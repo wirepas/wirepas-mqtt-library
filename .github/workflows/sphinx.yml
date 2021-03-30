@@ -1,7 +1,10 @@
 name: Build Sphinx doc
 
-on: 
-- pull_request
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   docs:
@@ -29,3 +32,10 @@ jobs:
       with:
         name: DocumentationHTML
         path: docs/_build/html/
+
+    - name: Publish doc on GithubIo
+      if: ${{ github.event_name == 'push' }}
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html/
