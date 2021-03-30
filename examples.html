@@ -1,0 +1,607 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Examples &mdash; Wirepas MQTT Library  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="WirepasNetworkInterface" href="wirepas_mqtt_library.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Wirepas MQTT Library
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">Wirepas MQTT Library</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html">WirepasNetworkInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html#module-wirepas_mqtt_library.wirepas_otap_helper">OtapHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html#gateway-return-codes-and-special-values">Gateway return codes and special values</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sending-and-receiving-data">Sending and receiving data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#objectives">Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code">Code</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-sink-config">Setting sink config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Code</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#discovering-nodes">Discovering nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Code</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#making-an-otap">Making an otap</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Wirepas MQTT Library</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Examples</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="sending-and-receiving-data">
+<h2>Sending and receiving data<a class="headerlink" href="#sending-and-receiving-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="objectives">
+<h3>Objectives<a class="headerlink" href="#objectives" title="Permalink to this headline">¶</a></h3>
+<p>With this example you will learn how to receive and send data from your network.</p>
+</div>
+<div class="section" id="code">
+<h3>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copyright 2021 Wirepas Ltd. All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># See file LICENSE.txt for full license details.</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">wirepas_mqtt_library</span> <span class="kn">import</span> <span class="n">WirepasNetworkInterface</span>
+<span class="kn">import</span> <span class="nn">wirepas_mesh_messaging</span> <span class="k">as</span> <span class="nn">wmm</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">fromfile_prefix_chars</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--host&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker address&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--port&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">8883</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker port&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--username&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;mqttmasteruser&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker username&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--password&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker password&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--insecure&#39;</span><span class="p">,</span>
+                        <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;insecure&#39;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT use unsecured connection&quot;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1"> </span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+    <span class="n">wni</span> <span class="o">=</span> <span class="n">WirepasNetworkInterface</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
+                                  <span class="n">insecure</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">insecure</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_data_received</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RX from </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> =&gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">gw_id</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">sink_id</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">data_payload</span><span class="p">))</span>
+
+    <span class="c1"># Register for any data</span>
+    <span class="n">wni</span><span class="o">.</span><span class="n">register_data_cb</span><span class="p">(</span><span class="n">on_data_received</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Write a message to send to all sinks</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">wni</span><span class="o">.</span><span class="n">get_sinks</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">wni</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;node_address&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="n">wmm</span><span class="o">.</span><span class="n">GatewayResultCode</span><span class="o">.</span><span class="n">GW_RES_OK</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot send data to </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> res=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">res</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot send data to </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="setting-sink-config">
+<h2>Setting sink config<a class="headerlink" href="#setting-sink-config" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Objectives<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>With this example you will learn how to configure a sink remotely from your backend.
+It is useful especially when the sink was not customized when gateway was produced.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The script has hardcoded values that should be customized before
+being used.</p>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Code<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copyright 2021 Wirepas Ltd. All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># See file LICENSE.txt for full license details.</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">wirepas_mqtt_library</span> <span class="kn">import</span> <span class="n">WirepasNetworkInterface</span>
+<span class="kn">import</span> <span class="nn">wirepas_mesh_messaging</span> <span class="k">as</span> <span class="nn">wmm</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="c1"># Hardcoded config as an example</span>
+<span class="n">new_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;node_role&quot;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="c1"># Sink with Low Latency flag: 0x11</span>
+    <span class="s2">&quot;network_address&quot;</span><span class="p">:</span> <span class="mh">0x1AB2C3</span><span class="p">,</span>
+    <span class="s2">&quot;network_channel&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+    <span class="c1"># Fake keys to illustrate the concept</span>
+    <span class="s2">&quot;cipher_key&quot;</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">([</span><span class="mh">0x11</span><span class="p">,</span><span class="mh">0x22</span><span class="p">,</span><span class="mh">0x33</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0x55</span><span class="p">,</span><span class="mh">0x66</span><span class="p">,</span><span class="mh">0x77</span><span class="p">,</span><span class="mh">0x88</span><span class="p">,</span><span class="mh">0x11</span><span class="p">,</span><span class="mh">0x22</span><span class="p">,</span><span class="mh">0x33</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0x55</span><span class="p">,</span><span class="mh">0x66</span><span class="p">,</span><span class="mh">0x77</span><span class="p">,</span><span class="mh">0x88</span><span class="p">]),</span>
+    <span class="s2">&quot;authentication_key&quot;</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">([</span><span class="mh">0x11</span><span class="p">,</span><span class="mh">0x22</span><span class="p">,</span><span class="mh">0x33</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0x55</span><span class="p">,</span><span class="mh">0x66</span><span class="p">,</span><span class="mh">0x77</span><span class="p">,</span><span class="mh">0x88</span><span class="p">,</span><span class="mh">0x11</span><span class="p">,</span><span class="mh">0x22</span><span class="p">,</span><span class="mh">0x33</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0x55</span><span class="p">,</span><span class="mh">0x66</span><span class="p">,</span><span class="mh">0x77</span><span class="p">,</span><span class="mh">0x88</span><span class="p">]),</span>
+    <span class="s2">&quot;started&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Configure a given sink on a gateway to predefined settings</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">fromfile_prefix_chars</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
+    <span class="c1"># Mqtt parameters</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--host&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker address&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--port&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">8883</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker port&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--username&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker username&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--password&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker password&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--insecure&#39;</span><span class="p">,</span>
+                        <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;insecure&#39;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT use unsecured connection&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--gateway&#39;</span><span class="p">,</span>
+                        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Gateway the sink to configure is attached&quot;</span><span class="p">)</span>
+    
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--sink&#39;</span><span class="p">,</span>
+                        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the sink to configure&quot;</span><span class="p">)</span>
+    
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--sink_address&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the sink address. Other sink settings are hardcoded inside script&quot;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1"> </span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+    <span class="n">wni</span> <span class="o">=</span> <span class="n">WirepasNetworkInterface</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
+                                  <span class="n">insecure</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">insecure</span><span class="p">)</span>
+
+    <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">wni</span><span class="o">.</span><span class="n">get_sinks</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">gw</span> <span class="o">!=</span> <span class="n">args</span><span class="o">.</span><span class="n">gateway</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">sink</span> <span class="o">!=</span> <span class="n">args</span><span class="o">.</span><span class="n">sink</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Sink is founded</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sink </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> is found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">gateway</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">sink</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">sink_address</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_config</span><span class="p">[</span><span class="s2">&quot;node_address&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">sink_address</span>
+            
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">wni</span><span class="o">.</span><span class="n">set_sink_config</span><span class="p">(</span><span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">new_config</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="n">wmm</span><span class="o">.</span><span class="n">GatewayResultCode</span><span class="o">.</span><span class="n">GW_RES_OK</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot set new config to </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> res=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">res</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot set new config to </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot find the sink to configure </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">gateway</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">sink</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sink </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> is configured&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">gateway</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">sink</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="discovering-nodes">
+<h2>Discovering nodes<a class="headerlink" href="#discovering-nodes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h3>Objectives<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>With this example you will learn how to discover the list of your nodes from your network.</p>
+<p>In this version, it is a passive discovery, so only nodes producing data will be discovered.
+The script will run for a specified period and print the list of nodes found
+or saved to a file.</p>
+</div>
+<div class="section" id="id4">
+<h3>Code<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copyright 2021 Wirepas Ltd. All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># See file LICENSE.txt for full license details.</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">wirepas_mqtt_library</span> <span class="kn">import</span> <span class="n">WirepasNetworkInterface</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span><span class="p">,</span> <span class="n">strftime</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">fromfile_prefix_chars</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--host&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker address&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--port&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">8883</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker port&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--username&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;mqttmasteruser&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker username&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--password&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker password&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--insecure&#39;</span><span class="p">,</span>
+                        <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;insecure&#39;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT use unsecured connection&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--network&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Network address concerned by scratchpad&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--delay_s&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Delay in seconds to listen for network traffic and discover nodes&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--output_folder&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Folder to store file containing list of nodes at the end, &quot;</span>
+                             <span class="s2">&quot;otherwise list is printed on standard output&quot;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1"> </span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+    <span class="n">wni</span> <span class="o">=</span> <span class="n">WirepasNetworkInterface</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
+                                  <span class="n">insecure</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">insecure</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">network</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No network address provided&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">delay_s</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No delay given to listen the network&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">()</span>
+
+    <span class="n">nodes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">on_data_rx</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">source_address</span><span class="p">)</span>
+
+    <span class="n">wni</span><span class="o">.</span><span class="n">register_data_cb</span><span class="p">(</span><span class="n">on_data_rx</span><span class="p">,</span> <span class="n">network</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">network</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Waiting for </span><span class="si">%d</span><span class="s2"> s to discover nodes&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="o">.</span><span class="n">delay_s</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">delay_s</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In </span><span class="si">%d</span><span class="s2"> s, </span><span class="si">%d</span><span class="s2"> nodes were found in network 0x</span><span class="si">%x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">delay_s</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="fm">__len__</span><span class="p">(),</span> <span class="n">args</span><span class="o">.</span><span class="n">network</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">output_folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_folder</span><span class="p">,</span> <span class="s2">&quot;list_nodes_&quot;</span> <span class="o">+</span> <span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">-%H%M%S&quot;</span><span class="p">))</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">node</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result written to </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">file</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="making-an-otap">
+<h2>Making an otap<a class="headerlink" href="#making-an-otap" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h3>Objectives<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>With this example you will learn how to do an otap in your network (if all nodes
+are running at list 5.1 version of the Wirepas stack).</p>
+<p>The code can be adapted depending on your use case to avoid the command
+parameter.</p>
+</div>
+<div class="section" id="id6">
+<h3>Code<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copyright 2021 Wirepas Ltd. All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># See file LICENSE.txt for full license details.</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">wirepas_mqtt_library</span> <span class="kn">import</span> <span class="n">WirepasNetworkInterface</span><span class="p">,</span> <span class="n">WirepasOtapHelper</span>
+<span class="kn">import</span> <span class="nn">wirepas_mesh_messaging</span> <span class="k">as</span> <span class="nn">wmm</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">fromfile_prefix_chars</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
+    <span class="c1"># Mqtt parameters</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--host&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker address&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--port&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">8883</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker port&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--username&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker username&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--password&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker password&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--insecure&#39;</span><span class="p">,</span>
+                        <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;insecure&#39;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT use unsecured connection&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Otap parameters</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;cmd&quot;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sink_only&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;propagate_only&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;immediately&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;delayed&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;update_delay&quot;</span><span class="p">])</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--network&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Network address concerned by scratchpad&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--file&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Scratcphad to use&quot;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1"> </span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+
+    <span class="n">wni</span> <span class="o">=</span> <span class="n">WirepasNetworkInterface</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
+                                  <span class="n">insecure</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">insecure</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">network</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No network address provided&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">()</span>
+
+    <span class="n">otapHelper</span> <span class="o">=</span> <span class="n">WirepasOtapHelper</span><span class="p">(</span><span class="n">wni</span><span class="p">,</span>
+                                   <span class="n">args</span><span class="o">.</span><span class="n">network</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;update_delay&quot;</span><span class="p">:</span>
+        <span class="n">delay</span> <span class="o">=</span> <span class="n">wmm</span><span class="o">.</span><span class="n">ProcessingDelay</span><span class="o">.</span><span class="n">DELAY_THIRTY_MINUTES</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set new delay to </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">delay</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_propagate_and_process_scratchpad_to_all_sinks</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot update delay&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">()</span>
+
+    <span class="c1"># Optional: find a &quot;good&quot; sequence</span>
+    <span class="n">current_target_seq_set</span> <span class="o">=</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">get_target_scratchpad_seq_list</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sequences already in used: &quot;</span><span class="p">,</span> <span class="n">current_target_seq_set</span><span class="p">)</span>
+    <span class="c1"># Take a sequence from 1-254 that is not in the current set</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="n">choice</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">254</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_target_seq_set</span><span class="p">])</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sequence chosen: &quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">load_scratchpad_to_all_sinks</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="n">seq</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot load scratchpad to all sinks&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;sink_only&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing scratchpad on all sinks&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">process_scratchpad_on_all_sinks</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot process scratchpad on all sinks&quot;</span><span class="p">)</span>
+            <span class="n">exit</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;propagate_only&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set propagate only&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_propagate_scratchpad_to_all_sinks</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot set propagate and process&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;immediately&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set propagate and process&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_propagate_and_process_scratchpad_to_all_sinks</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot set propagate and process only for delay </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">delay</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;delayed&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set propagate and process with 5 days delay&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_propagate_and_process_scratchpad_to_all_sinks</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="n">wmm</span><span class="o">.</span><span class="n">ProcessingDelay</span><span class="o">.</span><span class="n">DELAY_FIVE_DAYS</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot set propagate and process only for 5 days&quot;</span><span class="p">)</span>
+
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="wirepas_mqtt_library.html" class="btn btn-neutral float-left" title="WirepasNetworkInterface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Wirepas.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

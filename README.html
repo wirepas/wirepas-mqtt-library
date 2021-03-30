@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Wirepas MQTT Library &mdash; Wirepas MQTT Library  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="WirepasNetworkInterface" href="wirepas_mqtt_library.html" />
+    <link rel="prev" title="Wirepas MQTT library documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Wirepas MQTT Library
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Wirepas MQTT Library</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-from-pypi">Install from PyPi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-the-source">From the source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-example">Basic example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#steps-to-write-a-script-to-send-a-message">Steps to write a script to send a message</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#import-the-module">Import the module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-a-wirepas-network-interface-object">Create a Wirepas Network Interface object</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#send-a-message-with-broadcast-address-from-all-sinks-of-a-given-network">Send a message with broadcast address from all sinks of a given network</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#threading-model">Threading model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#synchronous-vs-asynchronous">Synchronous vs Asynchronous</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html">WirepasNetworkInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html#module-wirepas_mqtt_library.wirepas_otap_helper">OtapHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html#gateway-return-codes-and-special-values">Gateway return codes and special values</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Wirepas MQTT Library</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Wirepas MQTT Library</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/README.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="wirepas-mqtt-library">
+<h1>Wirepas MQTT Library<a class="headerlink" href="#wirepas-mqtt-library" title="Permalink to this headline">¶</a></h1>
+<p>This Python wheel is designed to ease the development of tools on top
+of Wirepas Gateway to backend Api (MQTT with protobuf payloads).</p>
+<p>Connection through MQTT is wrapped and messages in protobuf format are
+generated and parsed for you.</p>
+<p>Its main focus is to control a full network without to handle
+individually the connection to every gateways.</p>
+<p>Most api can be used in a synchronous or asynchronous way to feat your design.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="install-from-pypi">
+<h3>Install from PyPi<a class="headerlink" href="#install-from-pypi" title="Permalink to this headline">¶</a></h3>
+<p>This package is available from
+<a class="reference external" href="https://pypi.org/project/wirepas-mqtt-library/">PyPi</a>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install wirepas-mqtt-library
+</pre></div>
+</div>
+</div>
+<div class="section" id="from-the-source">
+<h3>From the source<a class="headerlink" href="#from-the-source" title="Permalink to this headline">¶</a></h3>
+<p>This wheel can be install from source directly if you need modifications.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install -e .
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="basic-example">
+<h2>Basic example<a class="headerlink" href="#basic-example" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="steps-to-write-a-script-to-send-a-message">
+<h3>Steps to write a script to send a message<a class="headerlink" href="#steps-to-write-a-script-to-send-a-message" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="import-the-module">
+<h4>Import the module<a class="headerlink" href="#import-the-module" title="Permalink to this headline">¶</a></h4>
+<p>Once the wheel is installed, you can import the module easily</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wirepas_mqtt_library</span> <span class="kn">import</span> <span class="n">WirepasNetworkInterface</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-a-wirepas-network-interface-object">
+<h4>Create a Wirepas Network Interface object<a class="headerlink" href="#create-a-wirepas-network-interface-object" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">wni</span> <span class="o">=</span> <span class="n">WirepasNetworkInterface</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                              <span class="n">port</span><span class="p">,</span>
+                              <span class="n">username</span><span class="p">,</span>
+                              <span class="n">password</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This object will allow you to interact with the network. For example,
+you can retrieve the list of gateways</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">wni</span><span class="o">.</span><span class="n">get_gateways</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Or print the list of sinks for a given network</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="k">for</span> <span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">wni</span><span class="o">.</span><span class="n">get_sinks</span><span class="p">():</span>
+    <span class="n">line</span> <span class="o">+=</span> <span class="s2">&quot;[</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">] &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="send-a-message-with-broadcast-address-from-all-sinks-of-a-given-network">
+<h4>Send a message with broadcast address from all sinks of a given network<a class="headerlink" href="#send-a-message-with-broadcast-address-from-all-sinks-of-a-given-network" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">wni</span><span class="o">.</span><span class="n">get_sinks</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">wni</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="mh">0xFFFFFFFF</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;This is a test message&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="n">wmm</span><span class="o">.</span><span class="n">GatewayResultCode</span><span class="o">.</span><span class="n">GW_RES_OK</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot send data to </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> res=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">res</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot send data to </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="threading-model">
+<h3>Threading model<a class="headerlink" href="#threading-model" title="Permalink to this headline">¶</a></h3>
+<p>When creating a WirepasNetworkInterface object, few threads will be involved.</p>
+<ul>
+<li><p><strong>Network (MQTT) thread</strong>: all the internal MQTT operations will happen on this dedicated thread but no code from your application will be executed on it</p></li>
+<li><div class="line-block">
+<div class="line"><strong>Worker thread(s)</strong>: these threads will be used to call all your callbacks.</div>
+<div class="line">It can be either asynchronous reception of gateway responses or the data you have registered to.</div>
+<div class="line">If long operation are expected in your callback (like IO operation), you can specify the number of threads to use when creating</div>
+<div class="line">your WirepasNetworkInterface object to avoid a bottleneck. In fact, multiple threads will allow to handle</div>
+<div class="line">a new callback if another one is executing long operations.</div>
+<div class="line">By default there is a single thread.</div>
+</div>
+</li>
+<li><p><strong>Your calling thread</strong>: Any call made in synchronous mode (cb=None) will lock your calling thread until it a response is receive or a timeout has elapsed</p></li>
+</ul>
+</div>
+<div class="section" id="synchronous-vs-asynchronous">
+<h3>Synchronous vs Asynchronous<a class="headerlink" href="#synchronous-vs-asynchronous" title="Permalink to this headline">¶</a></h3>
+<p>Most of the WirepasNetworkInterface methods can be called synchronously or asynchronously.
+When synchronous, answer from the gateway is awaited before returning.
+from the gateway and a TimeoutError Exception will be generated if the
+gateway doesn’t answer within the default 2s timeout.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Send a message as broadcast from sink sink_id attached to gateway gw_id on endpoint 1</span>
+<span class="c1"># in a synchronous way</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">wni</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="mh">0xFFFFFFFF</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;This is a test message&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+<span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="n">wmm</span><span class="o">.</span><span class="n">GatewayResultCode</span><span class="o">.</span><span class="n">GW_RES_OK</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sending data synchronously failed: res=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">res</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>But if you specify a callback, it will be called when the answer is
+received or never if the gateway doesn’t answer.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_message_sent_cb</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="n">wmm</span><span class="o">.</span><span class="n">GatewayResultCode</span><span class="o">.</span><span class="n">GW_RES_OK</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sending data asynchronously failed: res=</span><span class="si">%s</span><span class="s2">. Caller param is </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">param</span><span class="p">))</span>
+
+<span class="n">param</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="c1"># Send a message as broadcast from sink sink_id attached to gateway gw_id on endpoint 1</span>
+<span class="c1"># in an asynchronous way</span>
+<span class="n">wni</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">gw_id</span><span class="p">,</span> <span class="n">sink_id</span><span class="p">,</span> <span class="mh">0xFFFFFFFF</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;This is a test message&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">cb</span><span class="o">=</span><span class="n">on_message_sent_cb</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>Licensed under the Apache License, Version 2.0.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="wirepas_mqtt_library.html" class="btn btn-neutral float-right" title="WirepasNetworkInterface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Wirepas MQTT library documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Wirepas.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
