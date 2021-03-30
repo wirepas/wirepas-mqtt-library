@@ -1,0 +1,31 @@
+name: Build Sphinx doc
+
+on: 
+- pull_request
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+          python-version: '3.7'
+          
+    - name: Install pip packages
+      run: pip install sphinx==3.5.1 sphinx-rtd-theme==0.5.1
+      
+    - name: Insatll package requirement
+      run: pip install -r requirements.txt
+      
+    - name: Build the doc
+      run: |
+          cd docs
+          make html
+        
+    - uses: actions/upload-artifact@v1
+      with:
+        name: DocumentationHTML
+        path: docs/_build/html/
