@@ -144,6 +144,20 @@ class WirepasNetworkInterface:
             logging.error(str(e))
             return
 
+    def _update_sink_config(self, gw_id, config):
+        try:
+            gw = self._gateways[gw_id]
+            for idx, sink in enumerate(gw.sinks):
+                if sink["sink_id"] == config["sink_id"]:
+                    # Update the config
+                    gw.sinks[idx] = config
+        except KeyError:
+            logging.error("Receiving sink config that is unknown %s/%s", config.gw_id, config.sink_id)
+
+        # Config has changed, notify any subscriber
+        if self._on_config_changed_cb is not None:
+            self._task_queue.add_task(self._on_config_changed_cb)
+
     def _update_gateway_configs(self, config):
         try:
             gw = self._gateways[config.gw_id]
@@ -206,6 +220,8 @@ class WirepasNetworkInterface:
                 handler = self._update_gateway_configs
             elif cmd == "set_config":
                 response = wmm.SetConfigResponse.from_payload(message.payload)
+                # Set config answer contains the config set, update our cache value
+                self._update_sink_config(response.gw_id, response.config)
             elif cmd == "otap_load_scratchpad":
                 response = wmm.UploadScratchpadResponse.from_payload(message.payload)
             elif cmd == "otap_set_target_scratchpad":
@@ -655,7 +671,7 @@ class WirepasNetworkInterface:
 
             .. code-block:: python
 
-                on_scratchpad_processed_cb(gw_error_code, param)
+                on_config_set_cb(gw_error_code, param)
 
             - gw_error_code: :obj:`~wirepas_mesh_messaging.gateway_result_code.GatewayResultCode`
             - param: param given when doing this call
