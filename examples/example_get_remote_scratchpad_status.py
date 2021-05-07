@@ -30,8 +30,9 @@ def print_node_list(nodes):
     print("\nList of nodes:")
 
     id = 0
-    for node_id, node in nodes:
+    for node_id in list(nodes):
         # Convert utc time to date
+        node = nodes[node_id]
         timestamp = datetime.utcfromtimestamp(node["ts"] / 1000.0)
         print(" {:5d} | {:10d} | {} | {}".format(
             id,
@@ -84,7 +85,7 @@ if __name__ == "__main__":
     while True:
         choice = input("l to [l]ist nodes and s to [s]end remote status cmd as broadcast e to [e]xit\n")
         if choice == 'l':
-            print_node_list(otapHelper.get_current_nodes_status().items())
+            print_node_list(otapHelper.get_current_nodes_status())
             continue
         elif choice == 's':
             sinks = wni.get_sinks()
