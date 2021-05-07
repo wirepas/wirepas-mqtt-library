@@ -214,9 +214,9 @@ class WirepasOtapHelper:
 
         try:
             return set([i["target_scratchpad_and_action"]['target_sequence'] for i in self._status])
-        except KeyError:
+        except (KeyError, TypeError):
             # Can happen if gateway or sink doesn't support target scratchpad
-            logging.error("Cannot determine target scratchpad sequences")
+            logging.error("Cannot determine target scratchpad sequences (are sinks >= 5.1 and gateways >= 1.4.0 ?)")
             return None
 
     def _set_target_to_all_sinks(self, target):
