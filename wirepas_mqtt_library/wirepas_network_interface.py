@@ -4,6 +4,7 @@
 #
 import ssl
 import logging
+import socket
 
 import paho.mqtt.client as mqtt
 from paho.mqtt.client import connack_string
@@ -24,9 +25,12 @@ class WirepasNetworkInterface:
     or in an asynchronous way by specifying a callback to receive the response.
 
     """
+    # Timeout in s to wait for connection
+    _TIMEOUT_GW_CONNECTION_S = 4
+
     # Timeout in s to wait for status message after subscription to
     # topic and connection is established
-    _TIMEOUT_GW_STATUS_S = 1
+    _TIMEOUT_GW_STATUS_S = 2
 
     # Timeout in s to receive config from gw
     _TIMEOUT_GW_CONFIG_S = 2
@@ -39,7 +43,38 @@ class WirepasNetworkInterface:
             self.sinks = sinks
             self.config_received_event = Event()
 
-    def __init__(self, host, port, username, password, insecure=False, num_worker_thread=1, strict_mode=True):
+    class ConnectionErrorCode:
+        UNKNOWN_ERROR = 255
+        OK = 0
+        UNKNOWN_HOST = 1
+        SOCKET_TIMEOUT = 2
+        CONNECTION_REFUSED = 3
+        BROKER_REFUSED_PROTOCOL_VERSION = 4
+        BROKER_REFUSED_IDENTIFIER_REJECTED = 5
+        BROKER_REFUSED_SERVER_UNAVAILABLE = 6
+        BROKER_REFUSED_BAD_USERNAME_PASSWORD = 7
+        BROKER_REFUSED_NOT_AUTHORIZED = 8
+
+        @classmethod
+        def from_broker_connack(cls, rc):
+            error_code = cls.UNKNOWN_ERROR
+            if rc == 0:
+                error_code = cls.OK
+            elif rc == 1:
+                error_code = cls.BROKER_REFUSED_PROTOCOL_VERSION
+            elif rc == 2:
+                error_code = cls.BROKER_REFUSED_IDENTIFIER_REJECTED
+            elif rc == 3:
+                error_code = cls.BROKER_REFUSED_SERVER_UNAVAILABLE
+            elif rc == 4:
+                error_code = cls.BROKER_REFUSED_BAD_USERNAME_PASSWORD
+            elif rc == 5:
+                error_code = cls.BROKER_REFUSED_NOT_AUTHORIZED
+            return error_code
+
+    def __init__(self, host, port, username, password,
+                 insecure=False, num_worker_thread=1, strict_mode=True,
+                 connection_cb=None):
         """Constructor
 
         :param host: MQTT broker host address
@@ -49,6 +84,18 @@ class WirepasNetworkInterface:
         :param insecure: if set to true, TLS handshake with broker is skipped
         :param num_worker_thread: number of thread to use to handle asynchronous event (like data reception)
         :param strict_mode: if strict_mode is set to false, some errors do not generate exceptions but only an error message
+        :param connection_cb: If set, callback to be called when connection to mqtt broker changes
+
+            **Expected signature**:
+
+            .. code-block:: python
+
+                on_mqtt_connection_change_cb(connected, error_code)
+
+            - connected: if True, connection is established false otherwise
+            - error_code: :class:`~wirepas_mqtt_library.wirepas_network_interface.ConnectionErrorCode`
+
+        :type connection_cb: function
         """
         # Create an MQTT client
         self._mqtt_client = mqtt.Client()
@@ -63,10 +110,6 @@ class WirepasNetworkInterface:
 
         self._mqtt_client.on_connect = self._on_connect_callback
         self._mqtt_client.on_disconnect = self._on_disconnect_callback
-
-        # Reduce a bit keepalive for faster connection break detection
-        self._mqtt_client.connect(host, int(port), keepalive=20)
-        self._mqtt_client.loop_start()
 
         # Variable to store connection time
         self._connected = Event()
@@ -86,11 +129,40 @@ class WirepasNetworkInterface:
         # Create rx queue and start dispatch thread
         self._task_queue = _TaskQueue(num_worker_thread)
 
+        # Save user option parameters
         self._strict_mode = strict_mode
+        self._connection_cb = connection_cb
+
+        # Make the connection in a dedicated thread to use the
+        # synchronous call and be able to catch network connections exceptions
+        self._task_queue.add_task(self._execute_connection, host, int(port))
+
+        # Start the mqtt own thread
+        self._mqtt_client.loop_start()
+
+    def _execute_connection(self, host, port):
+        error = None
+        try:
+            # Reduce a bit keepalive for faster connection break detection
+            self._mqtt_client.connect(host, port, keepalive=20)
+        except socket.gaierror:
+            error = WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_HOST
+        except socket.timeout:
+            error = WirepasNetworkInterface.ConnectionErrorCode.SOCKET_TIMEOUT
+        except ConnectionRefusedError:
+            error = WirepasNetworkInterface.ConnectionErrorCode.CONNECTION_REFUSED
+        except Exception as e:
+            error = WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_ERROR
+            logging.error("Unknow exception in client connection %s", e)
+
+        if self._connection_cb is not None and error is not None:
+            self._connection_cb(False, error)
 
     def _on_connect_callback(self, client, userdata, flags, rc):
         if rc != 0:
             logging.error("MQTT cannot connect: %s (%s)", connack_string(rc), rc)
+            if self._connection_cb is not None:
+                self._task_queue.add_task(self._connection_cb, False, self.ConnectionErrorCode.from_broker_connack(rc))
             return
 
         # Register for Gateway status topic
@@ -115,10 +187,14 @@ class WirepasNetworkInterface:
 
         logging.info("..Connected to MQTT")
         self._connected.set()
+        if self._connection_cb is not None:
+            self._task_queue.add_task(self._connection_cb, True, self.ConnectionErrorCode.OK)
 
     def _on_disconnect_callback(self, client, userdata, rc):
         logging.info("..MQTT disconnected rc={}".format(rc))
         self._connected.clear()
+        if self._connection_cb is not None:
+            self._task_queue.add_task(self._connection_cb, False, self.ConnectionErrorCode.from_broker_connack(rc))
 
     def _on_status_gateway_received(self, client, userdata, message):
         try:
@@ -259,7 +335,7 @@ class WirepasNetworkInterface:
             # args[0] is self
             if not args[0]._initial_discovery_done:
                 # Wait for connection
-                args[0]._connected.wait(1)
+                args[0]._connected.wait(args[0]._TIMEOUT_GW_CONNECTION_S)
                 if not args[0]._connected.is_set():
                     raise TimeoutError("Cannot connect to broker")
 
@@ -286,6 +362,18 @@ class WirepasNetworkInterface:
             return fn(*args, **kwargs)
         wrapper.__doc__ = fn.__doc__
         return wrapper
+
+    def close(self):
+        """Explicitly close this network interface.
+
+        It allows to close the connection cleanly. Garbage collect will anyway do it later by closing
+        the socket, but in some use cases, it may be required to release the connection sooner in a more
+        deterministic way.
+
+        .. warning:: Object must not be used anymore after this call. Any other method call requiring the broker
+            connection after this one will end up in TimeoutError exception
+        """
+        self._mqtt_client.disconnect()
 
     @_wait_for_configs
     def get_sinks(self, network_address=None, gateway=None):
