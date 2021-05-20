@@ -4,7 +4,8 @@
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Examples &mdash; Wirepas MQTT Library  documentation</title>
@@ -83,17 +84,17 @@
               
             
             
-              <p class="caption"><span class="caption-text">Overview</span></p>
+              <p><span class="caption-text">Overview</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="README.html">Wirepas MQTT Library</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API</span></p>
+<p><span class="caption-text">API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html">WirepasNetworkInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html#module-wirepas_mqtt_library.wirepas_otap_helper">OtapHelper</a></li>
 <li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html#gateway-return-codes-and-special-values">Gateway return codes and special values</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples</span></p>
+<p><span class="caption-text">Examples</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#sending-and-receiving-data">Sending and receiving data</a><ul>
@@ -185,15 +186,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="examples">
+  <section id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="sending-and-receiving-data">
+<section id="sending-and-receiving-data">
 <h2>Sending and receiving data<a class="headerlink" href="#sending-and-receiving-data" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="objectives">
+<section id="objectives">
 <h3>Objectives<a class="headerlink" href="#objectives" title="Permalink to this headline">¶</a></h3>
 <p>With this example you will learn how to receive and send data from your network.</p>
-</div>
-<div class="section" id="code">
+</section>
+<section id="code">
 <h3>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copyright 2021 Wirepas Ltd. All Rights Reserved.</span>
 <span class="c1">#</span>
@@ -248,11 +249,11 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot send data to </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="setting-sink-config">
+</section>
+</section>
+<section id="setting-sink-config">
 <h2>Setting sink config<a class="headerlink" href="#setting-sink-config" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id1">
+<section id="id1">
 <h3>Objectives<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>With this example you will learn how to configure a sink remotely from your backend.
 It is useful especially when the sink was not customized when gateway was produced.</p>
@@ -261,8 +262,8 @@ It is useful especially when the sink was not customized when gateway was produc
 <p>The script has hardcoded values that should be customized before
 being used.</p>
 </div>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h3>Code<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copyright 2021 Wirepas Ltd. All Rights Reserved.</span>
 <span class="c1">#</span>
@@ -352,18 +353,18 @@ being used.</p>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sink </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> is configured&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">gateway</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">sink</span><span class="p">))</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="discovering-nodes">
+</section>
+</section>
+<section id="discovering-nodes">
 <h2>Discovering nodes<a class="headerlink" href="#discovering-nodes" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id3">
+<section id="id3">
 <h3>Objectives<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>With this example you will learn how to discover the list of your nodes from your network.</p>
 <p>In this version, it is a passive discovery, so only nodes producing data will be discovered.
 The script will run for a specified period and print the list of nodes found
 or saved to a file.</p>
-</div>
-<div class="section" id="id4">
+</section>
+<section id="id4">
 <h3>Code<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copyright 2021 Wirepas Ltd. All Rights Reserved.</span>
 <span class="c1">#</span>
@@ -444,18 +445,18 @@ or saved to a file.</p>
         <span class="nb">print</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="making-an-otap">
+</section>
+</section>
+<section id="making-an-otap">
 <h2>Making an otap<a class="headerlink" href="#making-an-otap" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id5">
+<section id="id5">
 <h3>Objectives<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <p>With this example you will learn how to do an otap in your network (if all nodes
 are running at list 5.1 version of the Wirepas stack).</p>
 <p>The code can be adapted depending on your use case to avoid the command
 parameter.</p>
-</div>
-<div class="section" id="id6">
+</section>
+<section id="id6">
 <h3>Code<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copyright 2021 Wirepas Ltd. All Rights Reserved.</span>
 <span class="c1">#</span>
@@ -553,9 +554,9 @@ parameter.</p>
 
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
