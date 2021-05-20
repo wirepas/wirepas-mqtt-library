@@ -12,6 +12,8 @@ individually the connection to every gateways.
 
 Most api can be used in a synchronous or asynchronous way to feat your design.
 
+Automatically generated documentation is hosted `here <https://wirepas.github.io/wirepas-mqtt-library/>`__.
+
 
 Installation
 ------------
