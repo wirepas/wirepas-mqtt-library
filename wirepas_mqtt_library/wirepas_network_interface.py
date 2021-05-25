@@ -269,7 +269,7 @@ class WirepasNetworkInterface:
                     sleep(delay)
 
                 # Check if we are still waiting for configs
-                for gw in args[0]._gateways.values():
+                for gw in args[0]._gateways.copy().values():
                     if gw.online:
                         gw.config_received_event.wait(args[0]._TIMEOUT_GW_CONFIG_S)
                         if not gw.config_received_event.is_set():
@@ -333,7 +333,7 @@ class WirepasNetworkInterface:
 
         """
         sinks = list()
-        for gw in self._gateways.values():
+        for gw in self._gateways.copy().values():
             if not gw.online:
                 continue
 
