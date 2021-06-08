@@ -169,15 +169,75 @@
 <span id="wirepasnetworkinterface"></span><h1>WirepasNetworkInterface<a class="headerlink" href="#module-wirepas_mqtt_library.wirepas_network_interface" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wirepas_mqtt_library.wirepas_network_interface.</span></code><code class="sig-name descname"><span class="pre">WirepasNetworkInterface</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insecure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_worker_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wirepas_mqtt_library.wirepas_network_interface.</span></code><code class="sig-name descname"><span class="pre">WirepasNetworkInterface</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insecure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_worker_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to interact with a Wirepas network through an MQTT broker.</p>
 <p>This class wraps the MQTT connection and the messages creation / parsing in protobuf
 format.</p>
 <p>Most of the calls can be called in a blocking mode (ie, blocking until gateway response is received)
 or in an asynchronous way by specifying a callback to receive the response.</p>
+<dl class="py class">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ConnectionErrorCode</span></code><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_ERROR">
+<code class="sig-name descname"><span class="pre">UNKNOWN_ERROR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">255</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_ERROR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.OK">
+<code class="sig-name descname"><span class="pre">OK</span></code><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.OK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_HOST">
+<code class="sig-name descname"><span class="pre">UNKNOWN_HOST</span></code><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_HOST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.SOCKET_TIMEOUT">
+<code class="sig-name descname"><span class="pre">SOCKET_TIMEOUT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.SOCKET_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.CONNECTION_REFUSED">
+<code class="sig-name descname"><span class="pre">CONNECTION_REFUSED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.CONNECTION_REFUSED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_PROTOCOL_VERSION">
+<code class="sig-name descname"><span class="pre">BROKER_REFUSED_PROTOCOL_VERSION</span></code><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_PROTOCOL_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_IDENTIFIER_REJECTED">
+<code class="sig-name descname"><span class="pre">BROKER_REFUSED_IDENTIFIER_REJECTED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_IDENTIFIER_REJECTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_SERVER_UNAVAILABLE">
+<code class="sig-name descname"><span class="pre">BROKER_REFUSED_SERVER_UNAVAILABLE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">6</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_SERVER_UNAVAILABLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_BAD_USERNAME_PASSWORD">
+<code class="sig-name descname"><span class="pre">BROKER_REFUSED_BAD_USERNAME_PASSWORD</span></code><em class="property"> <span class="pre">=</span> <span class="pre">7</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_BAD_USERNAME_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_NOT_AUTHORIZED">
+<code class="sig-name descname"><span class="pre">BROKER_REFUSED_NOT_AUTHORIZED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_NOT_AUTHORIZED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.from_broker_connack">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">from_broker_connack</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.from_broker_connack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py method">
 <dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insecure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_worker_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insecure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_worker_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -189,9 +249,33 @@ or in an asynchronous way by specifying a callback to receive the response.</p>
 <li><p><strong>insecure</strong> – if set to true, TLS handshake with broker is skipped</p></li>
 <li><p><strong>num_worker_thread</strong> – number of thread to use to handle asynchronous event (like data reception)</p></li>
 <li><p><strong>strict_mode</strong> – if strict_mode is set to false, some errors do not generate exceptions but only an error message</p></li>
+<li><p><strong>connection_cb</strong> (<em>function</em>) – <p>If set, callback to be called when connection to mqtt broker changes</p>
+<p><strong>Expected signature</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">on_mqtt_connection_change_cb</span><span class="p">(</span><span class="n">connected</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul>
+<li><p>connected: if True, connection is established false otherwise</p></li>
+<li><p>error_code: <code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionErrorCode</span></code></p></li>
+</ul>
+</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.close">
+<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly close this network interface.</p>
+<p>It allows to close the connection cleanly. Garbage collect will anyway do it later by closing
+the socket, but in some use cases, it may be required to release the connection sooner in a more
+deterministic way.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Object must not be used anymore after this call. Any other method call requiring the broker
+connection after this one will end up in TimeoutError exception</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
