@@ -429,8 +429,15 @@ class WirepasNetworkInterface:
                 continue
 
             for sink in gw.sinks:
-                if network_address is not None and sink['network_address'] != network_address:
-                    continue
+                if network_address is not None:
+                    # Sinks are filtered on network address
+                    try:
+                        if sink['network_address'] != network_address:
+                            continue
+                    except KeyError:
+                        # Network address is unset so doesn't match
+                        continue
+
                 sinks.append((gw.id, sink['sink_id'], sink))
 
         return sinks
