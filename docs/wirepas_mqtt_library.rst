@@ -15,6 +15,14 @@ OtapHelper
    :members:
    :undoc-members:
 
+TLVAppConfigHelper
+---------------------------------------------
+
+.. automodule:: wirepas_mqtt_library.wirepas_tlv_app_config_helper
+   :special-members: __init__
+   :members:
+   :undoc-members:
+
 Gateway return codes and special values
 ---------------------------------------------
 
