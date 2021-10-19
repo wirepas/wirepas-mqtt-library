@@ -168,3 +168,11 @@ class TopicParser:
             raise RuntimeError("Wrong topic for received_data")
 
         return gw_id, sink_id, int(network_id), int(src_ep), int(dst_ep)
+
+    @staticmethod
+    def parse_status_topic(topic):
+        _, cmd, gw_id = topic.split("/")
+        if not cmd.startswith("status"):
+            raise RuntimeError("Wrong topic for status")
+
+        return gw_id

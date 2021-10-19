@@ -197,6 +197,15 @@ class WirepasNetworkInterface:
             self._task_queue.add_task(self._connection_cb, False, self.ConnectionErrorCode.from_broker_connack(rc))
 
     def _on_status_gateway_received(self, client, userdata, message):
+        if message.payload.__len__() == 0:
+            # Remove gateway if in our list
+            try:
+                del self._gateways[TopicParser.parse_status_topic(message.topic)]
+            except KeyError:
+                pass
+
+            return
+
         try:
             status = wmm.StatusEvent.from_payload(message.payload)
 
@@ -218,6 +227,9 @@ class WirepasNetworkInterface:
 
         except wmm.GatewayAPIParsingException as e:
             logging.error(str(e))
+            gw = TopicParser.parse_status_topic(message.topic)
+            logging.error("It probably means that one of the gateway sent a malformed status."
+            " It can be cleared by calling clear_gateway_status(\"%s\")", gw)
             return
 
     def _update_sink_config(self, gw_id, config):
@@ -261,11 +273,12 @@ class WirepasNetworkInterface:
         for f in self._data_filters.values():
             f.filter_and_dispatch(data)
 
-    def _publish(self, topic, payload, qos=1):
+    def _publish(self, topic, payload, qos=1, retain=False):
         try:
             self._mqtt_client.publish(topic,
                                       payload,
-                                      qos=qos)
+                                      qos=qos,
+                                      retain=retain)
         except Exception as e:
             logging.error(str(e))
 
@@ -350,10 +363,14 @@ class WirepasNetworkInterface:
                         gw.config_received_event.wait(args[0]._TIMEOUT_GW_CONFIG_S)
                         if not gw.config_received_event.is_set():
                             logging.error("Config timeout for gw %s" % gw.id)
+                            logging.error("Is the gateway really online? If not, its status can be cleared by "
+                                          "calling clear_gateway_status(\"%s\")", gw.id)
                             # Mark the config as received to avoid waiting for it next time
                             # It may still come later
                             gw.config_received_event.set()
                             if args[0]._strict_mode:
+                                logging.error("This Timeout will generate an exception but you can"
+                                              "avoid it by starting WirepasNetworkInteface with strict_mode=False")
                                 raise TimeoutError("Cannot get config from online GW %s" % gw.id)
 
                 # Discovery done, no need to do it again
@@ -458,6 +475,20 @@ class WirepasNetworkInterface:
             gateways = self._gateways.keys()
 
         return gateways
+
+    def clear_gateway_status(self, gw_id):
+        """
+        Clear a gateway status
+
+        Gateway status is sent by gateway as a retain message on the broker.
+        It may be need to explicitly remove it in some situation:
+            - An offline gateway that will never be back online (removed from network)
+            - A sticky gateway online status that is not here anymore (bug from gateway)
+            - A malformed gateway status (bug from gateway)
+        """
+        topic = TopicGenerator.make_status_topic(gw_id)
+        self._publish(topic, None, qos=1, retain=True)
+
 
     def _wait_for_response(self, cb, req_id, timeout=2, param=None):
         if cb is not None:
