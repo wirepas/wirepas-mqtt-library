@@ -480,8 +480,11 @@ class WirepasNetworkInterface:
         """
         Clear a gateway status
 
-        Gateway status is sent by gateway as a retain message on the broker.
-        It may be need to explicitly remove it in some situation:
+        :param gw_id: Id of gateway the sink is attached
+        :type gw_id: str
+
+        .. note:: Gateway status is sent by gateway as a retain message on the broker.
+            It may be need to explicitly remove it in some situation:
             - An offline gateway that will never be back online (removed from network)
             - A sticky gateway online status that is not here anymore (bug from gateway)
             - A malformed gateway status (bug from gateway)
@@ -520,7 +523,7 @@ class WirepasNetworkInterface:
     def send_message(self, gw_id, sink_id, dest, src_ep, dst_ep, payload, qos=0, csma_ca_only=False, cb=None, param=None):
         """
         send_message(self, gw_id, sink_id, dest, src_ep, dst_ep, payload, qos=0, csma_ca_only=False, cb=None, param=None)
-        Send a message from a sink
+        Send a message to wirepas network from a given sink
 
         :param gw_id: Id of gateway the sink is attached
         :type gw_id: str
