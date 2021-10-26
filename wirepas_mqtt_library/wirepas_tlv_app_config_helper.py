@@ -12,7 +12,8 @@ class WirepasTLVAppConfigHelper:
 
     This class contains methods allowing the modification (addition, removal) 
     of app_config data inside a Wirepas network compliant with the TLV format.
-    It offers an abstraction
+    It offers an abstraction for wirepas supported feature at application level
+    like the local provisioning.
 
     """
 
@@ -24,9 +25,9 @@ class WirepasTLVAppConfigHelper:
         :param wni: Wirepas network interface
         :type wni: :obj:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface`
         :param network: Network address concerned by the otap
-        :param gateway_sink: list of (gateway, sink) tupple concerned by the change
+        :param gateway_sink_subset: list of (gateway, sink) tupple concerned by the change
         
-        :note: Either network or gateway_sink must be specified
+        :note: Either network or gateway_sink_subset must be specified
         """
         if wni is None:
             raise RuntimeError("No Wirepas Network Interface provided")
@@ -85,6 +86,16 @@ class WirepasTLVAppConfigHelper:
         return self
 
     def setup_local_provisioning(self, enabled, psk_id=None, psk=None):
+        """Set a new entry to enable or disable local provisioning
+
+        :param enabled: True to enable local provisioning, False to disable it
+        :type enabled: bool
+        :param psk_id: Id of the psk on 4 bytes (only valid when enabled)
+        :type psk_id: bytearray
+        :param psk: psk to use for lacal provisioning on 32 bytes (only valid when enabled)
+        :type psk: bytearray
+        :raises ValueError: if psk and psk_id are not both set or unset or with a wrong size
+        """
         # check parameters
         if psk_id is not None and psk_id.__len__() != 4:
             raise ValueError("psk_id must be a 4 bytes bytearray")
@@ -109,7 +120,9 @@ class WirepasTLVAppConfigHelper:
 
         :param override: if True, if an app config is already present that doesn't
              follow the TLV format, full app config is overriden with TLV format with this entry
-        :return: True if all specified sinks are updated
+        :return: True if all specified sinks are updated, False otherwise.
+
+        .. warning:: If returned value is False, only a subset of sinks may be updated
         """
 
         if self._new_entries.__len__() == 0 and \
@@ -177,6 +190,7 @@ class WirepasTLVAppConfigHelper:
         logging.info("Check done, doing the change")
         logging.debug("New configs are: %s" % new_configs)
 
+        res = True
         for gw, sink, app_config, seq, diag in new_configs:
             new_config = {}
             new_config["app_config_data"] = app_config
@@ -187,6 +201,7 @@ class WirepasTLVAppConfigHelper:
                 self.wni.set_sink_config(gw, sink, new_config)
             except TimeoutError:
                 logging.error("Issue when setting new app config to [%s][%s]" % (gw, sink))
+                res = False
                 continue
 
             logging.info("New app config set for [%s][%s]" % (gw, sink))
@@ -195,7 +210,7 @@ class WirepasTLVAppConfigHelper:
             self._removed_entries = list()
             self._new_entries = dict()
 
-        return True
+        return res
 
     def __str__(self):
         str = ""
