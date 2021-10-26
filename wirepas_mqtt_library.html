@@ -14,6 +14,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -30,6 +32,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -85,17 +88,18 @@
               
             
             
-              <p><span class="caption-text">Overview</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="README.html">Wirepas MQTT Library</a></li>
 </ul>
-<p><span class="caption-text">API</span></p>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">WirepasNetworkInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#module-wirepas_mqtt_library.wirepas_otap_helper">OtapHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-wirepas_mqtt_library.wirepas_tlv_app_config_helper">TLVAppConfigHelper</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#gateway-return-codes-and-special-values">Gateway return codes and special values</a></li>
 </ul>
-<p><span class="caption-text">Examples</span></p>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
@@ -168,76 +172,76 @@
   <section id="module-wirepas_mqtt_library.wirepas_network_interface">
 <span id="wirepasnetworkinterface"></span><h1>WirepasNetworkInterface<a class="headerlink" href="#module-wirepas_mqtt_library.wirepas_network_interface" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wirepas_mqtt_library.wirepas_network_interface.</span></code><code class="sig-name descname"><span class="pre">WirepasNetworkInterface</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insecure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_worker_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wirepas_mqtt_library.wirepas_network_interface.</span></span><span class="sig-name descname"><span class="pre">WirepasNetworkInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insecure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_worker_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to interact with a Wirepas network through an MQTT broker.</p>
 <p>This class wraps the MQTT connection and the messages creation / parsing in protobuf
 format.</p>
 <p>Most of the calls can be called in a blocking mode (ie, blocking until gateway response is received)
 or in an asynchronous way by specifying a callback to receive the response.</p>
 <dl class="py class">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ConnectionErrorCode</span></code><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ConnectionErrorCode</span></span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py attribute">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_ERROR">
-<code class="sig-name descname"><span class="pre">UNKNOWN_ERROR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">255</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_ERROR" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_ERROR">
+<span class="sig-name descname"><span class="pre">UNKNOWN_ERROR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">255</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_ERROR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.OK">
-<code class="sig-name descname"><span class="pre">OK</span></code><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.OK" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.OK">
+<span class="sig-name descname"><span class="pre">OK</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.OK" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_HOST">
-<code class="sig-name descname"><span class="pre">UNKNOWN_HOST</span></code><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_HOST" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_HOST">
+<span class="sig-name descname"><span class="pre">UNKNOWN_HOST</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.UNKNOWN_HOST" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.SOCKET_TIMEOUT">
-<code class="sig-name descname"><span class="pre">SOCKET_TIMEOUT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.SOCKET_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.SOCKET_TIMEOUT">
+<span class="sig-name descname"><span class="pre">SOCKET_TIMEOUT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.SOCKET_TIMEOUT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.CONNECTION_REFUSED">
-<code class="sig-name descname"><span class="pre">CONNECTION_REFUSED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.CONNECTION_REFUSED" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.CONNECTION_REFUSED">
+<span class="sig-name descname"><span class="pre">CONNECTION_REFUSED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.CONNECTION_REFUSED" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_PROTOCOL_VERSION">
-<code class="sig-name descname"><span class="pre">BROKER_REFUSED_PROTOCOL_VERSION</span></code><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_PROTOCOL_VERSION" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_PROTOCOL_VERSION">
+<span class="sig-name descname"><span class="pre">BROKER_REFUSED_PROTOCOL_VERSION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_PROTOCOL_VERSION" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_IDENTIFIER_REJECTED">
-<code class="sig-name descname"><span class="pre">BROKER_REFUSED_IDENTIFIER_REJECTED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_IDENTIFIER_REJECTED" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_IDENTIFIER_REJECTED">
+<span class="sig-name descname"><span class="pre">BROKER_REFUSED_IDENTIFIER_REJECTED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_IDENTIFIER_REJECTED" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_SERVER_UNAVAILABLE">
-<code class="sig-name descname"><span class="pre">BROKER_REFUSED_SERVER_UNAVAILABLE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">6</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_SERVER_UNAVAILABLE" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_SERVER_UNAVAILABLE">
+<span class="sig-name descname"><span class="pre">BROKER_REFUSED_SERVER_UNAVAILABLE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">6</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_SERVER_UNAVAILABLE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_BAD_USERNAME_PASSWORD">
-<code class="sig-name descname"><span class="pre">BROKER_REFUSED_BAD_USERNAME_PASSWORD</span></code><em class="property"> <span class="pre">=</span> <span class="pre">7</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_BAD_USERNAME_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_BAD_USERNAME_PASSWORD">
+<span class="sig-name descname"><span class="pre">BROKER_REFUSED_BAD_USERNAME_PASSWORD</span></span><em class="property"> <span class="pre">=</span> <span class="pre">7</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_BAD_USERNAME_PASSWORD" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_NOT_AUTHORIZED">
-<code class="sig-name descname"><span class="pre">BROKER_REFUSED_NOT_AUTHORIZED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_NOT_AUTHORIZED" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_NOT_AUTHORIZED">
+<span class="sig-name descname"><span class="pre">BROKER_REFUSED_NOT_AUTHORIZED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.BROKER_REFUSED_NOT_AUTHORIZED" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.from_broker_connack">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">from_broker_connack</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.from_broker_connack" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.from_broker_connack">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_broker_connack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.from_broker_connack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insecure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_worker_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.__init__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insecure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_worker_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -265,8 +269,8 @@ or in an asynchronous way by specifying a callback to receive the response.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.close">
-<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.close" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Explicitly close this network interface.</p>
 <p>It allows to close the connection cleanly. Garbage collect will anyway do it later by closing
 the socket, but in some use cases, it may be required to release the connection sooner in a more
@@ -279,8 +283,8 @@ connection after this one will end up in TimeoutError exception</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_sinks">
-<code class="sig-name descname"><span class="pre">get_sinks</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gateway</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_sinks" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_sinks">
+<span class="sig-name descname"><span class="pre">get_sinks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gateway</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_sinks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get list of current sink connected to this broker</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -380,8 +384,8 @@ connection after this one will end up in TimeoutError exception</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_gateways">
-<code class="sig-name descname"><span class="pre">get_gateways</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_online</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_gateways" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_gateways">
+<span class="sig-name descname"><span class="pre">get_gateways</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_online</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_gateways" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get list of current gateways connected to this broker</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -394,24 +398,28 @@ connection after this one will end up in TimeoutError exception</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.clear_gateway_status">
-<code class="sig-name descname"><span class="pre">clear_gateway_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.clear_gateway_status" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.clear_gateway_status">
+<span class="sig-name descname"><span class="pre">clear_gateway_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.clear_gateway_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear a gateway status</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gw_id</strong> (<em>str</em>) – Id of gateway the sink is attached</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Gateway status is sent by gateway as a retain message on the broker.
-It may be need to explicitly remove it in some situation:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>An offline gateway that will never be back online (removed from network)</p></li>
-<li><p>A sticky gateway online status that is not here anymore (bug from gateway)</p></li>
-<li><p>A malformed gateway status (bug from gateway)</p></li>
-</ul>
-</div></blockquote>
+It may be need to explicitly remove it in some situation:
+- An offline gateway that will never be back online (removed from network)
+- A sticky gateway online status that is not here anymore (bug from gateway)
+- A malformed gateway status (bug from gateway)</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.send_message">
-<code class="sig-name descname"><span class="pre">send_message</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_ep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_ep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csma_ca_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.send_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send a message from a sink</p>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.send_message">
+<span class="sig-name descname"><span class="pre">send_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_ep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_ep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csma_ca_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.send_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message to wirepas network from a given sink</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -452,8 +460,8 @@ If None, call is blocking.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.upload_scratchpad">
-<code class="sig-name descname"><span class="pre">upload_scratchpad</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scratchpad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.upload_scratchpad" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.upload_scratchpad">
+<span class="sig-name descname"><span class="pre">upload_scratchpad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scratchpad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.upload_scratchpad" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload a scratchpad on a given sink</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -492,8 +500,8 @@ If None, call is blocking.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.process_scratchpad">
-<code class="sig-name descname"><span class="pre">process_scratchpad</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.process_scratchpad" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.process_scratchpad">
+<span class="sig-name descname"><span class="pre">process_scratchpad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.process_scratchpad" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process scratchpad on a given sink</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -530,8 +538,8 @@ If None, call is blocking.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_scratchpad_status">
-<code class="sig-name descname"><span class="pre">get_scratchpad_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_scratchpad_status" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_scratchpad_status">
+<span class="sig-name descname"><span class="pre">get_scratchpad_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_scratchpad_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get scratchpad status of a given sink</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -599,8 +607,8 @@ If None, call is blocking.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_target_scratchpad">
-<code class="sig-name descname"><span class="pre">set_target_scratchpad</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_target_scratchpad" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_target_scratchpad">
+<span class="sig-name descname"><span class="pre">set_target_scratchpad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_target_scratchpad" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set target scratchpad on a given sink</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -638,8 +646,8 @@ If None, call is blocking.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb">
-<code class="sig-name descname"><span class="pre">register_data_cb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gateway</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb">
+<span class="sig-name descname"><span class="pre">register_data_cb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gateway</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a data filter to received filtered data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -660,8 +668,8 @@ If None, call is blocking.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb">
-<code class="sig-name descname"><span class="pre">unregister_data_cb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb">
+<span class="sig-name descname"><span class="pre">unregister_data_cb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unregister data callback previously registered
 with <a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb" title="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_data_cb()</span></code></a></p>
 <dl class="field-list simple">
@@ -675,8 +683,8 @@ with <a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_i
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_sink_config">
-<code class="sig-name descname"><span class="pre">set_sink_config</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_sink_config" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_sink_config">
+<span class="sig-name descname"><span class="pre">set_sink_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_sink_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the config of a sink</p>
 <p>Configuration is sent as dictionary. Call can be clocking or unblocking
 depending on <code class="docutils literal notranslate"><span class="pre">cb</span></code> parameter.</p>
@@ -763,8 +771,8 @@ Keys are:</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_config_changed_cb">
-<code class="sig-name descname"><span class="pre">set_config_changed_cb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_config_changed_cb" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_config_changed_cb">
+<span class="sig-name descname"><span class="pre">set_config_changed_cb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_config_changed_cb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a callback to be called when a config has changed on any of
 the attached gateway</p>
 <dl class="field-list simple">
@@ -783,15 +791,15 @@ can be used to discover what has changed</p>
 <section id="module-wirepas_mqtt_library.wirepas_otap_helper">
 <span id="otaphelper"></span><h1>OtapHelper<a class="headerlink" href="#module-wirepas_mqtt_library.wirepas_otap_helper" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wirepas_mqtt_library.wirepas_otap_helper.</span></code><code class="sig-name descname"><span class="pre">WirepasOtapHelper</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wni</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wirepas_mqtt_library.wirepas_otap_helper.</span></span><span class="sig-name descname"><span class="pre">WirepasOtapHelper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wni</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to ease Otap operation</p>
 <p>This class contains methods allowing the execution of simple otap operations
 on all the sinks belonging to the same network in a single call.</p>
 <p>It allows to write more complex script by chaining those operations.</p>
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wni</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.__init__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wni</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -804,8 +812,8 @@ on all the sinks belonging to the same network in a single call.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.load_scratchpad_to_all_sinks">
-<code class="sig-name descname"><span class="pre">load_scratchpad_to_all_sinks</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scratchpad_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.load_scratchpad_to_all_sinks" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.load_scratchpad_to_all_sinks">
+<span class="sig-name descname"><span class="pre">load_scratchpad_to_all_sinks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scratchpad_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.load_scratchpad_to_all_sinks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the specified scratchpad file on all sinks of the network</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -821,8 +829,8 @@ on all the sinks belonging to the same network in a single call.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.process_scratchpad_on_all_sinks">
-<code class="sig-name descname"><span class="pre">process_scratchpad_on_all_sinks</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.process_scratchpad_on_all_sinks" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.process_scratchpad_on_all_sinks">
+<span class="sig-name descname"><span class="pre">process_scratchpad_on_all_sinks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.process_scratchpad_on_all_sinks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the scratchpad locally on all sinks of the network</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -832,8 +840,8 @@ on all the sinks belonging to the same network in a single call.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_stored_scratchpad_seq_list">
-<code class="sig-name descname"><span class="pre">get_stored_scratchpad_seq_list</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_stored_scratchpad_seq_list" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_stored_scratchpad_seq_list">
+<span class="sig-name descname"><span class="pre">get_stored_scratchpad_seq_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_stored_scratchpad_seq_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve a set of stored scratchpad sequence in sinks for this network</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -844,8 +852,8 @@ or None if cannot be determined</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_target_scratchpad_seq_list">
-<code class="sig-name descname"><span class="pre">get_target_scratchpad_seq_list</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_target_scratchpad_seq_list" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_target_scratchpad_seq_list">
+<span class="sig-name descname"><span class="pre">get_target_scratchpad_seq_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_target_scratchpad_seq_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve a set of target scratchpad sequence in sinks for this network</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -856,8 +864,8 @@ or None if cannot be determined</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_legacy_otap_to_all_sinks">
-<code class="sig-name descname"><span class="pre">set_legacy_otap_to_all_sinks</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_legacy_otap_to_all_sinks" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_legacy_otap_to_all_sinks">
+<span class="sig-name descname"><span class="pre">set_legacy_otap_to_all_sinks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_legacy_otap_to_all_sinks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set legacy action on all sinks</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -867,8 +875,8 @@ or None if cannot be determined</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_no_otap_to_all_sinks">
-<code class="sig-name descname"><span class="pre">set_no_otap_to_all_sinks</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_no_otap_to_all_sinks" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_no_otap_to_all_sinks">
+<span class="sig-name descname"><span class="pre">set_no_otap_to_all_sinks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_no_otap_to_all_sinks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set no otap action on all sinks</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -878,8 +886,8 @@ or None if cannot be determined</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_scratchpad_to_all_sinks">
-<code class="sig-name descname"><span class="pre">set_propagate_scratchpad_to_all_sinks</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_scratchpad_to_all_sinks" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_scratchpad_to_all_sinks">
+<span class="sig-name descname"><span class="pre">set_propagate_scratchpad_to_all_sinks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_scratchpad_to_all_sinks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set propagate only action on all sinks</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -895,8 +903,8 @@ or None if cannot be determined</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_and_process_scratchpad_to_all_sinks">
-<code class="sig-name descname"><span class="pre">set_propagate_and_process_scratchpad_to_all_sinks</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_and_process_scratchpad_to_all_sinks" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_and_process_scratchpad_to_all_sinks">
+<span class="sig-name descname"><span class="pre">set_propagate_and_process_scratchpad_to_all_sinks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_and_process_scratchpad_to_all_sinks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set propagate and process action on all sinks</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -913,8 +921,8 @@ or None if cannot be determined</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.send_remote_scratchpad_status">
-<code class="sig-name descname"><span class="pre">send_remote_scratchpad_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4294967295</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.send_remote_scratchpad_status" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.send_remote_scratchpad_status">
+<span class="sig-name descname"><span class="pre">send_remote_scratchpad_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4294967295</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.send_remote_scratchpad_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send a remote api scratchpad status cmd to the network to trigger
 a response from nodes</p>
 <dl class="field-list simple">
@@ -928,8 +936,8 @@ a response from nodes</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_current_nodes_status">
-<code class="sig-name descname"><span class="pre">get_current_nodes_status</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_current_nodes_status" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_current_nodes_status">
+<span class="sig-name descname"><span class="pre">get_current_nodes_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_current_nodes_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return dictionary of all nodes status from the network discovered since this
 helper was created</p>
 <dl class="field-list simple">
@@ -1003,281 +1011,378 @@ helper was created</p>
 </dd></dl>
 
 </section>
+<section id="module-wirepas_mqtt_library.wirepas_tlv_app_config_helper">
+<span id="tlvappconfighelper"></span><h1>TLVAppConfigHelper<a class="headerlink" href="#module-wirepas_mqtt_library.wirepas_tlv_app_config_helper" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wirepas_mqtt_library.wirepas_tlv_app_config_helper.</span></span><span class="sig-name descname"><span class="pre">WirepasTLVAppConfigHelper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wni</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gateway_sink_subset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to ease operation management of app_config with Wirepas TLV format</p>
+<p>This class contains methods allowing the modification (addition, removal) 
+of app_config data inside a Wirepas network compliant with the TLV format.
+It offers an abstraction for wirepas supported feature at application level
+like the local provisioning.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wni</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gateway_sink_subset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wni</strong> (<a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface" title="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WirepasNetworkInterface</span></code></a>) – Wirepas network interface</p></li>
+<li><p><strong>network</strong> – Network address concerned by the otap</p></li>
+<li><p><strong>gateway_sink_subset</strong> – list of (gateway, sink) tupple concerned by the change</p></li>
+</ul>
+</dd>
+<dt class="field-even">Note</dt>
+<dd class="field-even"><p>Either network or gateway_sink_subset must be specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.add_raw_entry">
+<span class="sig-name descname"><span class="pre">add_raw_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.add_raw_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new entry to the local cache</p>
+<p>Nothing is done on the network yet. It will be updated only when
+calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">update_entries()</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entry</strong> (<em>int</em><em> (</em><em>between 0 and 0xffff</em><em>)</em>) – new entry to add</p></li>
+<li><p><strong>value</strong> (<em>bytearray</em>) – value for the entry</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.remove_raw_entry">
+<span class="sig-name descname"><span class="pre">remove_raw_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.remove_raw_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove an entry from the local cache</p>
+<p>Nothing is done on the network yet. It will be updated only when
+calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">update_entries()</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>entry</strong> (<em>int</em><em> (</em><em>between 0 and 0xffff</em><em>)</em>) – entry to remove</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.setup_local_provisioning">
+<span class="sig-name descname"><span class="pre">setup_local_provisioning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enabled</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psk_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.setup_local_provisioning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a new entry to enable or disable local provisioning</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>enabled</strong> (<em>bool</em>) – True to enable local provisioning, False to disable it</p></li>
+<li><p><strong>psk_id</strong> (<em>bytearray</em>) – Id of the psk on 4 bytes (only valid when enabled)</p></li>
+<li><p><strong>psk</strong> (<em>bytearray</em>) – psk to use for lacal provisioning on 32 bytes (only valid when enabled)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – if psk and psk_id are not both set or unset or with a wrong size</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.update_entries">
+<span class="sig-name descname"><span class="pre">update_entries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">override</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.update_entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a new entry to the NDP for the selected network or sink</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>override</strong> – if True, if an app config is already present that doesn’t
+follow the TLV format, full app config is overriden with TLV format with this entry</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if all specified sinks are updated, False otherwise.</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If returned value is False, only a subset of sinks may be updated</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="gateway-return-codes-and-special-values">
 <h1>Gateway return codes and special values<a class="headerlink" href="#gateway-return-codes-and-special-values" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wirepas_mesh_messaging.gateway_result_code.</span></code><code class="sig-name descname"><span class="pre">GatewayResultCode</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wirepas_mesh_messaging.gateway_result_code.</span></span><span class="sig-name descname"><span class="pre">GatewayResultCode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class that represent all possible errors generated by a gateway
 Keep a one-to-one mapping with current protobuf errors to ease
 conversion</p>
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_UNKNOWN_ERROR">
-<code class="sig-name descname"><span class="pre">GW_RES_UNKNOWN_ERROR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">-1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_UNKNOWN_ERROR" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_UNKNOWN_ERROR">
+<span class="sig-name descname"><span class="pre">GW_RES_UNKNOWN_ERROR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">-1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_UNKNOWN_ERROR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_OK">
-<code class="sig-name descname"><span class="pre">GW_RES_OK</span></code><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_OK" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_OK">
+<span class="sig-name descname"><span class="pre">GW_RES_OK</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_OK" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INTERNAL_ERROR">
-<code class="sig-name descname"><span class="pre">GW_RES_INTERNAL_ERROR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INTERNAL_ERROR" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INTERNAL_ERROR">
+<span class="sig-name descname"><span class="pre">GW_RES_INTERNAL_ERROR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INTERNAL_ERROR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SINK_ID">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_SINK_ID</span></code><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SINK_ID" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SINK_ID">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_SINK_ID</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SINK_ID" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_ROLE">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_ROLE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_ROLE" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_ROLE">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_ROLE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_ROLE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_ADDRESS">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_NETWORK_ADDRESS</span></code><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_ADDRESS" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_ADDRESS">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_NETWORK_ADDRESS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_ADDRESS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_CHANNEL">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_NETWORK_CHANNEL</span></code><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_CHANNEL" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_CHANNEL">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_NETWORK_CHANNEL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_CHANNEL" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_CHANNEL_MAP">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_CHANNEL_MAP</span></code><em class="property"> <span class="pre">=</span> <span class="pre">6</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_CHANNEL_MAP" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_CHANNEL_MAP">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_CHANNEL_MAP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">6</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_CHANNEL_MAP" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_KEYS">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_NETWORK_KEYS</span></code><em class="property"> <span class="pre">=</span> <span class="pre">7</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_KEYS" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_KEYS">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_NETWORK_KEYS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">7</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_NETWORK_KEYS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_AC_RANGE">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_AC_RANGE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_AC_RANGE" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_AC_RANGE">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_AC_RANGE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_AC_RANGE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SINK_STATE">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_SINK_STATE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">9</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SINK_STATE" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SINK_STATE">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_SINK_STATE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">9</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SINK_STATE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DEST_ADDRESS">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_DEST_ADDRESS</span></code><em class="property"> <span class="pre">=</span> <span class="pre">10</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DEST_ADDRESS" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DEST_ADDRESS">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_DEST_ADDRESS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">10</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DEST_ADDRESS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DEST_ENDPOINT">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_DEST_ENDPOINT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">11</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DEST_ENDPOINT" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DEST_ENDPOINT">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_DEST_ENDPOINT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">11</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DEST_ENDPOINT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SRC_ENDPOINT">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_SRC_ENDPOINT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">12</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SRC_ENDPOINT" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SRC_ENDPOINT">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_SRC_ENDPOINT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">12</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SRC_ENDPOINT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_QOS">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_QOS</span></code><em class="property"> <span class="pre">=</span> <span class="pre">13</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_QOS" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_QOS">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_QOS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">13</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_QOS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DATA_PAYLOAD">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_DATA_PAYLOAD</span></code><em class="property"> <span class="pre">=</span> <span class="pre">14</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DATA_PAYLOAD" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DATA_PAYLOAD">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_DATA_PAYLOAD</span></span><em class="property"> <span class="pre">=</span> <span class="pre">14</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DATA_PAYLOAD" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SCRATCHPAD">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_SCRATCHPAD</span></code><em class="property"> <span class="pre">=</span> <span class="pre">15</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SCRATCHPAD" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SCRATCHPAD">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_SCRATCHPAD</span></span><em class="property"> <span class="pre">=</span> <span class="pre">15</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SCRATCHPAD" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SCRATCHPAD_SIZE">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_SCRATCHPAD_SIZE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">16</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SCRATCHPAD_SIZE" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SCRATCHPAD_SIZE">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_SCRATCHPAD_SIZE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">16</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SCRATCHPAD_SIZE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVLAID_SEQUENCE_NUMBER">
-<code class="sig-name descname"><span class="pre">GW_RES_INVLAID_SEQUENCE_NUMBER</span></code><em class="property"> <span class="pre">=</span> <span class="pre">17</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVLAID_SEQUENCE_NUMBER" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVLAID_SEQUENCE_NUMBER">
+<span class="sig-name descname"><span class="pre">GW_RES_INVLAID_SEQUENCE_NUMBER</span></span><em class="property"> <span class="pre">=</span> <span class="pre">17</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVLAID_SEQUENCE_NUMBER" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SEQUENCE_NUMBER">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_SEQUENCE_NUMBER</span></code><em class="property"> <span class="pre">=</span> <span class="pre">17</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SEQUENCE_NUMBER" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SEQUENCE_NUMBER">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_SEQUENCE_NUMBER</span></span><em class="property"> <span class="pre">=</span> <span class="pre">17</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_SEQUENCE_NUMBER" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_REBOOT_DELAY">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_REBOOT_DELAY</span></code><em class="property"> <span class="pre">=</span> <span class="pre">18</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_REBOOT_DELAY" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_REBOOT_DELAY">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_REBOOT_DELAY</span></span><em class="property"> <span class="pre">=</span> <span class="pre">18</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_REBOOT_DELAY" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DIAG_INTERVAL">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_DIAG_INTERVAL</span></code><em class="property"> <span class="pre">=</span> <span class="pre">19</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DIAG_INTERVAL" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DIAG_INTERVAL">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_DIAG_INTERVAL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">19</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_DIAG_INTERVAL" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_APP_CONFIG">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_APP_CONFIG</span></code><em class="property"> <span class="pre">=</span> <span class="pre">20</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_APP_CONFIG" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_APP_CONFIG">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_APP_CONFIG</span></span><em class="property"> <span class="pre">=</span> <span class="pre">20</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_APP_CONFIG" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_PARAM">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_PARAM</span></code><em class="property"> <span class="pre">=</span> <span class="pre">21</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_PARAM" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_PARAM">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_PARAM</span></span><em class="property"> <span class="pre">=</span> <span class="pre">21</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_PARAM" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_NO_SCRATCHPAD_PRESENT">
-<code class="sig-name descname"><span class="pre">GW_RES_NO_SCRATCHPAD_PRESENT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">22</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_NO_SCRATCHPAD_PRESENT" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_NO_SCRATCHPAD_PRESENT">
+<span class="sig-name descname"><span class="pre">GW_RES_NO_SCRATCHPAD_PRESENT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">22</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_NO_SCRATCHPAD_PRESENT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_ACCESS_DENIED">
-<code class="sig-name descname"><span class="pre">GW_RES_ACCESS_DENIED</span></code><em class="property"> <span class="pre">=</span> <span class="pre">23</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_ACCESS_DENIED" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_ACCESS_DENIED">
+<span class="sig-name descname"><span class="pre">GW_RES_ACCESS_DENIED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">23</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_ACCESS_DENIED" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_REQUEST_NEEDS_SINK_ID">
-<code class="sig-name descname"><span class="pre">GW_RES_REQUEST_NEEDS_SINK_ID</span></code><em class="property"> <span class="pre">=</span> <span class="pre">24</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_REQUEST_NEEDS_SINK_ID" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_REQUEST_NEEDS_SINK_ID">
+<span class="sig-name descname"><span class="pre">GW_RES_REQUEST_NEEDS_SINK_ID</span></span><em class="property"> <span class="pre">=</span> <span class="pre">24</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_REQUEST_NEEDS_SINK_ID" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_MAX_HOP_COUNT">
-<code class="sig-name descname"><span class="pre">GW_RES_INVALID_MAX_HOP_COUNT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">25</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_MAX_HOP_COUNT" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_MAX_HOP_COUNT">
+<span class="sig-name descname"><span class="pre">GW_RES_INVALID_MAX_HOP_COUNT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">25</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_INVALID_MAX_HOP_COUNT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_SINK_OUT_OF_MEMORY">
-<code class="sig-name descname"><span class="pre">GW_RES_SINK_OUT_OF_MEMORY</span></code><em class="property"> <span class="pre">=</span> <span class="pre">26</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_SINK_OUT_OF_MEMORY" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_SINK_OUT_OF_MEMORY">
+<span class="sig-name descname"><span class="pre">GW_RES_SINK_OUT_OF_MEMORY</span></span><em class="property"> <span class="pre">=</span> <span class="pre">26</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_SINK_OUT_OF_MEMORY" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_SINK_TIMEOUT">
-<code class="sig-name descname"><span class="pre">GW_RES_SINK_TIMEOUT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">27</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_SINK_TIMEOUT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wirepas_mesh_messaging.otap_helper.ProcessingDelay">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wirepas_mesh_messaging.otap_helper.</span></code><code class="sig-name descname"><span class="pre">ProcessingDelay</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay" title="Permalink to this definition">¶</a></dt>
-<dd><p>An enumeration.</p>
-<dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_UNKNOWN">
-<code class="sig-name descname"><span class="pre">DELAY_UNKNOWN</span></code><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_UNKNOWN" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_TEN_MINUTES">
-<code class="sig-name descname"><span class="pre">DELAY_TEN_MINUTES</span></code><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_TEN_MINUTES" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_THIRTY_MINUTES">
-<code class="sig-name descname"><span class="pre">DELAY_THIRTY_MINUTES</span></code><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_THIRTY_MINUTES" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_ONE_HOUR">
-<code class="sig-name descname"><span class="pre">DELAY_ONE_HOUR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_ONE_HOUR" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_SIX_HOURS">
-<code class="sig-name descname"><span class="pre">DELAY_SIX_HOURS</span></code><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_SIX_HOURS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_ONE_DAY">
-<code class="sig-name descname"><span class="pre">DELAY_ONE_DAY</span></code><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_ONE_DAY" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_TWO_DAYS">
-<code class="sig-name descname"><span class="pre">DELAY_TWO_DAYS</span></code><em class="property"> <span class="pre">=</span> <span class="pre">6</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_TWO_DAYS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_FIVE_DAYS">
-<code class="sig-name descname"><span class="pre">DELAY_FIVE_DAYS</span></code><em class="property"> <span class="pre">=</span> <span class="pre">7</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_FIVE_DAYS" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_SINK_TIMEOUT">
+<span class="sig-name descname"><span class="pre">GW_RES_SINK_TIMEOUT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">27</span></em><a class="headerlink" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode.GW_RES_SINK_TIMEOUT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadAction">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wirepas_mesh_messaging.otap_helper.</span></code><code class="sig-name descname"><span class="pre">ScratchpadAction</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ProcessingDelay">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wirepas_mesh_messaging.otap_helper.</span></span><span class="sig-name descname"><span class="pre">ProcessingDelay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay" title="Permalink to this definition">¶</a></dt>
 <dd><p>An enumeration.</p>
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_NO_OTAP">
-<code class="sig-name descname"><span class="pre">ACTION_NO_OTAP</span></code><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_NO_OTAP" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_UNKNOWN">
+<span class="sig-name descname"><span class="pre">DELAY_UNKNOWN</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_UNKNOWN" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_ONLY">
-<code class="sig-name descname"><span class="pre">ACTION_PROPAGATE_ONLY</span></code><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_ONLY" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_TEN_MINUTES">
+<span class="sig-name descname"><span class="pre">DELAY_TEN_MINUTES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_TEN_MINUTES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS">
-<code class="sig-name descname"><span class="pre">ACTION_PROPAGATE_AND_PROCESS</span></code><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_THIRTY_MINUTES">
+<span class="sig-name descname"><span class="pre">DELAY_THIRTY_MINUTES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_THIRTY_MINUTES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS_WITH_DELAY">
-<code class="sig-name descname"><span class="pre">ACTION_PROPAGATE_AND_PROCESS_WITH_DELAY</span></code><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS_WITH_DELAY" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_ONE_HOUR">
+<span class="sig-name descname"><span class="pre">DELAY_ONE_HOUR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_ONE_HOUR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_LEGACY_OTAP">
-<code class="sig-name descname"><span class="pre">ACTION_LEGACY_OTAP</span></code><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_LEGACY_OTAP" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_SIX_HOURS">
+<span class="sig-name descname"><span class="pre">DELAY_SIX_HOURS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_SIX_HOURS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_ONE_DAY">
+<span class="sig-name descname"><span class="pre">DELAY_ONE_DAY</span></span><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_ONE_DAY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_TWO_DAYS">
+<span class="sig-name descname"><span class="pre">DELAY_TWO_DAYS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">6</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_TWO_DAYS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_FIVE_DAYS">
+<span class="sig-name descname"><span class="pre">DELAY_FIVE_DAYS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">7</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ProcessingDelay.DELAY_FIVE_DAYS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadType">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wirepas_mesh_messaging.otap_helper.</span></code><code class="sig-name descname"><span class="pre">ScratchpadType</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadType" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadAction">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wirepas_mesh_messaging.otap_helper.</span></span><span class="sig-name descname"><span class="pre">ScratchpadAction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>An enumeration.</p>
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_BLANK">
-<code class="sig-name descname"><span class="pre">SCRATCHPAD_TYPE_BLANK</span></code><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_BLANK" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_NO_OTAP">
+<span class="sig-name descname"><span class="pre">ACTION_NO_OTAP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_NO_OTAP" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_PRESENT">
-<code class="sig-name descname"><span class="pre">SCRATCHPAD_TYPE_PRESENT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_PRESENT" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_ONLY">
+<span class="sig-name descname"><span class="pre">ACTION_PROPAGATE_ONLY</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_ONLY" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_PROCESS">
-<code class="sig-name descname"><span class="pre">SCRATCHPAD_TYPE_PROCESS</span></code><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_PROCESS" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS">
+<span class="sig-name descname"><span class="pre">ACTION_PROPAGATE_AND_PROCESS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS_WITH_DELAY">
+<span class="sig-name descname"><span class="pre">ACTION_PROPAGATE_AND_PROCESS_WITH_DELAY</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS_WITH_DELAY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_LEGACY_OTAP">
+<span class="sig-name descname"><span class="pre">ACTION_LEGACY_OTAP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_LEGACY_OTAP" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadStatus">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wirepas_mesh_messaging.otap_helper.</span></code><code class="sig-name descname"><span class="pre">ScratchpadStatus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadStatus" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadType">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wirepas_mesh_messaging.otap_helper.</span></span><span class="sig-name descname"><span class="pre">ScratchpadType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadType" title="Permalink to this definition">¶</a></dt>
 <dd><p>An enumeration.</p>
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_SUCCESS">
-<code class="sig-name descname"><span class="pre">SCRATCHPAD_STATUS_SUCCESS</span></code><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_SUCCESS" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_BLANK">
+<span class="sig-name descname"><span class="pre">SCRATCHPAD_TYPE_BLANK</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_BLANK" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_NEW">
-<code class="sig-name descname"><span class="pre">SCRATCHPAD_STATUS_NEW</span></code><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_NEW" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_PRESENT">
+<span class="sig-name descname"><span class="pre">SCRATCHPAD_TYPE_PRESENT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_PRESENT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_ERROR">
-<code class="sig-name descname"><span class="pre">SCRATCHPAD_STATUS_ERROR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_ERROR" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_PROCESS">
+<span class="sig-name descname"><span class="pre">SCRATCHPAD_TYPE_PROCESS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadType.SCRATCHPAD_TYPE_PROCESS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadStatus">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wirepas_mesh_messaging.otap_helper.</span></span><span class="sig-name descname"><span class="pre">ScratchpadStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_SUCCESS">
+<span class="sig-name descname"><span class="pre">SCRATCHPAD_STATUS_SUCCESS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_SUCCESS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_NEW">
+<span class="sig-name descname"><span class="pre">SCRATCHPAD_STATUS_NEW</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_NEW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_ERROR">
+<span class="sig-name descname"><span class="pre">SCRATCHPAD_STATUS_ERROR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadStatus.SCRATCHPAD_STATUS_ERROR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

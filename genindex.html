@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -82,17 +85,18 @@
               
             
             
-              <p><span class="caption-text">Overview</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="README.html">Wirepas MQTT Library</a></li>
 </ul>
-<p><span class="caption-text">API</span></p>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html">WirepasNetworkInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html#module-wirepas_mqtt_library.wirepas_otap_helper">OtapHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html#module-wirepas_mqtt_library.wirepas_tlv_app_config_helper">TLVAppConfigHelper</a></li>
 <li class="toctree-l1"><a class="reference internal" href="wirepas_mqtt_library.html#gateway-return-codes-and-special-values">Gateway return codes and special values</a></li>
 </ul>
-<p><span class="caption-text">Examples</span></p>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
@@ -189,6 +193,8 @@
       <ul>
         <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.__init__">(wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper method)</a>
 </li>
+        <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.__init__">(wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper method)</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -200,13 +206,15 @@
 </li>
       <li><a href="wirepas_mqtt_library.html#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_NO_OTAP">ACTION_NO_OTAP (wirepas_mesh_messaging.otap_helper.ScratchpadAction attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="wirepas_mqtt_library.html#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS">ACTION_PROPAGATE_AND_PROCESS (wirepas_mesh_messaging.otap_helper.ScratchpadAction attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="wirepas_mqtt_library.html#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS_WITH_DELAY">ACTION_PROPAGATE_AND_PROCESS_WITH_DELAY (wirepas_mesh_messaging.otap_helper.ScratchpadAction attribute)</a>
 </li>
       <li><a href="wirepas_mqtt_library.html#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_ONLY">ACTION_PROPAGATE_ONLY (wirepas_mesh_messaging.otap_helper.ScratchpadAction attribute)</a>
+</li>
+      <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.add_raw_entry">add_raw_entry() (wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -376,6 +384,8 @@
 </li>
         <li><a href="wirepas_mqtt_library.html#module-wirepas_mqtt_library.wirepas_otap_helper">wirepas_mqtt_library.wirepas_otap_helper</a>
 </li>
+        <li><a href="wirepas_mqtt_library.html#module-wirepas_mqtt_library.wirepas_tlv_app_config_helper">wirepas_mqtt_library.wirepas_tlv_app_config_helper</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -408,6 +418,10 @@
       <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb">register_data_cb() (wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface method)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.remove_raw_entry">remove_raw_entry() (wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper method)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
@@ -431,10 +445,10 @@
 </li>
       <li><a href="wirepas_mqtt_library.html#wirepas_mesh_messaging.otap_helper.ScratchpadType">ScratchpadType (class in wirepas_mesh_messaging.otap_helper)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.send_message">send_message() (wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.send_remote_scratchpad_status">send_remote_scratchpad_status() (wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper method)</a>
 </li>
       <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_config_changed_cb">set_config_changed_cb() (wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface method)</a>
@@ -451,6 +465,8 @@
 </li>
       <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_target_scratchpad">set_target_scratchpad() (wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface method)</a>
 </li>
+      <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.setup_local_provisioning">setup_local_provisioning() (wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper method)</a>
+</li>
       <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode.SOCKET_TIMEOUT">SOCKET_TIMEOUT (wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode attribute)</a>
 </li>
   </ul></td>
@@ -466,6 +482,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb">unregister_data_cb() (wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface method)</a>
+</li>
+      <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper.update_entries">update_entries() (wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper method)</a>
 </li>
       <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.upload_scratchpad">upload_scratchpad() (wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface method)</a>
 </li>
@@ -489,6 +507,13 @@
         <li><a href="wirepas_mqtt_library.html#module-wirepas_mqtt_library.wirepas_otap_helper">module</a>
 </li>
       </ul></li>
+      <li>
+    wirepas_mqtt_library.wirepas_tlv_app_config_helper
+
+      <ul>
+        <li><a href="wirepas_mqtt_library.html#module-wirepas_mqtt_library.wirepas_tlv_app_config_helper">module</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface">WirepasNetworkInterface (class in wirepas_mqtt_library.wirepas_network_interface)</a>
@@ -496,6 +521,8 @@
       <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.ConnectionErrorCode">WirepasNetworkInterface.ConnectionErrorCode (class in wirepas_mqtt_library.wirepas_network_interface)</a>
 </li>
       <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper">WirepasOtapHelper (class in wirepas_mqtt_library.wirepas_otap_helper)</a>
+</li>
+      <li><a href="wirepas_mqtt_library.html#wirepas_mqtt_library.wirepas_tlv_app_config_helper.WirepasTLVAppConfigHelper">WirepasTLVAppConfigHelper (class in wirepas_mqtt_library.wirepas_tlv_app_config_helper)</a>
 </li>
   </ul></td>
 </tr></table>
