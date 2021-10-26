@@ -394,6 +394,21 @@ connection after this one will end up in TimeoutError exception</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.clear_gateway_status">
+<code class="sig-name descname"><span class="pre">clear_gateway_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.clear_gateway_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear a gateway status</p>
+<p>Gateway status is sent by gateway as a retain message on the broker.
+It may be need to explicitly remove it in some situation:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>An offline gateway that will never be back online (removed from network)</p></li>
+<li><p>A sticky gateway online status that is not here anymore (bug from gateway)</p></li>
+<li><p>A malformed gateway status (bug from gateway)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
 <dt id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.send_message">
 <code class="sig-name descname"><span class="pre">send_message</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_ep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_ep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csma_ca_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.send_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send a message from a sink</p>
