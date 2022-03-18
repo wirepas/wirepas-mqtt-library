@@ -51,7 +51,7 @@ if __name__ == "__main__":
     # have enough room for it
     res = app_config_helper.add_raw_entry(0x6666, b'\x00\x00\x12\x34')\
                            .add_raw_entry(0x32, b'\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A')\
-                           .remove_raw_entry(0x55555)\
+                           .remove_raw_entry(0x5555)\
                            .update_entries()
 
     print("Updating app_config result = %s" % res)
