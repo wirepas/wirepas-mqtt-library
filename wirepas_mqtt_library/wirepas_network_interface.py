@@ -74,7 +74,8 @@ class WirepasNetworkInterface:
 
     def __init__(self, host, port, username, password,
                  insecure=False, num_worker_thread=1, strict_mode=True,
-                 connection_cb=None):
+                 connection_cb=None, client_id="", clean_session=None,
+                 transport="tcp"):
         """Constructor
 
         :param host: MQTT broker host address
@@ -96,9 +97,15 @@ class WirepasNetworkInterface:
             - error_code: :class:`~wirepas_mqtt_library.wirepas_network_interface.ConnectionErrorCode`
 
         :type connection_cb: function
+        :param client_id: the unique client id string used when connecting to the broker. If client_id is zero length or None,
+               then one will be randomly generated. In this case the clean_session parameter must be True.
+        :param clean_session: a boolean that determines the client type. If True, the broker will remove all information about this client when it disconnects.
+               If False, the client is a durable client and subscription information and queued messages will be retained when the client disconnects.
+        :param transport: set to "websockets" to send MQTT over WebSockets. Leave at the default of "tcp" to use raw TCP.
         """
-        # Create an MQTT client
-        self._mqtt_client = mqtt.Client()
+        # Create an MQTT client (can generate Exception if clean session is False and no client id set,
+        # but no need to catch it here)
+        self._mqtt_client = mqtt.Client(client_id=client_id, clean_session=clean_session, transport=transport)
 
         if not insecure:
             self._mqtt_client.tls_set(ca_certs=None, certfile=None, keyfile=None,
