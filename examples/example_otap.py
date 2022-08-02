@@ -30,7 +30,8 @@ if __name__ == "__main__":
                                         "propagate_only",
                                         "immediately",
                                         "delayed",
-                                        "update_delay"])
+                                        "update_delay",
+                                        "remove"])
 
     parser.add_argument('--network',
                         type=int,
@@ -59,6 +60,11 @@ if __name__ == "__main__":
         print("Set new delay to %s" % delay)
         if not otapHelper.set_propagate_and_process_scratchpad_to_all_sinks(delay=delay):
             print("Cannot update delay")
+        exit()
+    elif args.cmd == "remove":
+        print("Remove scratchpads to all sinks")
+        if not otapHelper.set_no_otap_to_all_sinks():
+            print("Cannot set no otap to all sinks")
         exit()
 
     # Optional: find a "good" sequence
