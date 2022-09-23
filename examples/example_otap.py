@@ -30,7 +30,8 @@ if __name__ == "__main__":
                                         "propagate_only",
                                         "immediately",
                                         "delayed",
-                                        "update_delay"])
+                                        "update_delay",
+                                        "no_otap"])
 
     parser.add_argument('--network',
                         type=int,
@@ -61,6 +62,12 @@ if __name__ == "__main__":
             print("Cannot update delay")
         exit()
 
+    if args.cmd == "no_otap":
+        print("Set target to no otap")
+        if not otapHelper.set_no_otap_to_all_sinks():
+            print("Cannot set no otap on all sinks")
+        exit()
+
     # Optional: find a "good" sequence
     current_target_seq_set = otapHelper.get_target_scratchpad_seq_list()
 
@@ -77,7 +84,6 @@ if __name__ == "__main__":
         print("Processing scratchpad on all sinks")
         if not otapHelper.process_scratchpad_on_all_sinks():
             print("Cannot process scratchpad on all sinks")
-            exit()
     elif args.cmd == "propagate_only":
         print("Set propagate only")
         if not otapHelper.set_propagate_scratchpad_to_all_sinks():
