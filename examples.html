@@ -494,7 +494,8 @@ parameter.</p>
                                         <span class="s2">&quot;propagate_only&quot;</span><span class="p">,</span>
                                         <span class="s2">&quot;immediately&quot;</span><span class="p">,</span>
                                         <span class="s2">&quot;delayed&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;update_delay&quot;</span><span class="p">])</span>
+                                        <span class="s2">&quot;update_delay&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;no_otap&quot;</span><span class="p">])</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--network&#39;</span><span class="p">,</span>
                         <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
@@ -525,6 +526,12 @@ parameter.</p>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot update delay&quot;</span><span class="p">)</span>
         <span class="n">exit</span><span class="p">()</span>
 
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;no_otap&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set target to no otap&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_no_otap_to_all_sinks</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot set no otap on all sinks&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">()</span>
+
     <span class="c1"># Optional: find a &quot;good&quot; sequence</span>
     <span class="n">current_target_seq_set</span> <span class="o">=</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">get_target_scratchpad_seq_list</span><span class="p">()</span>
 
@@ -541,7 +548,6 @@ parameter.</p>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing scratchpad on all sinks&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">process_scratchpad_on_all_sinks</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot process scratchpad on all sinks&quot;</span><span class="p">)</span>
-            <span class="n">exit</span><span class="p">()</span>
     <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;propagate_only&quot;</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set propagate only&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_propagate_scratchpad_to_all_sinks</span><span class="p">():</span>
