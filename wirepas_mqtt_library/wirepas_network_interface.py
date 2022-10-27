@@ -172,6 +172,12 @@ class WirepasNetworkInterface:
                 self._task_queue.add_task(self._connection_cb, False, self.ConnectionErrorCode.from_broker_connack(rc))
             return
 
+        # Register for Gateway request status topic
+        get_gw_status_topic = TopicGenerator.make_get_gw_status_response_topic('+')
+        self._mqtt_client.subscribe(get_gw_status_topic, qos=1)
+        self._mqtt_client.message_callback_add(get_gw_status_topic,
+                                               self._on_get_status_gateway_received)
+
         # Register for Gateway status topic
         all_gateway_status_topic = TopicGenerator.make_status_topic()
         self._mqtt_client.subscribe(all_gateway_status_topic, qos=1)
@@ -215,22 +221,7 @@ class WirepasNetworkInterface:
 
         try:
             status = wmm.StatusEvent.from_payload(message.payload)
-
-            if status.state == wmm.GatewayState.ONLINE:
-                self._gateways[status.gw_id] = self._Gateway(status.gw_id, True)
-                request = wmm.GetConfigsRequest()
-                self._publish(TopicGenerator.make_get_configs_request_topic(status.gw_id),
-                              request.payload,
-                              1)
-
-                # Call update gateway config when receiving it
-                self._wait_for_response(self._update_gateway_configs, request.req_id)
-            else:
-                # Gateway is offline, remove config (Override any old config)
-                self._gateways[status.gw_id] = self._Gateway(status.gw_id, False)
-                # Config has changed, notify any subscriber
-                if self._on_config_changed_cb is not None:
-                    self._task_queue.add_task(self._on_config_changed_cb)
+            self._send_status(status.state, status.gw_id)
 
         except wmm.GatewayAPIParsingException as e:
             logging.error(str(e))
@@ -238,6 +229,42 @@ class WirepasNetworkInterface:
             logging.error("It probably means that one of the gateway sent a malformed status."
             " It can be cleared by calling clear_gateway_status(\"%s\")", gw)
             return
+
+    def _on_get_status_gateway_received(self, client, userdata, message):
+        if message.payload.__len__() == 0:
+            # Remove gateway if in our list
+            try:
+                del self._gateways[TopicParser.parse_status_topic(message.topic)]
+            except KeyError:
+                pass
+
+            return
+
+        try:
+            status = wmm.GetGatewayStatusResponse.from_payload(message.payload)
+            self._send_status(status.state, status.gw_id)
+
+        except wmm.GatewayAPIParsingException as e:
+            logging.error(str(e))
+            return
+
+
+    def _send_status(self, state, gw_id):
+        if state == wmm.GatewayState.ONLINE:
+            self._gateways[gw_id] = self._Gateway(gw_id, True)
+            request = wmm.GetConfigsRequest()
+            self._publish(TopicGenerator.make_get_configs_request_topic(gw_id),
+                            request.payload,
+                            1)
+
+            # Call update gateway config when receiving it
+            self._wait_for_response(self._update_gateway_configs, request.req_id)
+        else:
+            # Gateway is offline, remove config (Override any old config)
+            self._gateways[gw_id] = self._Gateway(gw_id, False)
+            # Config has changed, notify any subscriber
+            if self._on_config_changed_cb is not None:
+                self._task_queue.add_task(self._on_config_changed_cb)
 
     def _update_sink_config(self, gw_id, config):
         try:
@@ -482,6 +509,18 @@ class WirepasNetworkInterface:
             gateways = self._gateways.keys()
 
         return gateways
+
+    @_wait_for_configs
+    def request_online_gateways(self):
+        """
+        request_online_gateways(self)
+        Request gateways status connected to this broker
+
+        """
+        request = wmm.GetGatewayStatusRequest()
+        self._publish(TopicGenerator.make_get_gw_status_request_topic(),
+                      request.payload,
+                      1)
 
     def clear_gateway_status(self, gw_id):
         """
