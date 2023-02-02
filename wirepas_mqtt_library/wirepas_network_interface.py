@@ -388,16 +388,24 @@ class WirepasNetworkInterface:
         return wrapper
 
     def close(self):
-        """Explicitly close this network interface.
+        """Explicitly close this network interface as well as the worker threads
 
-        It allows to close the connection cleanly. Garbage collect will anyway do it later by closing
-        the socket, but in some use cases, it may be required to release the connection sooner in a more
-        deterministic way.
+        This closes disconnects the MQTT client from the broker which automatically closes the network thread. 
+        In addition, it creates empty tasks that force the worker daemon threads to exit cleanly.
+        Given the connection to broker is closed first, callbacks are not executed anymore and no additional tasks
+        are therefore added in the queue. Thus by design, no valid task can be added to the queue whilst the worker threads
+        are being closed.
 
-        .. warning:: Object must not be used anymore after this call. Any other method call requiring the broker
+        If you do not require to close the connection in a deterministic way by invoking this method, the resources on the 
+        host and broker are anyway cleaned up by way of garbage collection once the main program utilising this class is 
+        stopped and the corresponding python process is exited.
+    
+        .. warning:: the instance of WNI must not be used anymore after this call. Any other method call requiring the broker
             connection after this one will end up in TimeoutError exception
         """
         self._mqtt_client.disconnect()
+        self._task_queue.terminate()
+
 
     @_wait_for_configs
     def get_sinks(self, network_address=None, gateway=None):
@@ -909,8 +917,10 @@ class _DataFilter:
 
 class _TaskQueue(Queue):
     def __init__(self, num_worker=1):
+        self._num_worker = num_worker
+
         Queue.__init__(self)
-        for i in range(num_worker):
+        for i in range(self._num_worker):
             thread = Thread(target=self.worker)
             thread.daemon = True
             thread.start()
@@ -922,5 +932,15 @@ class _TaskQueue(Queue):
 
     def worker(self):
         while True:
-            task, args, kwargs = self.get()
-            task(*args, **kwargs)
+            try: 
+                task, args, kwargs = self.get()
+                task(*args, **kwargs)
+            except TypeError as e: 
+                # When a task is None in the queue and the task is invoked
+                # a type error is raised. This condition is used to terminate the Thread
+                break
+
+    def terminate(self):
+        for worker_id in range(0,self._num_worker):
+            logging.debug("Adding empty task to force worker %d thread to exit" %worker_id)
+            self.add_task(None)
