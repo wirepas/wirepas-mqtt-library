@@ -133,9 +133,8 @@ class WirepasNetworkInterface:
         self._data_filters = {}
         self._on_config_changed_cb = None
 
-        self._num_worker_thread = num_worker_thread
         # Create rx queue and start dispatch thread
-        self._task_queue = _TaskQueue(self._num_worker_thread)
+        self._task_queue = _TaskQueue(num_worker_thread)
 
         # Save user option parameters
         self._strict_mode = strict_mode
@@ -405,9 +404,8 @@ class WirepasNetworkInterface:
             connection after this one will end up in TimeoutError exception
         """
         self._mqtt_client.disconnect()
-        for worker_id in range(0,self._num_worker_thread):
-            logging.debug("Adding empty task to force worker %d threads to exit" %worker_id)
-            self._task_queue.add_task(None)
+        self._task_queue.terminate()
+
 
     @_wait_for_configs
     def get_sinks(self, network_address=None, gateway=None):
@@ -919,8 +917,10 @@ class _DataFilter:
 
 class _TaskQueue(Queue):
     def __init__(self, num_worker=1):
+        self._num_worker = num_worker
+
         Queue.__init__(self)
-        for i in range(num_worker):
+        for i in range(self._num_worker):
             thread = Thread(target=self.worker)
             thread.daemon = True
             thread.start()
@@ -939,3 +939,8 @@ class _TaskQueue(Queue):
                 # When a task is None in the queue and the task is invoked
                 # a type error is raised. This condition is used to terminate the Thread
                 break
+
+    def terminate(self):
+        for worker_id in range(0,self._num_worker):
+            logging.debug("Adding empty task to force worker %d thread to exit" %worker_id)
+            self.add_task(None)
