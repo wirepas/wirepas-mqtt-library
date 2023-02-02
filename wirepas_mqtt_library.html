@@ -276,13 +276,18 @@ If False, the client is a durable client and subscription information and queued
 <dl class="py method">
 <dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.close">
 <span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Explicitly close this network interface.</p>
-<p>It allows to close the connection cleanly. Garbage collect will anyway do it later by closing
-the socket, but in some use cases, it may be required to release the connection sooner in a more
-deterministic way.</p>
+<dd><p>Explicitly close this network interface as well as the worker threads</p>
+<p>This closes disconnects the MQTT client from the broker which automatically closes the network thread. 
+In addition, it creates empty tasks that force the worker daemon threads to exit cleanly.
+Given the connection to broker is closed first, callbacks are not executed anymore and no additional tasks
+are therefore added in the queue. Thus by design, no valid task can be added to the queue whilst the worker threads
+are being closed.</p>
+<p>If you do not require to close the connection in a deterministic way by invoking this method, the resources on the 
+host and broker are anyway cleaned up by way of garbage collection once the main program utilising this class is 
+stopped and the corresponding python process is exited.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Object must not be used anymore after this call. Any other method call requiring the broker
+<p>the instance of WNI must not be used anymore after this call. Any other method call requiring the broker
 connection after this one will end up in TimeoutError exception</p>
 </div>
 </dd></dl>
