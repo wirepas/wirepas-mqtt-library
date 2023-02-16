@@ -200,59 +200,6 @@
 </section>
 <section id="code">
 <h3>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copyright 2021 Wirepas Ltd. All Rights Reserved.</span>
-<span class="c1">#</span>
-<span class="c1"># See file LICENSE.txt for full license details.</span>
-<span class="c1">#</span>
-<span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">from</span> <span class="nn">wirepas_mqtt_library</span> <span class="kn">import</span> <span class="n">WirepasNetworkInterface</span>
-<span class="kn">import</span> <span class="nn">wirepas_mesh_messaging</span> <span class="k">as</span> <span class="nn">wmm</span>
-
-<span class="kn">import</span> <span class="nn">logging</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">fromfile_prefix_chars</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--host&#39;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker address&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--port&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">8883</span><span class="p">,</span>
-                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker port&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--username&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;mqttmasteruser&#39;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker username&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--password&#39;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT broker password&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--insecure&#39;</span><span class="p">,</span>
-                        <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;insecure&#39;</span><span class="p">,</span>
-                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;MQTT use unsecured connection&quot;</span><span class="p">)</span>
-
-    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
-
-    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1"> </span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
-
-    <span class="n">wni</span> <span class="o">=</span> <span class="n">WirepasNetworkInterface</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
-                                  <span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
-                                  <span class="n">args</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
-                                  <span class="n">args</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
-                                  <span class="n">insecure</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">insecure</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">on_data_received</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RX from </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> =&gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">gw_id</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">sink_id</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">data_payload</span><span class="p">))</span>
-
-    <span class="c1"># Register for any data</span>
-    <span class="n">wni</span><span class="o">.</span><span class="n">register_data_cb</span><span class="p">(</span><span class="n">on_data_received</span><span class="p">)</span>
-
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Write a message to send to all sinks</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">wni</span><span class="o">.</span><span class="n">get_sinks</span><span class="p">():</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">res</span> <span class="o">=</span> <span class="n">wni</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;node_address&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-                <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="n">wmm</span><span class="o">.</span><span class="n">GatewayResultCode</span><span class="o">.</span><span class="n">GW_RES_OK</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot send data to </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> res=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">res</span><span class="p">))</span>
-            <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot send data to </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">gw</span><span class="p">,</span> <span class="n">sink</span><span class="p">)</span>
-</pre></div>
-</div>
 </section>
 </section>
 <section id="setting-sink-config">

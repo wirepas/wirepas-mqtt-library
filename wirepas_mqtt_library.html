@@ -658,7 +658,23 @@ If None, call is blocking.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb">
 <span class="sig-name descname"><span class="pre">register_data_cb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gateway</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register a data filter to received filtered data</p>
+<dd><p>Deprecated
+Replaced by <a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_uplink_traffic_cb" title="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_uplink_traffic_cb"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_uplink_traffic_cb()</span></code></a>
+Only name has changed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb">
+<span class="sig-name descname"><span class="pre">unregister_data_cb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated
+Replaced by <a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_uplink_traffic_cb" title="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_uplink_traffic_cb"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unregister_uplink_traffic_cb()</span></code></a>
+Only name has changed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_uplink_traffic_cb">
+<span class="sig-name descname"><span class="pre">register_uplink_traffic_cb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gateway</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_uplink_traffic_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a data filter to received uplink filtered data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -678,10 +694,46 @@ If None, call is blocking.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb">
-<span class="sig-name descname"><span class="pre">unregister_data_cb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_uplink_traffic_cb">
+<span class="sig-name descname"><span class="pre">unregister_uplink_traffic_cb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_uplink_traffic_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unregister uplink data callback previously registered
+with <a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_uplink_traffic_cb" title="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_uplink_traffic_cb"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_uplink_traffic_cb()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id</strong> – id returned when adding the filter</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>KeyError</strong> – if id doesn’t exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_downlink_traffic_cb">
+<span class="sig-name descname"><span class="pre">register_downlink_traffic_cb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gateway</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_downlink_traffic_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a data filter to received downlink filtered data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cb</strong> – Callback to be called when a matching packet is received</p></li>
+<li><p><strong>gateway</strong> – Filter on a given gateway (None for all)</p></li>
+<li><p><strong>sink</strong> – Filter on a given sink (None for all)</p></li>
+<li><p><strong>src_ep</strong> – Filter on a given source endpoint (None for all)</p></li>
+<li><p><strong>dst_ep</strong> – Filter on a given destination endpoint (None for all)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The id of this filter, to be used when removing it with
+<a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_downlink_traffic_cb" title="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_downlink_traffic_cb"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unregister_downlink_traffic_cb()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_downlink_traffic_cb">
+<span class="sig-name descname"><span class="pre">unregister_downlink_traffic_cb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_downlink_traffic_cb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unregister data callback previously registered
-with <a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb" title="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_data_cb()</span></code></a></p>
+with <a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_downlink_traffic_cb" title="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_downlink_traffic_cb"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_downlink_traffic_cb()</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>id</strong> – id returned when adding the filter</p>
