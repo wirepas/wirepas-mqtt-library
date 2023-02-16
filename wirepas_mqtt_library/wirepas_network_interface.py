@@ -324,8 +324,6 @@ class WirepasNetworkInterface:
         for f in self._data_downlink_filters.values():
             f.filter_and_dispatch(data, response)
 
-    
-
     def _on_response_received(self, client, userdata, message):
         # Topic are as followed: gw-response/cmd/...
         cmd = message.topic.split("/")[1]
@@ -550,7 +548,7 @@ class WirepasNetworkInterface:
             response_event.set()
 
         self._add_to_ongoing_request(req_id, unlock)
-        
+
         if not response_event.wait(timeout):
             # Timeout
             del self._ongoing_requests[req_id]
