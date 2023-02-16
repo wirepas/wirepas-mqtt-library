@@ -300,10 +300,11 @@ class WirepasNetworkInterface:
 
     def _call_cb(self, response, *args):
         try:
-            cb, param = self._ongoing_requests[response.req_id]
+            for cb, param in self._ongoing_requests[response.req_id]:
             # Add caller param after response error code and add any additional param at the end
-            cb(response.res, param, *args)
-            # Cb called, remove key
+                cb(response.res, param, *args)
+                # Cb called, remove key
+            
             del self._ongoing_requests[response.req_id]
         except KeyError:
             # No cb set, just pass (could be timeout that expired)
@@ -313,14 +314,17 @@ class WirepasNetworkInterface:
     def _on_downlink_data_received(self, client, userdata, message):
         try:
             data = wmm.SendDataRequest.from_payload(message.payload)
-            self._task_queue.add_task(self._dispatch_downlink_data, data)
+            logging.debug("Received message with id: %s", data.req_id)
+            self._wait_for_response(self._dispatch_downlink_data, data.req_id, param=data)
+           
         except wmm.GatewayAPIParsingException as e:
             logging.error(str(e))
 
-    def _dispatch_downlink_data(self, data):
+    def _dispatch_downlink_data(self, response, data):
         for f in self._data_downlink_filters.values():
-            f.filter_and_dispatch(data)
+            f.filter_and_dispatch(data, response)
 
+    
 
     def _on_response_received(self, client, userdata, message):
         # Topic are as followed: gw-response/cmd/...
@@ -520,11 +524,16 @@ class WirepasNetworkInterface:
         topic = TopicGenerator.make_status_topic(gw_id)
         self._publish(topic, None, qos=1, retain=True)
 
+    def _add_to_ongoing_request(self, req_id, cb, param=None):
+        try: 
+            self._ongoing_requests[req_id].append((cb, param))
+        except KeyError:
+            self._ongoing_requests[req_id]= [(cb, param)]
 
     def _wait_for_response(self, cb, req_id, timeout=2, param=None):
         if cb is not None:
             # Unblocking call, cb will be called later
-            self._ongoing_requests[req_id] = cb, param
+            self._add_to_ongoing_request(req_id, cb, param)
             return None
 
         # No cb specified so blocking call
@@ -540,7 +549,8 @@ class WirepasNetworkInterface:
                 res = response, *args
             response_event.set()
 
-        self._ongoing_requests[req_id] = unlock, None
+        self._add_to_ongoing_request(req_id, unlock)
+        
         if not response_event.wait(timeout):
             # Timeout
             del self._ongoing_requests[req_id]
@@ -949,7 +959,7 @@ class _DataFilter:
             raise ValueError("Callback must be specified")
         self.callback = cb
 
-    def filter_and_dispatch(self, message):
+    def filter_and_dispatch(self, message, *args):
         if self.gateway is not None and message.gw_id not in self.gateway:
             return
 
@@ -966,7 +976,7 @@ class _DataFilter:
             return
 
         # Message is not filtered and can be dispatched
-        self.callback(message)
+        self.callback(message, *args)
 
 
 class _TaskQueue(Queue):
