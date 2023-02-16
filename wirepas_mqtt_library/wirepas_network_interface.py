@@ -130,7 +130,8 @@ class WirepasNetworkInterface:
         # Dictionary to store request id, associated cb
         self._ongoing_requests = {}
 
-        self._data_filters = {}
+        self._data_uplink_filters = {}
+        self._data_downlink_filters = {}
         self._on_config_changed_cb = None
 
         # Create rx queue and start dispatch thread
@@ -185,10 +186,18 @@ class WirepasNetworkInterface:
                                                self._on_data_received)
 
         # Register for all responses
+        # TODO must be part of TopicGenerator
         all_responses_topic = "gw-response/#"
         self._mqtt_client.subscribe(all_responses_topic, 1)
         self._mqtt_client.message_callback_add(all_responses_topic,
                                                self._on_response_received)
+
+
+        # Register for all sent data
+        all_send_data_topic = TopicGenerator.make_send_data_request_topic()
+        self._mqtt_client.subscribe(all_send_data_topic, 1)
+        self._mqtt_client.message_callback_add(all_send_data_topic,
+                                               self._on_downlink_data_received)
 
         self._connection_time = time()
 
@@ -272,12 +281,12 @@ class WirepasNetworkInterface:
                 # Network id is from topic
                 _, _, network_address, _, _ = TopicParser.parse_received_data_topic(message.topic)
                 data.network_address = network_address
-            self._task_queue.add_task(self._dispatch_data, data)
+            self._task_queue.add_task(self._dispatch_uplink_data, data)
         except wmm.GatewayAPIParsingException as e:
             logging.error(str(e))
 
-    def _dispatch_data(self, data):
-        for f in self._data_filters.values():
+    def _dispatch_uplink_data(self, data):
+        for f in self._data_uplink_filters.values():
             f.filter_and_dispatch(data)
 
     def _publish(self, topic, payload, qos=1, retain=False):
@@ -291,15 +300,29 @@ class WirepasNetworkInterface:
 
     def _call_cb(self, response, *args):
         try:
-            cb, param = self._ongoing_requests[response.req_id]
+            for cb, param in self._ongoing_requests[response.req_id]:
             # Add caller param after response error code and add any additional param at the end
-            cb(response.res, param, *args)
-            # Cb called, remove key
+                cb(response.res, param, *args)
+                # Cb called, remove key
+            
             del self._ongoing_requests[response.req_id]
         except KeyError:
             # No cb set, just pass (could be timeout that expired)
             logging.debug("Response but no associated cb: %s" % response.req_id)
             pass
+
+    def _on_downlink_data_received(self, client, userdata, message):
+        try:
+            data = wmm.SendDataRequest.from_payload(message.payload)
+            logging.debug("Received message with id: %s", data.req_id)
+            self._wait_for_response(self._dispatch_downlink_data, data.req_id, param=data)
+           
+        except wmm.GatewayAPIParsingException as e:
+            logging.error(str(e))
+
+    def _dispatch_downlink_data(self, response, data):
+        for f in self._data_downlink_filters.values():
+            f.filter_and_dispatch(data, response)
 
     def _on_response_received(self, client, userdata, message):
         # Topic are as followed: gw-response/cmd/...
@@ -507,11 +530,16 @@ class WirepasNetworkInterface:
         topic = TopicGenerator.make_status_topic(gw_id)
         self._publish(topic, None, qos=1, retain=True)
 
+    def _add_to_ongoing_request(self, req_id, cb, param=None):
+        try: 
+            self._ongoing_requests[req_id].append((cb, param))
+        except KeyError:
+            self._ongoing_requests[req_id]= [(cb, param)]
 
     def _wait_for_response(self, cb, req_id, timeout=2, param=None):
         if cb is not None:
             # Unblocking call, cb will be called later
-            self._ongoing_requests[req_id] = cb, param
+            self._add_to_ongoing_request(req_id, cb, param)
             return None
 
         # No cb specified so blocking call
@@ -527,7 +555,8 @@ class WirepasNetworkInterface:
                 res = response, *args
             response_event.set()
 
-        self._ongoing_requests[req_id] = unlock, None
+        self._add_to_ongoing_request(req_id, unlock)
+
         if not response_event.wait(timeout):
             # Timeout
             del self._ongoing_requests[req_id]
@@ -753,8 +782,22 @@ class WirepasNetworkInterface:
         return self._wait_for_response(cb, request.req_id, param=param)
 
     def register_data_cb(self, cb, gateway=None, sink=None, network=None, src_ep=None, dst_ep=None):
+        """Deprecated
+        Replaced by :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_uplink_traffic_cb`
+        Only name has changed
         """
-        Register a data filter to received filtered data
+        return self.register_uplink_traffic_cb(cb, gateway, sink, network, src_ep, dst_ep)
+
+    def unregister_data_cb(self, id):
+        """Deprecated
+        Replaced by :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_uplink_traffic_cb`
+        Only name has changed
+        """
+        return self.unregister_uplink_traffic_cb(id)
+
+    def register_uplink_traffic_cb(self, cb, gateway=None, sink=None, network=None, src_ep=None, dst_ep=None):
+        """
+        Register a data filter to received uplink filtered data
 
         :param cb: Callback to be called when a matching packet is received
         :param gateway: Filter on a given gateway (None for all)
@@ -766,18 +809,45 @@ class WirepasNetworkInterface:
             :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb`
         """
         new_filter = _DataFilter(cb, gateway, sink, network, src_ep, dst_ep)
-        self._data_filters[id(new_filter)] = new_filter
+        self._data_uplink_filters[id(new_filter)] = new_filter
 
         return id(new_filter)
 
-    def unregister_data_cb(self, id):
-        """Unregister data callback previously registered
-        with :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_data_cb`
+    def unregister_uplink_traffic_cb(self, id):
+        """Unregister uplink data callback previously registered
+        with :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_uplink_traffic_cb`
 
         :param id: id returned when adding the filter
         :raises KeyError: if id doesn't exist
         """
-        del self._data_filters[id]
+        del self._data_uplink_filters[id]
+
+    def register_downlink_traffic_cb(self, cb, gateway=None, sink=None, src_ep=None, dst_ep=None):
+        """
+        Register a data filter to received downlink filtered data
+
+        :param cb: Callback to be called when a matching packet is received
+        :param gateway: Filter on a given gateway (None for all)
+        :param sink: Filter on a given sink (None for all)
+        :param src_ep: Filter on a given source endpoint (None for all)
+        :param dst_ep: Filter on a given destination endpoint (None for all)
+        :return: The id of this filter, to be used when removing it with
+            :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_downlink_traffic_cb`
+        """
+        # Downlink traffic do not have network address field. It could be determined based on gateway/sink config
+        new_filter = _DataFilter(cb, gateway, sink, None, src_ep, dst_ep)
+        self._data_downlink_filters[id(new_filter)] = new_filter
+
+        return id(new_filter)
+
+    def unregister_downlink_traffic_cb(self, id):
+        """Unregister data callback previously registered
+        with :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_downlink_traffic_cb`
+
+        :param id: id returned when adding the filter
+        :raises KeyError: if id doesn't exist
+        """
+        del self._data_downlink_filters[id]
 
     @_wait_for_configs
     def set_sink_config(self, gw_id, sink_id, new_config, cb=None, param=None):
@@ -895,7 +965,7 @@ class _DataFilter:
             raise ValueError("Callback must be specified")
         self.callback = cb
 
-    def filter_and_dispatch(self, message):
+    def filter_and_dispatch(self, message, *args):
         if self.gateway is not None and message.gw_id not in self.gateway:
             return
 
@@ -912,7 +982,7 @@ class _DataFilter:
             return
 
         # Message is not filtered and can be dispatched
-        self.callback(message)
+        self.callback(message, *args)
 
 
 class _TaskQueue(Queue):

@@ -34,11 +34,18 @@ if __name__ == "__main__":
                                   args.password,
                                   insecure=args.insecure)
 
-    def on_data_received(data):
-        print("RX from %s:%s => %s" % (data.gw_id, data.sink_id, data.data_payload))
+    def on_downlink_data_received(data, res):
+        logging.info("Message to the Mesh network: %s", data)
+        logging.info("Status: %s", res)
 
-    # Register for any data
-    wni.register_data_cb(on_data_received)
+    def on_uplink_data_transmitted(data):
+        logging.info("Message from the Mesh network: %s", data)
+
+    # Register a callback for downlink traffic
+    wni.register_downlink_traffic_cb(on_downlink_data_received)
+    
+    # Register a callback for uplink traffic
+    wni.register_uplink_traffic_cb(on_uplink_data_transmitted)
 
     while True:
         message = input("Write a message to send to all sinks\n")
