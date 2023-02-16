@@ -26,7 +26,7 @@ class WirepasNetworkInterface:
 
     """
     # Timeout in s to wait for connection
-    _TIMEOUT_GW_CONNECTION_S = 4
+    _TIMEOUT_NETWORK_CONNECTION_S = 4
 
     # Timeout in s to wait for status message after subscription to
     # topic and connection is established
@@ -227,13 +227,6 @@ class WirepasNetworkInterface:
 
             if status.state == wmm.GatewayState.ONLINE:
                 self._gateways[status.gw_id] = self._Gateway(status.gw_id, True)
-                request = wmm.GetConfigsRequest()
-                self._publish(TopicGenerator.make_get_configs_request_topic(status.gw_id),
-                              request.payload,
-                              1)
-
-                # Call update gateway config when receiving it
-                self._wait_for_response(self._update_gateway_configs, request.req_id)
             else:
                 # Gateway is offline, remove config (Override any old config)
                 self._gateways[status.gw_id] = self._Gateway(status.gw_id, False)
@@ -377,40 +370,67 @@ class WirepasNetworkInterface:
         except wmm.GatewayAPIParsingException as e:
             logging.error(str(e))
 
+    def _wait_for_connection(fn):
+        # Decorator to handle waiting for connection to mqtt
+        def wrapper(*args, **kwargs):
+            args[0]._connected.wait(args[0]._TIMEOUT_NETWORK_CONNECTION_S)
+            if not args[0]._connected.is_set():
+                raise TimeoutError("Cannot connect to broker")
+
+            # Check if enough time was elapsed since we connect to receive all status
+            delay = (args[0]._connection_time + args[0]._TIMEOUT_GW_STATUS_S) - time()
+            if delay > 0:
+                sleep(delay)
+
+            return fn(*args, **kwargs)
+        wrapper.__doc__ = fn.__doc__
+        return wrapper
+
+    def _ask_gateway_config(self, gw_id):
+        request = wmm.GetConfigsRequest()
+        self._publish(TopicGenerator.make_get_configs_request_topic(gw_id),
+                        request.payload,
+                        1)
+
+        # Call update gateway config when receiving it
+        self._wait_for_response(self._update_gateway_configs, request.req_id)
+
     def _wait_for_configs(fn):
         # Decorator to handle waiting for enough time for the setup
         # of the network interface
         def wrapper(*args, **kwargs):
             # args[0] is self
-            if not args[0]._initial_discovery_done:
-                # Wait for connection
-                args[0]._connected.wait(args[0]._TIMEOUT_GW_CONNECTION_S)
-                if not args[0]._connected.is_set():
-                    raise TimeoutError("Cannot connect to broker")
 
-                # Check if enough time was elapsed since we connect to receive all status
-                delay = (args[0]._connection_time + args[0]._TIMEOUT_GW_STATUS_S) - time()
-                if delay > 0:
-                    sleep(delay)
+            gateways_subset = None
+            # Check for missing gateway config
+            if ("gateway" in kwargs):
+                gateways_subset = kwargs['gateway']
 
-                # Check if we are still waiting for configs
-                for gw in args[0]._gateways.copy().values():
-                    if gw.online:
-                        gw.config_received_event.wait(args[0]._TIMEOUT_GW_CONFIG_S)
-                        if not gw.config_received_event.is_set():
-                            logging.error("Config timeout for gw %s" % gw.id)
-                            logging.error("Is the gateway really online? If not, its status can be cleared by "
-                                          "calling clear_gateway_status(\"%s\")", gw.id)
-                            # Mark the config as received to avoid waiting for it next time
-                            # It may still come later
-                            gw.config_received_event.set()
-                            if args[0]._strict_mode:
-                                logging.error("This Timeout will generate an exception but you can"
-                                              "avoid it by starting WirepasNetworkInteface with strict_mode=False")
-                                raise TimeoutError("Cannot get config from online GW %s" % gw.id)
+            for gw in args[0]._gateways.copy().values():
+                if gw.id not in gateways_subset:
+                    # Not interested by this gateway, so no need for the config
+                    continue
 
-                # Discovery done, no need to do it again
-                args[0]._initial_discovery_done = True
+                if gw.online:
+                    if gw.config_received_event.is_set():
+                        # We have already received the config
+                        continue
+
+                    # Time to ask the gateway config
+                    args[0]._ask_gateway_config(gw.id)
+
+                    gw.config_received_event.wait(args[0]._TIMEOUT_GW_CONFIG_S)
+                    if not gw.config_received_event.is_set():
+                        logging.error("Config timeout for gw %s" % gw.id)
+                        logging.error("Is the gateway really online? If not, its status can be cleared by "
+                                        "calling clear_gateway_status(\"%s\")", gw.id)
+                        # Mark the config as received to avoid waiting for it next time
+                        # It may still come later
+                        gw.config_received_event.set()
+                        if args[0]._strict_mode:
+                            logging.error("This Timeout will generate an exception but you can"
+                                            "avoid it by starting WirepasNetworkInteface with strict_mode=False")
+                            raise TimeoutError("Cannot get config from online GW %s" % gw.id)
 
             return fn(*args, **kwargs)
         wrapper.__doc__ = fn.__doc__
@@ -436,6 +456,7 @@ class WirepasNetworkInterface:
         self._task_queue.terminate()
 
 
+    @_wait_for_connection
     @_wait_for_configs
     def get_sinks(self, network_address=None, gateway=None):
         """
@@ -503,7 +524,7 @@ class WirepasNetworkInterface:
 
         return sinks
 
-    @_wait_for_configs
+    @_wait_for_connection
     def get_gateways(self, only_online=True):
         """
         get_gateways(self, only_online=True)
@@ -520,6 +541,7 @@ class WirepasNetworkInterface:
 
         return gateways
 
+    @_wait_for_connection
     def clear_gateway_status(self, gw_id):
         """
         Clear a gateway status
@@ -570,6 +592,7 @@ class WirepasNetworkInterface:
 
         return res
 
+    @_wait_for_connection
     def send_message(self, gw_id, sink_id, dest, src_ep, dst_ep, payload, qos=0, csma_ca_only=False, cb=None, param=None):
         """
         send_message(self, gw_id, sink_id, dest, src_ep, dst_ep, payload, qos=0, csma_ca_only=False, cb=None, param=None)
@@ -615,6 +638,7 @@ class WirepasNetworkInterface:
 
         return self._wait_for_response(cb, request.req_id, param=param)
 
+    @_wait_for_connection
     def upload_scratchpad(self, gw_id, sink_id, seq, scratchpad=None, cb=None, param=None):
         """
         upload_scratchpad(self, gw_id, sink_id, seq, scratchpad=None, cb=None, param=None)
@@ -656,7 +680,7 @@ class WirepasNetworkInterface:
                       1)
         return self._wait_for_response(cb, request.req_id, timeout=60, param=param)
 
-    @_wait_for_configs
+    @_wait_for_connection
     def process_scratchpad(self, gw_id, sink_id, cb=None, param=None):
         """
         process_scratchpad(self, gw_id, sink_id, cb=None, param=None)
@@ -694,7 +718,7 @@ class WirepasNetworkInterface:
                       1)
         return self._wait_for_response(cb, request.req_id, timeout=60, param=param)
 
-    @_wait_for_configs
+    @_wait_for_connection
     def get_scratchpad_status(self, gw_id, sink_id, cb=None, param=None):
         """
         get_scratchpad_status(self, gw_id, sink_id, cb=None, param=None)
@@ -746,7 +770,7 @@ class WirepasNetworkInterface:
                       1)
         return self._wait_for_response(cb, request.req_id, param=param)
 
-    @_wait_for_configs
+    @_wait_for_connection
     def set_target_scratchpad(self, gw_id, sink_id, action, cb=None, param=None):
         """
         set_target_scratchpad(self, gw_id, sink_id, action, cb=None, param=None)
@@ -855,7 +879,7 @@ class WirepasNetworkInterface:
         """
         del self._data_downlink_filters[id]
 
-    @_wait_for_configs
+    @_wait_for_connection
     def set_sink_config(self, gw_id, sink_id, new_config, cb=None, param=None):
         """
         set_sink_config(self, gw_id, sink_id, new_config, cb=None, param=None)
@@ -918,7 +942,6 @@ class WirepasNetworkInterface:
         # Extend default delay as it may require a reboot of sink
         return self._wait_for_response(cb, request.req_id, timeout=5, param=param)
 
-    @_wait_for_configs
     def set_config_changed_cb(self, cb):
         """
         set_config_changed_cb(self, cb)
