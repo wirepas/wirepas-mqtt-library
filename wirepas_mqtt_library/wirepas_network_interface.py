@@ -314,6 +314,12 @@ class WirepasNetworkInterface:
     def _on_downlink_data_received(self, client, userdata, message):
         try:
             data = wmm.SendDataRequest.from_payload(message.payload)
+
+            # retrieve missing info from message by reading topic
+            gw_id, sink_id = TopicParser.parse_send_data_topic(message.topic)
+            data.__dict__.update({'gw_id': gw_id})
+            data.__dict__.update({'sink_id': sink_id})
+
             logging.debug("Received message with id: %s", data.req_id)
             self._wait_for_response(self._dispatch_downlink_data, data.req_id, param=data)
            
