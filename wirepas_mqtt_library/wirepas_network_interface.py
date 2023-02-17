@@ -407,7 +407,7 @@ class WirepasNetworkInterface:
                 gateways_subset = kwargs['gateway']
 
             for gw in args[0]._gateways.copy().values():
-                if gw.id not in gateways_subset:
+                if gateways_subset is not None and gw.id not in gateways_subset:
                     # Not interested by this gateway, so no need for the config
                     continue
 
@@ -428,9 +428,9 @@ class WirepasNetworkInterface:
                         # It may still come later
                         gw.config_received_event.set()
                         if args[0]._strict_mode:
-                            logging.error("This Timeout will generate an exception but you can"
+                            logging.error("This Timeout will generate an exception but you can "
                                             "avoid it by starting WirepasNetworkInteface with strict_mode=False")
-                            raise TimeoutError("Cannot get config from online GW %s" % gw.id)
+                            raise TimeoutError("Cannot get config from online GW %s", gw.id)
 
             return fn(*args, **kwargs)
         wrapper.__doc__ = fn.__doc__
@@ -942,6 +942,8 @@ class WirepasNetworkInterface:
         # Extend default delay as it may require a reboot of sink
         return self._wait_for_response(cb, request.req_id, timeout=5, param=param)
 
+    @_wait_for_connection
+    @_wait_for_configs
     def set_config_changed_cb(self, cb):
         """
         set_config_changed_cb(self, cb)
