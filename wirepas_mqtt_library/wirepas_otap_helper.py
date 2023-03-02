@@ -135,13 +135,15 @@ class WirepasOtapHelper:
 
         self._nodes[data.source_address] = new_status
 
-    def load_scratchpad_to_all_sinks(self, scratchpad_file, seq=None):
+    def load_scratchpad_to_all_sinks(self, scratchpad_file, seq=None, timeout=60):
         """Load the specified scratchpad file on all sinks of the network
 
         :param scratchpad_file: scratchpad file with .otap extension
         :type scratchpad_file: str
         :param seq: optional seq for the scratchpad. If not given a random one is chosen
         :type seq: int
+        :param timeout: maximum time to wait for each scratchpad upload
+        :type timeout: int
         :return: True if scratchpad is correctly loaded on all sinks, false otherwise
         """
         # Read the scratchpad file as binary
@@ -159,7 +161,7 @@ class WirepasOtapHelper:
         for gw, sink, config in self._sinks:
             logging.debug("Loading scratchpad to [%s][%s] " % (gw, sink))
             try:
-                res = self.wni.upload_scratchpad(gw, sink, seq, scratchpad)
+                res = self.wni.upload_scratchpad(gw, sink, seq, scratchpad, timeout=timeout)
                 if res != wmm.GatewayResultCode.GW_RES_OK:
                     logging.error("Scratchpad loaded error: [%s] " % res)
                     return False

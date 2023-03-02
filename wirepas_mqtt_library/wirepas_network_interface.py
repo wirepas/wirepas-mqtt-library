@@ -639,7 +639,7 @@ class WirepasNetworkInterface:
         return self._wait_for_response(cb, request.req_id, param=param)
 
     @_wait_for_connection
-    def upload_scratchpad(self, gw_id, sink_id, seq, scratchpad=None, cb=None, param=None):
+    def upload_scratchpad(self, gw_id, sink_id, seq, scratchpad=None, cb=None, param=None, timeout=60):
         """
         upload_scratchpad(self, gw_id, sink_id, seq, scratchpad=None, cb=None, param=None)
         Upload a scratchpad on a given sink
@@ -663,22 +663,24 @@ class WirepasNetworkInterface:
             - gw_error_code: :obj:`~wirepas_mesh_messaging.gateway_result_code.GatewayResultCode`
             - param: param given when doing this call
 
-            .. warning:: If unset, call is synchronous and caller can be blocked for up to 60 seconds
+            .. warning:: If unset, call is synchronous and caller can be blocked for up to specified timeout
 
         :type cb: function
         :param param: Optional parameter that will be passed to callback
         :type param: object
+        :param timeout: Timeout in second to wait for the upload (default 60s)
+        :type timeout: int
         :return: None if cb is set or error code from gateway is synchronous call
         :rtype: :obj:`~wirepas_mesh_messaging.gateway_result_code.GatewayResultCode`
 
-        :raises TimeoutError: Raised if cb is None and response is not received within 60 sec
+        :raises TimeoutError: Raised if cb is None and response is not received within the specified timeout
         """
         request = wmm.UploadScratchpadRequest(seq, sink_id, scratchpad=scratchpad)
 
         self._publish(TopicGenerator.make_otap_load_scratchpad_request_topic(gw_id, sink_id),
                       request.payload,
                       1)
-        return self._wait_for_response(cb, request.req_id, timeout=60, param=param)
+        return self._wait_for_response(cb, request.req_id, timeout=timeout, param=param)
 
     @_wait_for_connection
     def process_scratchpad(self, gw_id, sink_id, cb=None, param=None):
