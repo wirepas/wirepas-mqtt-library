@@ -2,6 +2,8 @@
 #
 # See file LICENSE.txt for full license details.
 #
+from threading import Event
+from time import sleep
 import wirepas_mesh_messaging as wmm
 import logging
 from struct import pack, unpack
@@ -135,7 +137,7 @@ class WirepasOtapHelper:
 
         self._nodes[data.source_address] = new_status
 
-    def load_scratchpad_to_all_sinks(self, scratchpad_file, seq=None, timeout=60):
+    def load_scratchpad_to_all_sinks(self, scratchpad_file, seq=None, timeout=60, delay_between_sinks_s=1):
         """Load the specified scratchpad file on all sinks of the network
 
         :param scratchpad_file: scratchpad file with .otap extension
@@ -144,8 +146,15 @@ class WirepasOtapHelper:
         :type seq: int
         :param timeout: maximum time to wait for each scratchpad upload
         :type timeout: int
+        :param delay_between_sinks_s: time to wait between the sending of a load scratchpad between sinks.
+                                      On large network, it may help to avoid loading the broker too much.
+        :type delay_between_sinks_s: int
         :return: True if scratchpad is correctly loaded on all sinks, false otherwise
         """
+        all_expected_answers = set()
+        all_received = Event()
+        final_result = True
+
         # Read the scratchpad file as binary
         try:
             with open(scratchpad_file, "rb") as f:
@@ -157,19 +166,35 @@ class WirepasOtapHelper:
         if seq is None:
             seq = randint(1, 254)
 
-        logging.info("Loading scratchpad with seq = %d to all sinks for network %d" %(seq, self.network))
-        for gw, sink, config in self._sinks:
-            logging.debug("Loading scratchpad to [%s][%s] " % (gw, sink))
+        def _on_scratchpad_loaded_cb(gw_error_code, param):
+            nonlocal final_result
+            if gw_error_code != wmm.GatewayResultCode.GW_RES_OK:
+                logging.error("Scratchpad loaded error on [%s][%s]: [%s] " % (param[0], param[1], gw_error_code))
+                final_result = False
+            else:
+                logging.debug("Scratchpad loaded successfully on [%s][%s]" % (param[0], param[1]))
+
             try:
-                res = self.wni.upload_scratchpad(gw, sink, seq, scratchpad, timeout=timeout)
-                if res != wmm.GatewayResultCode.GW_RES_OK:
-                    logging.error("Scratchpad loaded error: [%s] " % res)
-                    return False
-                logging.debug("Scratchpad loaded correctly")
-            except TimeoutError:
-                logging.error("Cannot load scratchpad to [%s][%s] => Timeout " % (gw, sink))
-                return False
-        return True
+                all_expected_answers.remove((param[0], param[1]))
+            except KeyError:
+                logging.error("Answer already received: duplicated for [%s][%s]" % (param[0], param[1]))
+
+            # Check if everybody has answered
+            if all_expected_answers.__len__() == 0:
+                all_received.set()
+
+        logging.info("Loading scratchpad with seq = %d to all sinks for network %d" %(seq, self.network))
+        for gw, sink, _ in self._sinks:
+            logging.debug("Loading scratchpad to [%s][%s] " % (gw, sink))
+            self.wni.upload_scratchpad(gw, sink, seq, scratchpad, cb=_on_scratchpad_loaded_cb, param=(gw, sink), timeout=timeout)
+            all_expected_answers.add((gw, sink))
+            sleep(delay_between_sinks_s)
+
+        if not all_received.wait(timeout):
+            logging.error("Some sinks do not answered within timeout %s" % all_expected_answers)
+            final_result = False
+
+        return final_result
 
     def process_scratchpad_on_all_sinks(self):
         """Process the scratchpad locally on all sinks of the network
