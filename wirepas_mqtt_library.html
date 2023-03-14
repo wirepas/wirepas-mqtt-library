@@ -876,7 +876,7 @@ on all the sinks belonging to the same network in a single call.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.load_scratchpad_to_all_sinks">
-<span class="sig-name descname"><span class="pre">load_scratchpad_to_all_sinks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scratchpad_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.load_scratchpad_to_all_sinks" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">load_scratchpad_to_all_sinks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scratchpad_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_between_sinks_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.load_scratchpad_to_all_sinks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the specified scratchpad file on all sinks of the network</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -884,6 +884,8 @@ on all the sinks belonging to the same network in a single call.</p>
 <li><p><strong>scratchpad_file</strong> (<em>str</em>) – scratchpad file with .otap extension</p></li>
 <li><p><strong>seq</strong> (<em>int</em>) – optional seq for the scratchpad. If not given a random one is chosen</p></li>
 <li><p><strong>timeout</strong> (<em>int</em>) – maximum time to wait for each scratchpad upload</p></li>
+<li><p><strong>delay_between_sinks_s</strong> (<em>int</em>) – time to wait between the sending of a load scratchpad between sinks.
+On large network, it may help to avoid loading the broker too much.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
