@@ -76,7 +76,7 @@ if __name__ == "__main__":
         try:
             res = wni.set_sink_config(gw, sink, new_config)
             if res != wmm.GatewayResultCode.GW_RES_OK:
-                print("Cannot set new config to %s:%s res=%s" % (gw, sink, res.res))
+                print("Cannot set new config to %s:%s res=%s" % (gw, sink, res))
         except TimeoutError:
             print("Cannot set new config to %s:%s" % (gw, sink))
 
