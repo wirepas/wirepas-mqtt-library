@@ -593,7 +593,7 @@ class WirepasNetworkInterface:
         return res
 
     @_wait_for_connection
-    def send_message(self, gw_id, sink_id, dest, src_ep, dst_ep, payload, qos=0, csma_ca_only=False, cb=None, param=None):
+    def send_message(self, gw_id, sink_id, dest, src_ep, dst_ep, payload, qos=0, csma_ca_only=False, hop_limit=0, cb=None, param=None):
         """
         send_message(self, gw_id, sink_id, dest, src_ep, dst_ep, payload, qos=0, csma_ca_only=False, cb=None, param=None)
         Send a message to wirepas network from a given sink
@@ -610,6 +610,8 @@ class WirepasNetworkInterface:
         :type payload: bytearray
         :param csma_ca_only: Is packet only for csma-ca nodes
         :type csma_ca_only: bool
+        :param hop_limit(int): maximum number of hops this message can do to reach its destination (<16)
+        :type hop_limit: int
         :param cb: If set, callback to be asynchronously called when gateway answer.
             If None, call is blocking.
 
@@ -630,7 +632,7 @@ class WirepasNetworkInterface:
 
         :raises TimeoutError: Raised if cb is None and response is not received within 2 sec
         """
-        request = wmm.SendDataRequest(dest, src_ep, dst_ep, qos, payload, is_unack_csma_ca=csma_ca_only)
+        request = wmm.SendDataRequest(dest, src_ep, dst_ep, qos, payload, is_unack_csma_ca=csma_ca_only, hop_limit=hop_limit)
 
         self._publish(TopicGenerator.make_send_data_request_topic(gw_id, sink_id),
                       request.payload,
