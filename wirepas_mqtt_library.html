@@ -441,6 +441,7 @@ It may be need to explicitly remove it in some situation:
 <li><p><strong>qos</strong> – Quality of service to use (0 or 1) (default is 0)</p></li>
 <li><p><strong>payload</strong> (<em>bytearray</em>) – payload to send</p></li>
 <li><p><strong>csma_ca_only</strong> (<em>bool</em>) – Is packet only for csma-ca nodes</p></li>
+<li><p><strong>hop_limit</strong><strong>(</strong><strong>int</strong><strong>)</strong> – maximum number of hops this message can do to reach its destination (&lt;16)</p></li>
 <li><p><strong>cb</strong> (<em>function</em>) – <p>If set, callback to be asynchronously called when gateway answer.
 If None, call is blocking.</p>
 <div class="admonition note">
