@@ -91,7 +91,7 @@ if __name__ == "__main__":
     elif args.cmd == "immediately":
         print("Set propagate and process")
         if not otapHelper.set_propagate_and_process_scratchpad_to_all_sinks():
-            print("Cannot set propagate and process only for delay %s" % delay)
+            print("Cannot set propagate and process only")
     elif args.cmd == "delayed":
         print("Set propagate and process with 5 days delay")
         if not otapHelper.set_propagate_and_process_scratchpad_to_all_sinks(delay=wmm.ProcessingDelay.DELAY_FIVE_DAYS):
