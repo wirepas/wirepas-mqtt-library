@@ -19,12 +19,13 @@ class WirepasOtapHelper:
     It allows to write more complex script by chaining those operations.
 
     """
-    def __init__(self, wni, network):
+    def __init__(self, wni, network, gateway=None):
         """Constructor
 
         :param wni: Wirepas network interface
         :type wni: :obj:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface`
         :param network: Network address concerned by the otap
+        :param gateway: Gateway (or list) concerned by the otap
         """
         if wni is None:
             raise RuntimeError("No Wirepas Network Interface provided")
@@ -33,7 +34,7 @@ class WirepasOtapHelper:
         self.network = network
 
         # Get all the sinks associated with the given network
-        self._sinks = self.wni.get_sinks(self.network)
+        self._sinks = self.wni.get_sinks(self.network, gateway)
 
         # Get initial scratchpad status from sinks
         self._status = []
