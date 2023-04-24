@@ -272,8 +272,14 @@ class WirepasNetworkInterface:
             data = wmm.ReceivedDataEvent.from_payload(message.payload)
             if data.network_address is None:
                 # Network id is from topic
-                _, _, network_address, _, _ = TopicParser.parse_received_data_topic(message.topic)
-                data.network_address = network_address
+                try:
+                    _, _, network_address, _, _ = TopicParser.parse_received_data_topic(message.topic)
+                    data.network_address = network_address
+                except ValueError:
+                    logging.error("Cannot determine network address from topic: %s",message.topic)
+                    # Address is unknown but still dispatch data
+                    data.network_address = None
+
             self._task_queue.add_task(self._dispatch_uplink_data, data)
         except wmm.GatewayAPIParsingException as e:
             logging.error(str(e))
