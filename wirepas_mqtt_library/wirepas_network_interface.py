@@ -285,7 +285,7 @@ class WirepasNetworkInterface:
             logging.error(str(e))
 
     def _dispatch_uplink_data(self, data):
-        for f in self._data_uplink_filters.values():
+        for f in list(self._data_uplink_filters.values()):
             f.filter_and_dispatch(data)
 
     def _publish(self, topic, payload, qos=1, retain=False):
@@ -326,7 +326,7 @@ class WirepasNetworkInterface:
             logging.error(str(e))
 
     def _dispatch_downlink_data(self, response, data):
-        for f in self._data_downlink_filters.values():
+        for f in list(self._data_downlink_filters.values()):
             f.filter_and_dispatch(data, response)
 
     def _on_response_received(self, client, userdata, message):
