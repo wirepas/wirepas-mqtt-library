@@ -10,7 +10,7 @@ import paho.mqtt.client as mqtt
 from paho.mqtt.client import connack_string
 import wirepas_mesh_messaging as wmm
 from .topic_helper import TopicGenerator, TopicParser
-from threading import Event, Thread
+from threading import Event, Thread, Lock
 from time import sleep, time
 from queue import Queue
 
@@ -130,7 +130,10 @@ class WirepasNetworkInterface:
         # Dictionary to store request id, associated cb
         self._ongoing_requests = {}
 
+
+        self._data_uplink_filters_lock = Lock()
         self._data_uplink_filters = {}
+        self._data_downlink_filters_lock = Lock()
         self._data_downlink_filters = {}
         self._on_config_changed_cb = None
 
@@ -285,8 +288,9 @@ class WirepasNetworkInterface:
             logging.error(str(e))
 
     def _dispatch_uplink_data(self, data):
-        for f in self._data_uplink_filters.values():
-            f.filter_and_dispatch(data)
+        with self._data_uplink_filters_lock:
+            for f in self._data_uplink_filters.values():
+                f.filter_and_dispatch(data)
 
     def _publish(self, topic, payload, qos=1, retain=False):
         try:
@@ -326,8 +330,9 @@ class WirepasNetworkInterface:
             logging.error(str(e))
 
     def _dispatch_downlink_data(self, response, data):
-        for f in self._data_downlink_filters.values():
-            f.filter_and_dispatch(data, response)
+        with self._data_downlink_filters_lock:
+            for f in self._data_downlink_filters.values():
+                f.filter_and_dispatch(data, response)
 
     def _on_response_received(self, client, userdata, message):
         # Topic are as followed: gw-response/cmd/...
@@ -849,7 +854,8 @@ class WirepasNetworkInterface:
             :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb`
         """
         new_filter = _DataFilter(cb, gateway, sink, network, src_ep, dst_ep)
-        self._data_uplink_filters[id(new_filter)] = new_filter
+        with self._data_uplink_filters_lock:
+            self._data_uplink_filters[id(new_filter)] = new_filter
 
         return id(new_filter)
 
@@ -860,7 +866,8 @@ class WirepasNetworkInterface:
         :param id: id returned when adding the filter
         :raises KeyError: if id doesn't exist
         """
-        del self._data_uplink_filters[id]
+        with self._data_uplink_filters_lock:
+            del self._data_uplink_filters[id]
 
     def register_downlink_traffic_cb(self, cb, gateway=None, sink=None, src_ep=None, dst_ep=None):
         """
@@ -876,7 +883,8 @@ class WirepasNetworkInterface:
         """
         # Downlink traffic do not have network address field. It could be determined based on gateway/sink config
         new_filter = _DataFilter(cb, gateway, sink, None, src_ep, dst_ep)
-        self._data_downlink_filters[id(new_filter)] = new_filter
+        with self._data_downlink_filters_lock:
+            self._data_downlink_filters[id(new_filter)] = new_filter
 
         return id(new_filter)
 
@@ -887,7 +895,8 @@ class WirepasNetworkInterface:
         :param id: id returned when adding the filter
         :raises KeyError: if id doesn't exist
         """
-        del self._data_downlink_filters[id]
+        with self._data_downlink_filters_lock:
+            del self._data_downlink_filters[id]
 
     @_wait_for_connection
     def set_sink_config(self, gw_id, sink_id, new_config, cb=None, param=None):
