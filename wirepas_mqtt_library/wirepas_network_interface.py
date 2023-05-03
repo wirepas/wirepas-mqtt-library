@@ -32,9 +32,6 @@ class WirepasNetworkInterface:
     # topic and connection is established
     _TIMEOUT_GW_STATUS_S = 2
 
-    # Timeout in s to receive config from gw
-    _TIMEOUT_GW_CONFIG_S = 2
-
     # Inner class definition to define a gateway
     class _Gateway:
         def __init__(self, id, online=False, sinks=[]):
@@ -75,7 +72,7 @@ class WirepasNetworkInterface:
     def __init__(self, host, port, username, password,
                  insecure=False, num_worker_thread=1, strict_mode=True,
                  connection_cb=None, client_id="", clean_session=None,
-                 transport="tcp"):
+                 transport="tcp", gw_timeout_s=2):
         """Constructor
 
         :param host: MQTT broker host address
@@ -102,6 +99,7 @@ class WirepasNetworkInterface:
         :param clean_session: a boolean that determines the client type. If True, the broker will remove all information about this client when it disconnects.
                If False, the client is a durable client and subscription information and queued messages will be retained when the client disconnects.
         :param transport: set to "websockets" to send MQTT over WebSockets. Leave at the default of "tcp" to use raw TCP.
+        :param gw_timeout_s: Timeout in s to receive a response from a gw
         """
         # Create an MQTT client (can generate Exception if clean session is False and no client id set,
         # but no need to catch it here)
@@ -143,6 +141,7 @@ class WirepasNetworkInterface:
         # Save user option parameters
         self._strict_mode = strict_mode
         self._connection_cb = connection_cb
+        self._gw_timeout_s = gw_timeout_s
 
         # Make the connection in a dedicated thread to use the
         # synchronous call and be able to catch network connections exceptions
@@ -430,7 +429,7 @@ class WirepasNetworkInterface:
                     # Time to ask the gateway config
                     args[0]._ask_gateway_config(gw.id)
 
-                    gw.config_received_event.wait(args[0]._TIMEOUT_GW_CONFIG_S)
+                    gw.config_received_event.wait(args[0]._gw_timeout_s)
                     if not gw.config_received_event.is_set():
                         logging.error("Config timeout for gw %s" % gw.id)
                         logging.error("Is the gateway really online? If not, its status can be cleared by "
@@ -575,7 +574,7 @@ class WirepasNetworkInterface:
         except KeyError:
             self._ongoing_requests[req_id]= [(cb, param)]
 
-    def _wait_for_response(self, cb, req_id, timeout=2, param=None):
+    def _wait_for_response(self, cb, req_id, extra_timeout=0, param=None):
         if cb is not None:
             # Unblocking call, cb will be called later
             self._add_to_ongoing_request(req_id, cb, param)
@@ -596,7 +595,7 @@ class WirepasNetworkInterface:
 
         self._add_to_ongoing_request(req_id, unlock)
 
-        if not response_event.wait(timeout):
+        if not response_event.wait(self._gw_timeout_s + extra_timeout):
             # Timeout
             del self._ongoing_requests[req_id]
             raise TimeoutError("Cannot get response for request")
@@ -693,7 +692,7 @@ class WirepasNetworkInterface:
         self._publish(TopicGenerator.make_otap_load_scratchpad_request_topic(gw_id, sink_id),
                       request.payload,
                       1)
-        return self._wait_for_response(cb, request.req_id, timeout=timeout, param=param)
+        return self._wait_for_response(cb, request.req_id, extra_timeout=timeout, param=param)
 
     @_wait_for_connection
     def process_scratchpad(self, gw_id, sink_id, cb=None, param=None):
@@ -731,7 +730,7 @@ class WirepasNetworkInterface:
         self._publish(TopicGenerator.make_otap_process_scratchpad_request_topic(gw_id, sink_id),
                       request.payload,
                       1)
-        return self._wait_for_response(cb, request.req_id, timeout=60, param=param)
+        return self._wait_for_response(cb, request.req_id, extra_timeout=60, param=param)
 
     @_wait_for_connection
     def get_scratchpad_status(self, gw_id, sink_id, cb=None, param=None):
@@ -958,8 +957,8 @@ class WirepasNetworkInterface:
         self._publish(TopicGenerator.make_set_config_request_topic(gw_id, sink_id),
                       request.payload,
                       1)
-        # Extend default delay as it may require a reboot of sink
-        return self._wait_for_response(cb, request.req_id, timeout=5, param=param)
+        # Add extra timeout as it may require a reboot of sink
+        return self._wait_for_response(cb, request.req_id, extra_timeout=3, param=param)
 
     @_wait_for_connection
     @_wait_for_configs
