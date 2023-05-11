@@ -196,16 +196,18 @@ class WirepasOtapHelper:
 
         return final_result
 
-    def process_scratchpad_on_all_sinks(self):
-        """Process the scratchpad locally on all sinks of the network
+    def process_scratchpad_on_all_sinks(self, timeout=120):
+        """Process the scratchpad localy on all sinks of the network
 
+        :param timeout: maximum time to wait for processing of scratchpad
+        :type timeout: int
         :return: True if scratchpad is correctly set to be processed on all sinks, false otherwise
         """
         logging.info("Processing scratchpad on all sinks for network %d" % self.network)
         for gw, sink, config in self._sinks:
             logging.debug("Processing scratchpad to [%s][%s] " % (gw, sink))
             try:
-                res = self.wni.process_scratchpad(gw, sink)
+                res = self.wni.process_scratchpad(gw, sink, timeout=timeout)
                 if res != wmm.GatewayResultCode.GW_RES_OK:
                     logging.error("Scratchpad processing error: [%s] " % res)
                     return False
