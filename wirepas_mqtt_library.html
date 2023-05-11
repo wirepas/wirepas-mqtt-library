@@ -532,10 +532,11 @@ If None, call is blocking.</p>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>If unset, call is synchronous and caller can be blocked for up to 60 seconds</p>
+<p>If unset, call is synchronous and caller can be blocked for up to specified timeout</p>
 </div>
 </p></li>
 <li><p><strong>param</strong> (<em>object</em>) – Optional parameter that will be passed to callback</p></li>
+<li><p><strong>timeout</strong> (<em>int</em>) – Timeout in second to wait for the processing of scratchpad (default 120s)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -545,7 +546,7 @@ If None, call is blocking.</p>
 <dd class="field-odd"><p><a class="reference internal" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode" title="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GatewayResultCode</span></code></a></p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>TimeoutError</strong> – Raised if cb is None and response is not received within 60 sec</p>
+<dd class="field-even"><p><strong>TimeoutError</strong> – Raised if cb is None and response is not received within specified timeout</p>
 </dd>
 </dl>
 </dd></dl>
@@ -898,11 +899,14 @@ On large network, it may help to avoid loading the broker too much.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.process_scratchpad_on_all_sinks">
-<span class="sig-name descname"><span class="pre">process_scratchpad_on_all_sinks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.process_scratchpad_on_all_sinks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Process the scratchpad locally on all sinks of the network</p>
+<span class="sig-name descname"><span class="pre">process_scratchpad_on_all_sinks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">120</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.process_scratchpad_on_all_sinks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the scratchpad localy on all sinks of the network</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if scratchpad is correctly set to be processed on all sinks, false otherwise</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>timeout</strong> (<em>int</em>) – maximum time to wait for processing of scratchpad</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if scratchpad is correctly set to be processed on all sinks, false otherwise</p>
 </dd>
 </dl>
 </dd></dl>
