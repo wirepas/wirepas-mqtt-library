@@ -34,11 +34,63 @@ class WirepasNetworkInterface:
 
     # Inner class definition to define a gateway
     class _Gateway:
-        def __init__(self, id, online=False, sinks=[]):
+        def __init__(self, id, online=False, sinks=None):
             self.id = id
             self.online = online
             self.sinks = sinks
             self.config_received_event = Event()
+            if sinks is not None:
+                self.config_received_event.set()
+
+            self._config_lock = Lock()
+
+        def update_all_sink_configs(self, configs):
+            with self._config_lock:
+                updated = False
+
+                if self.sinks is None:
+                    self.sinks = configs
+                    updated = True
+                else:
+                    if sorted(configs, key = lambda ele: sorted(ele.items())) != sorted(
+                            self.sinks, key = lambda ele: sorted(ele.items())):
+                        self.sinks = configs
+                        updated = True
+
+                # Initial config has been received
+                self.config_received_event.set()
+
+                return updated
+
+
+        def update_sink_config(self, config):
+            with self._config_lock:
+                updated = False
+                if self.config_received_event.is_set():
+                    # We have receive full config so we can update
+                    if self.sinks is None:
+                        self.sinks = [config]
+                        updated = True
+                    else:
+                        for idx, sink in enumerate(self.sinks):
+                            if sink["sink_id"] == config["sink_id"]:
+                                # Update the config
+                                if self.sinks[idx] != config:
+                                    self.sinks[idx] = config
+                                    updated = True
+
+                return updated
+
+        def __repr__(self):
+            return self.__str__()
+
+        def __str__(self):
+            if not self.online:
+                return "GW {} => OFFLINE".format(self.id)
+            elif self.config_received_event.is_set():
+                return "GW {} => ONLINE with sinks: {}".format(self.id, self.sinks)
+            else:
+                return "GW {} => ONLINE (config unknown yet)".format(self.id)
 
     class ConnectionErrorCode:
         UNKNOWN_ERROR = 255
@@ -219,6 +271,9 @@ class WirepasNetworkInterface:
             # Remove gateway if in our list
             try:
                 del self._gateways[TopicParser.parse_status_topic(message.topic)]
+                # Config has changed, notify any subscriber
+                if self._on_config_changed_cb is not None:
+                    self._task_queue.add_task(self._on_config_changed_cb)
             except KeyError:
                 pass
 
@@ -227,14 +282,22 @@ class WirepasNetworkInterface:
         try:
             status = wmm.StatusEvent.from_payload(message.payload)
 
-            if status.state == wmm.GatewayState.ONLINE:
-                self._gateways[status.gw_id] = self._Gateway(status.gw_id, True)
-            else:
-                # Gateway is offline, remove config (Override any old config)
-                self._gateways[status.gw_id] = self._Gateway(status.gw_id, False)
-                # Config has changed, notify any subscriber
-                if self._on_config_changed_cb is not None:
-                    self._task_queue.add_task(self._on_config_changed_cb)
+            # Get gateway if it already exist
+            try:
+                gw = self._gateways[status.gw_id]
+                gw.online = (status.state == wmm.GatewayState.ONLINE)
+                if gw.update_all_sink_configs(status.sink_configs):
+                    # Config has changed, notify any subscriber
+                    if self._on_config_changed_cb is not None:
+                        self._task_queue.add_task(self._on_config_changed_cb)
+
+            except KeyError:
+                # Create Gateway
+                self._gateways[status.gw_id] = self._Gateway(status.gw_id,
+                                                             status.state == wmm.GatewayState.ONLINE,
+                                                             status.sink_configs)
+
+
 
         except wmm.GatewayAPIParsingException as e:
             logging.error(str(e))
@@ -246,28 +309,23 @@ class WirepasNetworkInterface:
     def _update_sink_config(self, gw_id, config):
         try:
             gw = self._gateways[gw_id]
-            for idx, sink in enumerate(gw.sinks):
-                if sink["sink_id"] == config["sink_id"]:
-                    # Update the config
-                    gw.sinks[idx] = config
+            if gw.update_sink_config(config):
+                # Config has changed, notify any subscriber
+                if self._on_config_changed_cb is not None:
+                    self._task_queue.add_task(self._on_config_changed_cb)
+
         except KeyError:
             logging.error("Receiving sink config that is unknown %s/%s", config.gw_id, config.sink_id)
-
-        # Config has changed, notify any subscriber
-        if self._on_config_changed_cb is not None:
-            self._task_queue.add_task(self._on_config_changed_cb)
 
     def _update_gateway_configs(self, config):
         try:
             gw = self._gateways[config.gw_id]
-            gw.sinks = config.configs
-            gw.config_received_event.set()
+            if gw.update_all_sink_configs(config.configs):
+                # Config has changed, notify any subscriber
+                if self._on_config_changed_cb is not None:
+                    self._task_queue.add_task(self._on_config_changed_cb)
         except KeyError:
             logging.error("Receiving gateway config that is unknown %s", config.gw_id)
-
-        # Config has changed, notify any subscriber
-        if self._on_config_changed_cb is not None:
-            self._task_queue.add_task(self._on_config_changed_cb)
 
     def _on_data_received(self, client, userdata, message):
         try:
@@ -434,9 +492,10 @@ class WirepasNetworkInterface:
                         logging.error("Config timeout for gw %s" % gw.id)
                         logging.error("Is the gateway really online? If not, its status can be cleared by "
                                         "calling clear_gateway_status(\"%s\")", gw.id)
-                        # Mark the config as received to avoid waiting for it next time
+                        # Mark the initial config as empty list to avoid waiting for it next time
                         # It may still come later
-                        gw.config_received_event.set()
+                        gw.update_all_sink_configs([])
+
                         if args[0]._strict_mode:
                             logging.error("This Timeout will generate an exception but you can "
                                             "avoid it by starting WirepasNetworkInteface with strict_mode=False")
@@ -518,6 +577,10 @@ class WirepasNetworkInterface:
                 continue
 
             if gateway is not None and gw.id not in gateway:
+                continue
+
+            if gw.sinks is None:
+                # No sinks, nothing to iterate
                 continue
 
             for sink in gw.sinks:
