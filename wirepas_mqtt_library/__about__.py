@@ -21,4 +21,4 @@ __pkg_name__ = "wirepas_mqtt_library"
 __title__ = "Wirepas Library For Network access"
 __url__ = "https://github.com/wirepas/wirepas-mqtt-library"
 # __version__ will be updated by Github action
-__version__ = "dev"
+__version__ = "0.0.dev1"
