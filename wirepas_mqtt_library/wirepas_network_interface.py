@@ -48,7 +48,7 @@ class WirepasNetworkInterface:
             with self._config_lock:
                 updated = False
 
-                if self.sinks is None:
+                if self.sinks is None or configs is None:
                     self.sinks = configs
                     updated = True
                 else:
