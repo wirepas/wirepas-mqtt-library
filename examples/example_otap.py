@@ -38,6 +38,10 @@ if __name__ == "__main__":
                         help="Network address concerned by scratchpad")
     parser.add_argument('--file',
                         help="Scratcphad to use")
+    parser.add_argument("--gateway",
+                        type=list,
+                        help="Gateway list to use. If specified, the OTAP will be performed on given Gateway IDs",
+                        default=None)
     args = parser.parse_args()
 
     logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', level=logging.WARNING)
@@ -53,7 +57,8 @@ if __name__ == "__main__":
         exit()
 
     otapHelper = WirepasOtapHelper(wni,
-                                   args.network)
+                                   args.network,
+                                   args.gateway)
 
     if args.cmd == "update_delay":
         delay = wmm.ProcessingDelay.DELAY_THIRTY_MINUTES
