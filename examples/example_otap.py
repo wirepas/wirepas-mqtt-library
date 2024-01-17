@@ -39,7 +39,8 @@ if __name__ == "__main__":
     parser.add_argument('--file',
                         help="Scratcphad to use")
     parser.add_argument("--gateway",
-                        type=list,
+                        type=str,
+                        nargs='+',
                         help="Gateway list to use. If specified, the OTAP will be performed on given Gateway IDs",
                         default=None)
     args = parser.parse_args()
