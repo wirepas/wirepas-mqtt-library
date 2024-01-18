@@ -858,20 +858,21 @@ can be used to discover what has changed</p>
 <span id="otaphelper"></span><h1>OtapHelper<a class="headerlink" href="#module-wirepas_mqtt_library.wirepas_otap_helper" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wirepas_mqtt_library.wirepas_otap_helper.</span></span><span class="sig-name descname"><span class="pre">WirepasOtapHelper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wni</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wirepas_mqtt_library.wirepas_otap_helper.</span></span><span class="sig-name descname"><span class="pre">WirepasOtapHelper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wni</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gateway</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to ease Otap operation</p>
 <p>This class contains methods allowing the execution of simple otap operations
 on all the sinks belonging to the same network in a single call.</p>
 <p>It allows to write more complex script by chaining those operations.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wni</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wni</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gateway</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>wni</strong> (<a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface" title="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WirepasNetworkInterface</span></code></a>) – Wirepas network interface</p></li>
 <li><p><strong>network</strong> – Network address concerned by the otap</p></li>
+<li><p><strong>gateway</strong> – Gateway (or list) concerned by the otap</p></li>
 </ul>
 </dd>
 </dl>
