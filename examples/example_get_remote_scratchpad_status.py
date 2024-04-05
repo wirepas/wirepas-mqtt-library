@@ -34,12 +34,7 @@ def print_node_list(nodes):
         # Convert utc time to date
         node = nodes[node_id]
         timestamp = datetime.utcfromtimestamp(node["ts"] / 1000.0)
-        print(" {:5d} | {:10d} | {} | {}".format(
-            id,
-            node_id,
-            timestamp,
-            node
-        ));
+        print(" {:5d} | {:10d} | {} | {}".format(id, node_id, timestamp, node))
         id += 1
 
     print()

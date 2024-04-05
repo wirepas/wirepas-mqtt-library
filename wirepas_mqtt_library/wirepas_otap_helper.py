@@ -58,7 +58,7 @@ class WirepasOtapHelper:
             try:
                 res, status = self.wni.get_scratchpad_status(gw, sink)
                 if res != wmm.GatewayResultCode.GW_RES_OK:
-                    logging.error("Scratchpad Status error from [%s][%s]: [%s] " %  (gw, sink, res))
+                    logging.error("Scratchpad Status error from [%s][%s]: [%s] " % (gw, sink, res))
                     return
                 logging.debug("Scratchpad status read correctly")
                 self._status.append(status)
@@ -184,10 +184,14 @@ class WirepasOtapHelper:
             if all_expected_answers.__len__() == 0:
                 all_received.set()
 
-        logging.info("Loading scratchpad with seq = %d to all sinks for network %d" %(seq, self.network))
+        logging.info("Loading scratchpad with seq = %d to all sinks for network %d" % (seq, self.network))
         for gw, sink, _ in self._sinks:
             logging.debug("Loading scratchpad to [%s][%s] " % (gw, sink))
-            self.wni.upload_scratchpad(gw, sink, seq, scratchpad, cb=_on_scratchpad_loaded_cb, param=(gw, sink), timeout=timeout)
+            self.wni.upload_scratchpad(
+                gw, sink, seq, scratchpad, cb=_on_scratchpad_loaded_cb,
+                param=(gw, sink), timeout=timeout
+            )
+
             all_expected_answers.add((gw, sink))
             sleep(delay_between_sinks_s)
 

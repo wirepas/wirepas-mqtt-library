@@ -4,9 +4,9 @@
 #
 import argparse
 from wirepas_mqtt_library import WirepasNetworkInterface, WirepasTLVAppConfigHelper
-import wirepas_mesh_messaging as wmm
 
 import logging
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(fromfile_prefix_chars='@')
@@ -38,7 +38,7 @@ if __name__ == "__main__":
                                   args.username,
                                   args.password,
                                   insecure=args.insecure)
-    
+
     app_config_helper = WirepasTLVAppConfigHelper(wni,
                                                   network=args.network)
 
