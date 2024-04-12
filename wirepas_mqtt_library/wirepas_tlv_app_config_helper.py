@@ -2,15 +2,13 @@
 #
 # See file LICENSE.txt for full license details.
 #
-import wirepas_mesh_messaging as wmm
 import logging
-from wirepas_mqtt_library import WirepasNetworkInterface 
 
 
 class WirepasTLVAppConfigHelper:
-    """Class to ease operation management of app_config with Wirepas TLV format 
+    """Class to ease operation management of app_config with Wirepas TLV format
 
-    This class contains methods allowing the modification (addition, removal) 
+    This class contains methods allowing the modification (addition, removal)
     of app_config data inside a Wirepas network compliant with the TLV format.
     It offers an abstraction for wirepas supported feature at application level
     like the local provisioning.
@@ -26,7 +24,7 @@ class WirepasTLVAppConfigHelper:
         :type wni: :obj:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface`
         :param network: Network address concerned by the otap
         :param gateway_sink_subset: list of (gateway, sink) tupple concerned by the change
-        
+
         :note: Either network or gateway_sink_subset must be specified
         """
         if wni is None:
@@ -35,7 +33,7 @@ class WirepasTLVAppConfigHelper:
 
         if gateway_sink_subset is None and network is None:
             raise RuntimeError("No gw/sink list provided nor network")
-        
+
         if gateway_sink_subset is not None and network is not None:
             raise RuntimeError("gw/sink list and network cannot be specified together")
 
@@ -81,7 +79,7 @@ class WirepasTLVAppConfigHelper:
         """
         if entry < 0 or entry > 0xffff:
             raise ValueError("TLV type must be between 0 and 0xffff")
-        
+
         self._removed_entries.append(entry)
         return self
 
@@ -104,7 +102,7 @@ class WirepasTLVAppConfigHelper:
             raise ValueError("psk must be a 32 bytes bytearray")
 
         if psk_id is not None and psk is None or \
-            psk_id is None and psk is not None:
+                psk_id is None and psk is not None:
             raise ValueError("psk and psk_id must be both unset or set")
 
         if enabled:
@@ -150,9 +148,9 @@ class WirepasTLVAppConfigHelper:
                 else:
                     logging.error(
                         "Current app config from [%s][%s] doesn't follow TLV format and override is false"
-                         % (gw, sink))
+                        % (gw, sink))
                     proceed = False
-                    continue      
+                    continue
 
             # First remove entries
             removed = False
@@ -186,7 +184,7 @@ class WirepasTLVAppConfigHelper:
         if not proceed:
             logging.error("Cannot add new app_config TLV entry")
             return False
-        
+
         logging.info("Check done, doing the change")
         logging.debug("New configs are: %s" % new_configs)
 
@@ -220,13 +218,14 @@ class WirepasTLVAppConfigHelper:
                 str += "[{}][{}] => {}\n".format(gw, sink, app_conf_obj)
             except ValueError:
                 str += "[{}][{}] => No TLV format\n".format(gw, sink)
-        return str     
+        return str
+
 
 class WirepasTLVAppConfig:
     wirepas_tlv_header = b'\xF6\x7E'
 
     def __init__(self, entries):
-        if entries == None:
+        if entries is None:
             entries = dict()
         self.entries = entries
 
@@ -240,7 +239,7 @@ class WirepasTLVAppConfig:
         except KeyError:
             # Key doesn't exist
             pass
-        
+
         self.entries[entry_type] = entry_value
         return True
 
@@ -260,12 +259,12 @@ class WirepasTLVAppConfig:
 
         # Add number of TLV entries
         app_config.append(entries.__len__())
-        
+
         # Add one by one the entries
         for t, v in entries.items():
-            l = v.__len__()
-            logging.debug("Adding: t = 0x%x, l = %d" % (t, l))
-            
+            length = v.__len__()
+            logging.debug("Adding: t = 0x%x, length = %d" % (t, length))
+
             if (t > 0xffff):
                 raise ValueError("Type must be feat on 2 bytes: 0x%x", t)
 
@@ -273,10 +272,10 @@ class WirepasTLVAppConfig:
             app_config.append(t & 0xff)
             if (t >= 256):
                 # Long type, set MSBit of length to 1
-                app_config.append(l | 0x80)
+                app_config.append(length | 0x80)
                 app_config.append(t >> 8 & 0xff)
             else:
-                app_config.append(l)
+                app_config.append(length)
 
             # Add the value
             app_config += v
@@ -297,7 +296,7 @@ class WirepasTLVAppConfig:
 
         app_config = app_config[3:]
 
-        entries={} 
+        entries = {}
         # Iterate the different entries
         while (tlv_entries > 0):
             value_offset = 2
@@ -307,20 +306,20 @@ class WirepasTLVAppConfig:
                 # We have a long type
                 t += app_config[2] * 256
                 value_offset += 1
-            
-            l = app_config[1] & ~0x80
-            logging.debug("t = 0x%x, l = %d," % (t, l))
-            entries[t] = app_config[value_offset:value_offset+l]
-            
-            app_config = app_config[value_offset+l:]
-            tlv_entries-=1
+
+            length = app_config[1] & ~0x80
+            logging.debug("t = 0x%x, length = %d," % (t, length))
+            entries[t] = app_config[value_offset:value_offset+length]
+
+            app_config = app_config[value_offset+length:]
+            tlv_entries -= 1
 
         return entries
 
     @classmethod
     def from_value(cls, app_config):
         d = WirepasTLVAppConfig._parse_app_config(app_config)
-        if d == None:
+        if d is None:
             raise ValueError("Not a Wirepas TLV app_config format")
         return cls(d)
 
@@ -332,9 +331,8 @@ class WirepasTLVAppConfig:
         str = "{"
         for t, v in self.entries.items():
             if str.__len__() > 2:
-                str+=", "
-            str+= "0x%x:%s" % (t, v.hex())
+                str += ", "
+            str += "0x%x:%s" % (t, v.hex())
 
         str += "}"
         return str
-

@@ -52,8 +52,8 @@ class WirepasNetworkInterface:
                     self.sinks = configs
                     updated = True
                 else:
-                    if sorted(configs, key = lambda ele: sorted(ele.items())) != sorted(
-                            self.sinks, key = lambda ele: sorted(ele.items())):
+                    if sorted(configs, key=lambda ele: sorted(ele.items())) != sorted(
+                            self.sinks, key=lambda ele: sorted(ele.items())):
                         self.sinks = configs
                         updated = True
 
@@ -61,7 +61,6 @@ class WirepasNetworkInterface:
                 self.config_received_event.set()
 
                 return updated
-
 
         def update_sink_config(self, config):
             with self._config_lock:
@@ -146,10 +145,13 @@ class WirepasNetworkInterface:
             - error_code: :class:`~wirepas_mqtt_library.wirepas_network_interface.ConnectionErrorCode`
 
         :type connection_cb: function
-        :param client_id: the unique client id string used when connecting to the broker. If client_id is zero length or None,
-               then one will be randomly generated. In this case the clean_session parameter must be True.
-        :param clean_session: a boolean that determines the client type. If True, the broker will remove all information about this client when it disconnects.
-               If False, the client is a durable client and subscription information and queued messages will be retained when the client disconnects.
+        :param client_id: the unique client id string used when connecting to the broker.
+            If client_id is zero length or None, then one will be randomly generated.
+            In this case the clean_session parameter must be True.
+        :param clean_session: a boolean that determines the client type.
+            If True, the broker will remove all information about this client when it disconnects.
+            If False, the client is a durable client and subscription information
+            and queued messages will be retained when the client disconnects.
         :param transport: set to "websockets" to send MQTT over WebSockets. Leave at the default of "tcp" to use raw TCP.
         :param gw_timeout_s: Timeout in s to receive a response from a gw
         """
@@ -179,7 +181,6 @@ class WirepasNetworkInterface:
         self._gateways = {}
         # Dictionary to store request id, associated cb
         self._ongoing_requests = {}
-
 
         self._data_uplink_filters_lock = Lock()
         self._data_uplink_filters = {}
@@ -246,7 +247,6 @@ class WirepasNetworkInterface:
         self._mqtt_client.message_callback_add(all_responses_topic,
                                                self._on_response_received)
 
-
         # Register for all sent data
         all_send_data_topic = TopicGenerator.make_send_data_request_topic()
         self._mqtt_client.subscribe(all_send_data_topic, 1)
@@ -297,13 +297,11 @@ class WirepasNetworkInterface:
                                                              status.state == wmm.GatewayState.ONLINE,
                                                              status.sink_configs)
 
-
-
         except wmm.GatewayAPIParsingException as e:
             logging.error(str(e))
             gw = TopicParser.parse_status_topic(message.topic)
-            logging.error("It probably means that one of the gateway sent a malformed status."
-            " It can be cleared by calling clear_gateway_status(\"%s\")", gw)
+            logging.error("It probably means that one of the gateway sent a malformed status. "
+                          "It can be cleared by calling clear_gateway_status(\"%s\")", gw)
             return
 
     def _update_sink_config(self, gw_id, config):
@@ -336,7 +334,7 @@ class WirepasNetworkInterface:
                     _, _, network_address, _, _ = TopicParser.parse_received_data_topic(message.topic)
                     data.network_address = network_address
                 except ValueError:
-                    logging.error("Cannot determine network address from topic: %s",message.topic)
+                    logging.error("Cannot determine network address from topic: %s", message.topic)
                     # Address is unknown but still dispatch data
                     data.network_address = None
 
@@ -363,7 +361,7 @@ class WirepasNetworkInterface:
     def _call_cb(self, response, *args):
         try:
             for cb, param in self._ongoing_requests[response.req_id]:
-            # Add caller param after response error code and add any additional param at the end
+                # Add caller param after response error code and add any additional param at the end
                 cb(response.res, param, *args)
                 # Cb called, remove key
 
@@ -461,8 +459,8 @@ class WirepasNetworkInterface:
     def _ask_gateway_config(self, gw_id):
         request = wmm.GetConfigsRequest()
         self._publish(TopicGenerator.make_get_configs_request_topic(gw_id),
-                        request.payload,
-                        1)
+                      request.payload,
+                      1)
 
         # Call update gateway config when receiving it
         self._wait_for_response(self._update_gateway_configs, request.req_id)
@@ -507,14 +505,14 @@ class WirepasNetworkInterface:
                 if not gw.config_received_event.is_set():
                     logging.error("Config timeout for gw %s" % gw.id)
                     logging.error("Is the gateway really online? If not, its status can be cleared by "
-                                    "calling clear_gateway_status(\"%s\")", gw.id)
+                                  "calling clear_gateway_status(\"%s\")", gw.id)
                     # Mark the initial config as empty list to avoid waiting for it next time
                     # It may still come later
                     gw.update_all_sink_configs([])
 
                     if args[0]._strict_mode:
                         logging.error("This Timeout will generate an exception but you can "
-                                        "avoid it by starting WirepasNetworkInteface with strict_mode=False")
+                                      "avoid it by starting WirepasNetworkInteface with strict_mode=False")
                         raise TimeoutError("Cannot get config from online GW %s", gw.id)
 
             return fn(*args, **kwargs)
@@ -539,7 +537,6 @@ class WirepasNetworkInterface:
         """
         self._mqtt_client.disconnect()
         self._task_queue.terminate()
-
 
     @_wait_for_connection
     @_wait_for_configs
@@ -651,7 +648,7 @@ class WirepasNetworkInterface:
         try:
             self._ongoing_requests[req_id].append((cb, param))
         except KeyError:
-            self._ongoing_requests[req_id]= [(cb, param)]
+            self._ongoing_requests[req_id] = [(cb, param)]
 
     def _wait_for_response(self, cb, req_id, extra_timeout=0, param=None):
         if cb is not None:
@@ -682,7 +679,8 @@ class WirepasNetworkInterface:
         return res
 
     @_wait_for_connection
-    def send_message(self, gw_id, sink_id, dest, src_ep, dst_ep, payload, qos=0, csma_ca_only=False, hop_limit=0, cb=None, param=None):
+    def send_message(self, gw_id, sink_id, dest, src_ep, dst_ep, payload, qos=0,
+                     csma_ca_only=False, hop_limit=0, cb=None, param=None):
         """
         send_message(self, gw_id, sink_id, dest, src_ep, dst_ep, payload, qos=0, csma_ca_only=False, cb=None, param=None)
         Send a message to wirepas network from a given sink
@@ -840,7 +838,8 @@ class WirepasNetworkInterface:
         :type cb: function
         :param param: Optional parameter that will be passed to callback
         :type param: object
-        :return: Tuple (:obj:`~wirepas_mesh_messaging.gateway_result_code.GatewayResultCode`, status) None if cb is set. See note.
+        :return: Tuple (:obj:`~wirepas_mesh_messaging.gateway_result_code.GatewayResultCode`, status)
+            None if cb is set. See note.
         :rtype: Tuple
 
         :raises TimeoutError: Raised if cb is None and response is not received within 2 sec
@@ -908,14 +907,14 @@ class WirepasNetworkInterface:
 
     def register_data_cb(self, cb, gateway=None, sink=None, network=None, src_ep=None, dst_ep=None):
         """Deprecated
-        Replaced by :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_uplink_traffic_cb`
+        Replaced by :meth:`~register_uplink_traffic_cb`
         Only name has changed
         """
         return self.register_uplink_traffic_cb(cb, gateway, sink, network, src_ep, dst_ep)
 
     def unregister_data_cb(self, id):
         """Deprecated
-        Replaced by :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_uplink_traffic_cb`
+        Replaced by :meth:`~unregister_uplink_traffic_cb`
         Only name has changed
         """
         return self.unregister_uplink_traffic_cb(id)
@@ -931,7 +930,7 @@ class WirepasNetworkInterface:
         :param src_ep: Filter on a given source endpoint (None for all)
         :param dst_ep: Filter on a given destination endpoint (None for all)
         :return: The id of this filter, to be used when removing it with
-            :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_data_cb`
+            :meth:`~unregister_data_cb`
         """
         new_filter = _DataFilter(cb, gateway, sink, network, src_ep, dst_ep)
         with self._data_uplink_filters_lock:
@@ -941,7 +940,7 @@ class WirepasNetworkInterface:
 
     def unregister_uplink_traffic_cb(self, id):
         """Unregister uplink data callback previously registered
-        with :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_uplink_traffic_cb`
+        with :meth:`~register_uplink_traffic_cb`
 
         :param id: id returned when adding the filter
         :raises KeyError: if id doesn't exist
@@ -959,7 +958,7 @@ class WirepasNetworkInterface:
         :param src_ep: Filter on a given source endpoint (None for all)
         :param dst_ep: Filter on a given destination endpoint (None for all)
         :return: The id of this filter, to be used when removing it with
-            :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_downlink_traffic_cb`
+            :meth:`~unregister_downlink_traffic_cb`
         """
         # Downlink traffic do not have network address field. It could be determined based on gateway/sink config
         new_filter = _DataFilter(cb, gateway, sink, None, src_ep, dst_ep)
@@ -970,7 +969,7 @@ class WirepasNetworkInterface:
 
     def unregister_downlink_traffic_cb(self, id):
         """Unregister data callback previously registered
-        with :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.register_downlink_traffic_cb`
+        with :meth:`~register_downlink_traffic_cb`
 
         :param id: id returned when adding the filter
         :raises KeyError: if id doesn't exist
@@ -1050,8 +1049,7 @@ class WirepasNetworkInterface:
         the attached gateway
 
         :param cb: Callback to be called when something has changed.
-            :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_gateways`
-            and :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_sinks`
+            :meth:`~get_gateways` and :meth:`~get_sinks`
             can be used to discover what has changed
         """
         self._on_config_changed_cb = cb
@@ -1135,12 +1133,12 @@ class _TaskQueue(Queue):
             try:
                 task, args, kwargs = self.get()
                 task(*args, **kwargs)
-            except TypeError as e:
+            except TypeError:
                 # When a task is None in the queue and the task is invoked
                 # a type error is raised. This condition is used to terminate the Thread
                 break
 
     def terminate(self):
-        for worker_id in range(0,self._num_worker):
-            logging.debug("Adding empty task to force worker %d thread to exit" %worker_id)
+        for worker_id in range(0, self._num_worker):
+            logging.debug("Adding empty task to force worker %d thread to exit" % worker_id)
             self.add_task(None)

@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     print("Sequences already in used: ", current_target_seq_set)
     # Take a sequence from 1-254 that is not in the current set
-    seq = choice([i for i in range(1,254) if i not in current_target_seq_set])
+    seq = choice([i for i in range(1, 254) if i not in current_target_seq_set])
 
     print("Sequence chosen: ", seq)
 
@@ -102,5 +102,3 @@ if __name__ == "__main__":
         print("Set propagate and process with 5 days delay")
         if not otapHelper.set_propagate_and_process_scratchpad_to_all_sinks(delay=wmm.ProcessingDelay.DELAY_FIVE_DAYS):
             print("Cannot set propagate and process only for 5 days")
-
-

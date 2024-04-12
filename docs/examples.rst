@@ -10,8 +10,7 @@ With this example you will learn how to receive and send data from your network.
 
 Code
 ^^^^
-
-.. literalinclude:: ../examples/example_send_data.py
+.. literalinclude:: ../examples/example_data.py
 
 Setting sink config
 ---------------------------------------------------

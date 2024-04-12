@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
     # Register a callback for downlink traffic
     wni.register_downlink_traffic_cb(on_downlink_data_received)
-    
+
     # Register a callback for uplink traffic
     wni.register_uplink_traffic_cb(on_uplink_data_transmitted)
 

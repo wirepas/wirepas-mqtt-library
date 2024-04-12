@@ -9,14 +9,17 @@ import logging
 
 # Hardcoded config as an example
 new_config = {
-    "node_role": 17, # Sink with Low Latency flag: 0x11
+    "node_role": 17,  # Sink with Low Latency flag: 0x11
     "network_address": 0x1AB2C3,
     "network_channel": 13,
     # Fake keys to illustrate the concept
-    "cipher_key": bytes([0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88]),
-    "authentication_key": bytes([0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88]),
+    "cipher_key": bytes([0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88,
+                         0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]),
+    "authentication_key": bytes([0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88,
+                                 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]),
     "started": True
 }
+
 
 if __name__ == "__main__":
     """Configure a given sink on a gateway to predefined settings
@@ -40,11 +43,11 @@ if __name__ == "__main__":
     parser.add_argument('--gateway',
                         required=True,
                         help="Gateway the sink to configure is attached")
-    
+
     parser.add_argument('--sink',
                         required=True,
                         help="the sink to configure")
-    
+
     parser.add_argument('--sink_address',
                         type=int,
                         help="the sink address. Other sink settings are hardcoded inside script")
@@ -72,7 +75,7 @@ if __name__ == "__main__":
 
         if args.sink_address is not None:
             new_config["node_address"] = args.sink_address
-            
+
         try:
             res = wni.set_sink_config(gw, sink, new_config)
             if res != wmm.GatewayResultCode.GW_RES_OK:

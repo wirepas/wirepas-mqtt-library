@@ -39,7 +39,7 @@ jobs:
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --per-file-ignores="__init__.py:F401" --statistics
 
     #- name: Install wheel locally
     #  run: pip install .
@@ -61,7 +61,7 @@ jobs:
     - name: Set Version for PR
       if: ${{ github.event_name == 'pull_request' }}
       run: echo "VERSION=PR_${{ github.event.pull_request.number }}" >> $GITHUB_ENV
-    
+
     - name: Set Version for manual triggering
       if: ${{ github.event_name == 'workflow_dispatch' }}
       run: echo "VERSION=${{ github.event.inputs.version_name }}" >> $GITHUB_ENV
@@ -72,10 +72,10 @@ jobs:
 
     - name: Build the wheel
       run: python setup.py sdist bdist_wheel
-    
+
     - name: Save produced wheel name and path
       run: echo "WHEEL_FILE=$(ls dist/*-py3-none-any.whl)" >> $GITHUB_ENV
-      
+
     - name: Store artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -99,7 +99,7 @@ jobs:
         user: __token__
         password: ${{ secrets.PYPI_TEST_PWD }}
         repository_url: https://test.pypi.org/legacy/
-        
+
     - name: Publish package to PyPI for release
       if: ${{ github.event_name == 'release' }}
       uses: pypa/gh-action-pypi-publish@v1.4.1
