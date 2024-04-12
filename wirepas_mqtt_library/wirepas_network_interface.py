@@ -315,7 +315,7 @@ class WirepasNetworkInterface:
                     self._task_queue.add_task(self._on_config_changed_cb)
 
         except KeyError:
-            logging.error("Receiving sink config that is unknown %s/%s", config.gw_id, config.sink_id)
+            logging.error("Receiving sink config that is unknown %s/%s", gw_id, config["sink_id"])
 
     def _update_gateway_configs(self, config):
         try:
