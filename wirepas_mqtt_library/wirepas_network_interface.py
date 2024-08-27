@@ -34,10 +34,13 @@ class WirepasNetworkInterface:
 
     # Inner class definition to define a gateway
     class _Gateway:
-        def __init__(self, id, online=False, sinks=None):
+        def __init__(self, id, online=False, sinks=None, model=None, version=None, max_scratchpad_size=None):
             self.id = id
             self.online = online
             self.sinks = sinks
+            self.model = model
+            self.version = version
+            self.max_scratchpad_size = max_scratchpad_size
             self.config_received_event = Event()
             if sinks is not None:
                 self.config_received_event.set()
@@ -286,6 +289,10 @@ class WirepasNetworkInterface:
             try:
                 gw = self._gateways[status.gw_id]
                 gw.online = (status.state == wmm.GatewayState.ONLINE)
+                gw.model = status.gateway_model
+                gw.version = status.gateway_version
+                gw.max_scratchpad_size=status.max_scratchpad_size
+
                 if gw.update_all_sink_configs(status.sink_configs):
                     # Config has changed, notify any subscriber
                     if self._on_config_changed_cb is not None:
@@ -295,7 +302,10 @@ class WirepasNetworkInterface:
                 # Create Gateway
                 self._gateways[status.gw_id] = self._Gateway(status.gw_id,
                                                              status.state == wmm.GatewayState.ONLINE,
-                                                             status.sink_configs)
+                                                             status.sink_configs,
+                                                             model=status.gateway_model,
+                                                             version=status.gateway_version,
+                                                             max_scratchpad_size=status.max_scratchpad_size)
 
 
 
