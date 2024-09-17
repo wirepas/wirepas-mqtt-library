@@ -125,7 +125,7 @@ class WirepasNetworkInterface:
             return error_code
 
     def __init__(self, host, port, username, password,
-                 insecure=False, num_worker_thread=1, strict_mode=True,
+                 insecure=False, num_worker_thread=1, strict_mode=False,
                  connection_cb=None, client_id="", clean_session=None,
                  transport="tcp", gw_timeout_s=2):
         """Constructor
