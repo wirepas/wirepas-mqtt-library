@@ -477,59 +477,45 @@ class WirepasNetworkInterface:
         # Call update gateway config when receiving it
         self._wait_for_response(self._update_gateway_configs, request.req_id)
 
-    def _wait_for_configs(fn):
-        # Decorator to handle waiting for enough time for the setup
-        # of the network interface
-        def wrapper(*args, **kwargs):
-            # args[0] is self
 
-            gateways_subset = None
-            # Check for missing gateway config
-            if ("gateway" in kwargs):
-                gateways_subset = kwargs['gateway']
+    def _wait_for_configs(self, gateways=None):
+        gateways_to_wait_config = []
+        for gw in self._gateways.copy().values():
+            if gateways is not None and gw.id not in gateways:
+                # Not interested by this gateway, so no need for the config
+                continue
 
-            gateways_to_wait_config = []
-            for gw in args[0]._gateways.copy().values():
-                if gateways_subset is not None and gw.id not in gateways_subset:
-                    # Not interested by this gateway, so no need for the config
+            if gw.online:
+                if gw.config_received_event.is_set():
+                    # We have already received the config
                     continue
 
-                if gw.online:
-                    if gw.config_received_event.is_set():
-                        # We have already received the config
-                        continue
+                # Time to ask the gateway config
+                self._ask_gateway_config(gw.id)
+                gateways_to_wait_config.append(gw)
 
-                    # Time to ask the gateway config
-                    args[0]._ask_gateway_config(gw.id)
+        timeout_ts = time() + self._gw_timeout_s
 
-                    gateways_to_wait_config.append(gw)
-
-            timeout_ts = time() + args[0]._gw_timeout_s
-
-            # We have asked config for gateway we never received it
-            # Check if we received it for all gateways we asked before timeout
-            for gw in gateways_to_wait_config:
-                timeout = timeout_ts - time()
-                if timeout <= 0:
-                    timeout = None
-
+        # We have asked config for gateway we never received it
+        # Check if we received it for all gateways we asked before timeout
+        for gw in gateways_to_wait_config:
+            timeout = timeout_ts - time()
+            if timeout > 0:
+                # We can still wait
                 gw.config_received_event.wait(timeout)
-                if not gw.config_received_event.is_set():
-                    logging.error("Config timeout for gw %s" % gw.id)
-                    logging.error("Is the gateway really online? If not, its status can be cleared by "
-                                    "calling clear_gateway_status(\"%s\")", gw.id)
-                    # Mark the initial config as empty list to avoid waiting for it next time
-                    # It may still come later
-                    gw.update_all_sink_configs([])
 
-                    if args[0]._strict_mode:
-                        logging.error("This Timeout will generate an exception but you can "
-                                        "avoid it by starting WirepasNetworkInteface with strict_mode=False")
-                        raise TimeoutError("Cannot get config from online GW %s", gw.id)
+            if not gw.config_received_event.is_set():
+                logging.error("Config timeout for gw %s" % gw.id)
+                logging.error("Is the gateway really online? If not, its status can be cleared by "
+                                "calling clear_gateway_status(\"%s\")", gw.id)
+                # Mark the initial config as empty list to avoid waiting for it next time
+                # It may still come later
+                gw.update_all_sink_configs([])
 
-            return fn(*args, **kwargs)
-        wrapper.__doc__ = fn.__doc__
-        return wrapper
+                if self._strict_mode:
+                    logging.error("This Timeout will generate an exception but you can "
+                                    "avoid it by starting WirepasNetworkInteface with strict_mode=False")
+                    raise TimeoutError("Cannot get config from online GW %s", gw.id)
 
     def close(self):
         """Explicitly close this network interface as well as the worker threads
@@ -552,7 +538,6 @@ class WirepasNetworkInterface:
 
 
     @_wait_for_connection
-    @_wait_for_configs
     def get_sinks(self, network_address=None, gateway=None):
         """
         get_sinks(self, network_address=None, gateway=None)
@@ -597,6 +582,8 @@ class WirepasNetworkInterface:
         :raises TimeoutError: If a gateway doesn't send its initial config fast enough
 
         """
+        # Wait for subset of gateways
+        self._wait_for_configs(gateways=gateway)
         sinks = list()
         for gw in self._gateways.copy().values():
             if not gw.online:
@@ -1126,7 +1113,6 @@ class WirepasNetworkInterface:
         return self._wait_for_response(cb, request.req_id, extra_timeout=3, param=param)
 
     @_wait_for_connection
-    @_wait_for_configs
     def set_config_changed_cb(self, cb):
         """
         set_config_changed_cb(self, cb)
@@ -1138,6 +1124,7 @@ class WirepasNetworkInterface:
             and :meth:`~wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_sinks`
             can be used to discover what has changed
         """
+        self._wait_for_configs()
         self._on_config_changed_cb = cb
 
         # Call the cb a first time as an initial info
