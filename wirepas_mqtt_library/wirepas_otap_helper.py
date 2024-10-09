@@ -2,12 +2,13 @@
 #
 # See file LICENSE.txt for full license details.
 #
-from threading import Event
+from threading import Event, Lock
 from time import sleep
 import wirepas_mesh_messaging as wmm
 import logging
 from struct import pack, unpack
 from random import randint
+from .otap_status_storage import OtapStatusStorage
 
 
 class WirepasOtapHelper:
@@ -19,7 +20,7 @@ class WirepasOtapHelper:
     It allows to write more complex script by chaining those operations.
 
     """
-    def __init__(self, wni, network, gateway=None):
+    def __init__(self, wni, network, gateway=None, persist_otap_status_file=None):
         """Constructor
 
         :param wni: Wirepas network interface
@@ -30,6 +31,16 @@ class WirepasOtapHelper:
         if wni is None:
             raise RuntimeError("No Wirepas Network Interface provided")
         self.wni = wni
+
+        self._persist_otap_status = False
+        self._otap_status_storage = None
+        self._otap_status_storage_write_lock = None
+
+        if persist_otap_status_file is not None:
+            logging.info("OTAP status persistence enabled.")
+            self._persist_otap_status = True
+            self._otap_status_storage_write_lock = Lock()
+            self._otap_status_storage = OtapStatusStorage(persist_otap_status_file)
 
         self.network = network
 
@@ -135,6 +146,11 @@ class WirepasOtapHelper:
             new_status["target_seq"] = target_seq
             new_status["target_delay_m"] = target_delay
             new_status["remaining_delay_m"] = remaining_delay
+
+        # Store node's OTAP status in database if requested
+        if self._persist_otap_status:
+            with self._otap_status_storage_write_lock:
+                self._otap_status_storage.write_node_status(new_status, data.network_address, data.source_address, data.travel_time_ms)
 
         self._nodes[data.source_address] = new_status
 
