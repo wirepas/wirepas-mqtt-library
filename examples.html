@@ -418,6 +418,27 @@ parameter.</p>
 <span class="kn">import</span> <span class="nn">wirepas_mesh_messaging</span> <span class="k">as</span> <span class="nn">wmm</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">otap_delay_choices</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;10_minutes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;30_minutes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;1_hour&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;6_hours&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;1_day&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2_days&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;5_days&quot;</span>
+<span class="p">]</span>
+
+<span class="n">otap_delay_choices_to_internal_values</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">otap_delay_choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">wmm</span><span class="o">.</span><span class="n">ProcessingDelay</span><span class="o">.</span><span class="n">DELAY_TEN_MINUTES</span><span class="p">,</span>
+    <span class="n">otap_delay_choices</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">wmm</span><span class="o">.</span><span class="n">ProcessingDelay</span><span class="o">.</span><span class="n">DELAY_THIRTY_MINUTES</span><span class="p">,</span>
+    <span class="n">otap_delay_choices</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">wmm</span><span class="o">.</span><span class="n">ProcessingDelay</span><span class="o">.</span><span class="n">DELAY_ONE_HOUR</span><span class="p">,</span>
+    <span class="n">otap_delay_choices</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">wmm</span><span class="o">.</span><span class="n">ProcessingDelay</span><span class="o">.</span><span class="n">DELAY_SIX_HOURS</span><span class="p">,</span>
+    <span class="n">otap_delay_choices</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">wmm</span><span class="o">.</span><span class="n">ProcessingDelay</span><span class="o">.</span><span class="n">DELAY_ONE_DAY</span><span class="p">,</span>
+    <span class="n">otap_delay_choices</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">wmm</span><span class="o">.</span><span class="n">ProcessingDelay</span><span class="o">.</span><span class="n">DELAY_TWO_DAYS</span><span class="p">,</span>
+    <span class="n">otap_delay_choices</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">wmm</span><span class="o">.</span><span class="n">ProcessingDelay</span><span class="o">.</span><span class="n">DELAY_FIVE_DAYS</span>
+<span class="p">}</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">fromfile_prefix_chars</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
@@ -446,75 +467,129 @@ parameter.</p>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--network&#39;</span><span class="p">,</span>
                         <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Network address concerned by scratchpad&quot;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--file&#39;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Scratcphad to use&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--gateway&quot;</span><span class="p">,</span>
+
+    <span class="n">mutual_exclusive_group_1</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">()</span>
+    <span class="n">mutual_exclusive_group_1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--gateway&quot;</span><span class="p">,</span>
                         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
                         <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Gateway list to use. If specified, the OTAP will be performed on given Gateway IDs&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Gateway list to use (space separator between entries).</span>
+<span class="s2">                        If specified, the OTAP will be performed on given Gateway IDs.</span>
+<span class="s2">                        Warning: Mutually exclusive with --gateway-from-file option&quot;&quot;&quot;</span><span class="p">,</span>
                         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">mutual_exclusive_group_1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--gateway-from-file&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">FileType</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">),</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Gateway list to use from a file (one gateway ID per line,</span>
+<span class="s2">                        UTF-8 encoded with line ending with LF character).</span>
+<span class="s2">                        If specified, the OTAP will be performed on given Gateway IDs.</span>
+<span class="s2">                        Warning: Mutually exclusive with --gateway option&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--otap-delay&quot;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">otap_delay_choices</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;OTAP action delay (only valid for cmd &#39;delayed&#39; or &#39;update_delay&#39;)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Log parameters</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--log-level&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                        <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;warning&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="s2">&quot;critical&quot;</span><span class="p">],</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Default to &#39;info&#39;. Log level to be displayed. &quot;</span>
+                        <span class="s2">&quot;It has to be chosen between &#39;debug&#39;, &#39;info&#39;, &#39;warning&#39;, &#39;error&#39; and &#39;critical&#39;&quot;</span><span class="p">)</span>
+    <span class="c1"># Script behavior</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--strict-mode&quot;</span><span class="p">,</span>
+                        <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;strict_mode&#39;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Stop execution at first generated error on gateway/sink operation&quot;</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
-    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1"> </span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> | [</span><span class="si">%(levelname)s</span><span class="s1">] </span><span class="si">%(filename)s</span><span class="s1">:</span><span class="si">%(lineno)d</span><span class="s1">:</span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">log_level</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                        <span class="n">handlers</span><span class="o">=</span><span class="p">[</span>
+                            <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">),</span>
+                            <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s2">&quot;example_otap.log&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+                        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Script arguments: </span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">wni</span> <span class="o">=</span> <span class="n">WirepasNetworkInterface</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
                                   <span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
                                   <span class="n">args</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
                                   <span class="n">args</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
-                                  <span class="n">insecure</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">insecure</span><span class="p">)</span>
+                                  <span class="n">insecure</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">insecure</span><span class="p">,</span>
+                                  <span class="n">strict_mode</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">strict_mode</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">network</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No network address provided&quot;</span><span class="p">)</span>
-        <span class="n">exit</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;delayed&quot;</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;update_delay&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">otap_delay</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No value given for OTAP action with delay&quot;</span><span class="p">)</span>
+            <span class="n">exit</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">delay</span> <span class="o">=</span> <span class="n">otap_delay_choices_to_internal_values</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">otap_delay</span><span class="p">]</span>
+            <span class="n">delay_str</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">otap_delay</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+
+    <span class="c1"># Get gateway list</span>
+    <span class="n">gateways</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">gateway</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">gateway_from_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Load gateway list from file</span>
+            <span class="n">gateways</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">gateway_from_file</span><span class="p">:</span>
+                    <span class="n">gateways</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Invalid file format. Must be UTF-8 with lines ending with LF character&quot;</span><span class="p">)</span>
+                <span class="n">exit</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gateways</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">gateway</span>
+
+    <span class="k">if</span> <span class="n">gateways</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+       <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;OTAP to be performed on all gateways under network </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="o">.</span><span class="n">network</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;OTAP to be performed on </span><span class="si">%d</span><span class="s2"> gateways&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">gateways</span><span class="p">))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gateway list </span><span class="si">{</span><span class="n">gateways</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">otapHelper</span> <span class="o">=</span> <span class="n">WirepasOtapHelper</span><span class="p">(</span><span class="n">wni</span><span class="p">,</span>
                                    <span class="n">args</span><span class="o">.</span><span class="n">network</span><span class="p">,</span>
-                                   <span class="n">args</span><span class="o">.</span><span class="n">gateway</span><span class="p">)</span>
+                                   <span class="n">gateways</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;update_delay&quot;</span><span class="p">:</span>
-        <span class="n">delay</span> <span class="o">=</span> <span class="n">wmm</span><span class="o">.</span><span class="n">ProcessingDelay</span><span class="o">.</span><span class="n">DELAY_THIRTY_MINUTES</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set new delay to </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">delay</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set new delay to </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">delay_str</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_propagate_and_process_scratchpad_to_all_sinks</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot update delay&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cannot update delay on all sinks&quot;</span><span class="p">)</span>
         <span class="n">exit</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;no_otap&quot;</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set target to no otap&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set OTAP action to &lt;no otap&gt; on all sinks&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_no_otap_to_all_sinks</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot set no otap on all sinks&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cannot set OTAP action to &lt;no otap&gt; on all sinks&quot;</span><span class="p">)</span>
         <span class="n">exit</span><span class="p">()</span>
 
     <span class="c1"># Optional: find a &quot;good&quot; sequence</span>
     <span class="n">current_target_seq_set</span> <span class="o">=</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">get_target_scratchpad_seq_list</span><span class="p">()</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sequences already in used: &quot;</span><span class="p">,</span> <span class="n">current_target_seq_set</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sequences already in use: </span><span class="si">{</span><span class="n">current_target_seq_set</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="c1"># Take a sequence from 1-254 that is not in the current set</span>
     <span class="n">seq</span> <span class="o">=</span> <span class="n">choice</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">254</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_target_seq_set</span><span class="p">])</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sequence chosen: &quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sequence chosen: </span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">seq</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">load_scratchpad_to_all_sinks</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="n">seq</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot load scratchpad to all sinks&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cannot load scratchpad to all sinks&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;sink_only&quot;</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing scratchpad on all sinks&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Processing scratchpad on all sinks&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">process_scratchpad_on_all_sinks</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot process scratchpad on all sinks&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cannot process scratchpad on all sinks&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;propagate_only&quot;</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set propagate only&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set OTAP action to &lt;propagate only&gt; on all sinks&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_propagate_scratchpad_to_all_sinks</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot set propagate and process&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cannot set OTAP action &lt;propagate only&gt; on all sinks&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;immediately&quot;</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set propagate and process&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set OTAP action &lt;propagate and process&gt; on all sinks&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_propagate_and_process_scratchpad_to_all_sinks</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot set propagate and process only&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cannot set OTAP action &lt;propagate and process&gt; on all sinks&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;delayed&quot;</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set propagate and process with 5 days delay&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_propagate_and_process_scratchpad_to_all_sinks</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="n">wmm</span><span class="o">.</span><span class="n">ProcessingDelay</span><span class="o">.</span><span class="n">DELAY_FIVE_DAYS</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot set propagate and process only for 5 days&quot;</span><span class="p">)</span>
-
-
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set OTAP action &lt;propagate and process with </span><span class="si">%s</span><span class="s2"> delay&gt; on all sinks&quot;</span> <span class="o">%</span> <span class="n">delay_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">otapHelper</span><span class="o">.</span><span class="n">set_propagate_and_process_scratchpad_to_all_sinks</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cannot set OTAP action &lt;propagate and process only with delay&gt; on all sinks&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
