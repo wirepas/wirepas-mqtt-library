@@ -1205,11 +1205,15 @@ class _TaskQueue(Queue):
         while True:
             try:
                 task, args, kwargs = self.get()
-                task(*args, **kwargs)
-            except TypeError as e:
                 # When a task is None in the queue and the task is invoked
                 # a type error is raised. This condition is used to terminate the Thread
-                break
+                
+                if task is None:
+                    break
+
+                task(*args, **kwargs)
+            except Exception as e:
+                logging.exception(e)
 
     def terminate(self):
         for worker_id in range(0,self._num_worker):
