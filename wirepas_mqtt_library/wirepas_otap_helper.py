@@ -406,3 +406,10 @@ class WirepasOtapHelper:
             .. note:: All keys are not necessarily present in dictionary depending on the available info
         """
         return self._nodes
+
+    def get_known_gateways(self):
+        """ Get list of current gateways known by this instance of OtapHelper
+
+        :return: List of gateways
+        """
+        return [x[0] for x in self._sinks]

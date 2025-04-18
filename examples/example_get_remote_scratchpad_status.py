@@ -47,6 +47,14 @@ def print_node_list(nodes):
     print()
 
 
+def get_missing_gw_list(gw_list_user, gw_list_otaphelper):
+    missing_gw_list = []
+
+    if gw_list_user is not None:
+        missing_gw_list = list(set(gw_list_user) - set(gw_list_otaphelper))
+
+    return missing_gw_list
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(fromfile_prefix_chars='@')
     parser.add_argument('--host',
@@ -154,6 +162,15 @@ if __name__ == "__main__":
                                    args.network,
                                    gateways,
                                    args.persist_otap_status_file)
+
+    otap_known_gws = otapHelper.get_known_gateways()
+    logging.debug(f"OtapHelper knows gateway(s): {otap_known_gws}")
+    logging.warning(f"OtapHelper will *NOT* query gateway(s): {get_missing_gw_list(gateways, otap_known_gws)}")
+
+    choice = input("Based on gateway & sink list reported, do you want to continue? ([y]es/[n]o)")
+
+    if choice not in ['y', 'Y', 'yes']:
+        sys.exit()
 
     while True:
         choice = input("l to [l]ist nodes and s to [s]end remote status cmd as broadcast (if mode allows it) e to [e]xit\n")
