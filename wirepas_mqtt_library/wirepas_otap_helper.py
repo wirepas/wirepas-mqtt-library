@@ -350,6 +350,15 @@ class WirepasOtapHelper:
         """
         ret = True
         for gw, sink, config in self._sinks:
+            if address == 0xFFFFFFFF:
+                try:
+                    res = self.wni.send_message(gw, sink, config['node_address'], 255, 240, pack('<BB', 25, 0))
+                    if res != wmm.GatewayResultCode.GW_RES_OK:
+                        logging.error("Cannot send data to %s:%s res=%s" % (gw, sink, res))
+                        ret = False
+                except TimeoutError:
+                    logging.error("Cannot send data to %s:%s", gw, sink)
+                    ret = False
             try:
                 res = self.wni.send_message(gw, sink, address, 255, 240, pack('<BB', 25, 0))
                 if res != wmm.GatewayResultCode.GW_RES_OK:
