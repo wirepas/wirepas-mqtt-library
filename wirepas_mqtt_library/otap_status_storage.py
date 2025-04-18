@@ -16,7 +16,7 @@ except ModuleNotFoundError:
 ### Database metadata
 _MAX_LEN_FIELD_DB_CREATOR= 128
 _DB_CREATOR = 'com.wirepas.otaphelper'
-_DB_SCHEMA_VERSION = 1
+_DB_SCHEMA_VERSION = 2
 _DB_METADATA_TABLE_NAME = 'otapstatusdbmetadata'
 
 ### Database otap status
@@ -26,6 +26,7 @@ _MAX_LEN_FIELD_SCRATCHPAD_ST_STATUS = 20
 _MAX_LEN_FIELD_WIREPAS_STACK_VERSION = 12
 _MAX_LEN_FIELD_APP_VERSION = _MAX_LEN_FIELD_WIREPAS_STACK_VERSION
 _MAX_LEN_FIELD_OTAP_ACTION = 33
+_MAX_LEN_FIELD_GW_ID = 256
 
 ### Database connection. Init deferred when final filename known.
 _DB_CONN = SqliteDatabase(None, autoconnect=False)
@@ -89,7 +90,7 @@ class OtapStatusStorage:
                 raise ValueError
         logging.info("Format OK.")
 
-    def write_node_status(self, node_status, network_address, node_address, travel_time_ms):
+    def write_node_status(self, node_status, network_address, node_address, travel_time_ms, gateway_id):
         """Write node OTAP status to persisted storage
         :param node_status: node's OTAP status to persist
         :param network_address: network address the node belong to
@@ -101,6 +102,7 @@ class OtapStatusStorage:
         # Create data to write to storage
         storage_entry = {
                             OtapStatusDB.node_address: node_address,
+                            OtapStatusDB.gateway_id: gateway_id,
                             OtapStatusDB.network_address: network_address,
                             OtapStatusDB.rx_timestamp_epoch_ms: node_status["ts"],
                             OtapStatusDB.tx_timestamp_epoch_ms: node_status["ts"] - travel_time_ms,
@@ -223,6 +225,7 @@ class OtapStatusDB(_BaseModel):
 
     # Mandatory fields
     node_address = BigIntegerField(primary_key=True)
+    gateway_id = FixedCharField(_MAX_LEN_FIELD_GW_ID)
     network_address = IntegerField()
     rx_timestamp_epoch_ms = IntegerField()
     tx_timestamp_epoch_ms = IntegerField()

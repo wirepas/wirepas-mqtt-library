@@ -54,6 +54,8 @@ class WirepasOtapHelper:
         # Dictionary of nodes in the network and their otap status
         # discovered since this api object is created
         self._nodes = {}
+        # Store Gateway (or list) concerned by the otap
+        self._gateways_queried = gateway
 
         # Register for remote API data from given network
         wni.register_data_cb(self._on_remote_api_response_received,
@@ -75,6 +77,12 @@ class WirepasOtapHelper:
                 self._status.append(status)
             except TimeoutError:
                 logging.error("Cannot read scratchpad status from [%s][%s] => Timeout " % (gw, sink))
+
+    def _gateway_queried_match(self, data_gw_id):
+        match_status = True
+        if self._gateways_queried is not None and data_gw_id not in self._gateways_queried:
+            match_status = False
+        return match_status
 
     def _on_remote_api_response_received(self, data):
         logging.debug("RX from %s:%s:%s => %s" % (data.gw_id, data.sink_id, data.source_address, data.data_payload))
@@ -148,9 +156,9 @@ class WirepasOtapHelper:
             new_status["remaining_delay_m"] = remaining_delay
 
         # Store node's OTAP status in database if requested
-        if self._persist_otap_status:
+        if self._persist_otap_status and self._gateway_queried_match(data.gw_id):
             with self._otap_status_storage_write_lock:
-                self._otap_status_storage.write_node_status(new_status, data.network_address, data.source_address, data.travel_time_ms)
+                self._otap_status_storage.write_node_status(new_status, data.network_address, data.source_address, data.travel_time_ms, data.gw_id)
 
         self._nodes[data.source_address] = new_status
 

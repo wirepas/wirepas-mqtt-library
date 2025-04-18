@@ -8,6 +8,7 @@ from datetime import datetime
 
 import logging
 import sys
+import time
 
 
 def type_to_str(type_int):
@@ -101,6 +102,12 @@ if __name__ == "__main__":
     parser.add_argument("--persist-otap-status-file",
                         type=str,
                         help="When provided, received nodes' OTAP status will be persisted.")
+    parser.add_argument("--otap-helper-init-delay-s",
+                        type=int,
+                        default=0,
+                        help="""Wait delay for WNI to collect gateway info and OtapHelper to be started.
+                                Default: No wait. To be adjusted based on gateway count to query and config read latency
+                                """)
 
     args = parser.parse_args()
 
@@ -142,7 +149,7 @@ if __name__ == "__main__":
         logging.info(f"Nodes' OTAP status can be received from {len(gateways)} gateways under network {args.network}")
         logging.debug(f"Gateway list {gateways}")
 
-
+    time.sleep(args.otap_helper_init_delay_s)
     otapHelper = WirepasOtapHelper(wni,
                                    args.network,
                                    gateways,
