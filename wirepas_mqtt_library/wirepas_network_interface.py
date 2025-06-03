@@ -127,7 +127,7 @@ class WirepasNetworkInterface:
     def __init__(self, host, port, username, password,
                  insecure=False, num_worker_thread=1, strict_mode=False,
                  connection_cb=None, client_id="", clean_session=None,
-                 transport="tcp", gw_timeout_s=2):
+                 transport="tcp", gw_timeout_s=2, no_uplink=False, no_gw_status=False):
         """Constructor
 
         :param host: MQTT broker host address
@@ -155,6 +155,12 @@ class WirepasNetworkInterface:
                If False, the client is a durable client and subscription information and queued messages will be retained when the client disconnects.
         :param transport: set to "websockets" to send MQTT over WebSockets. Leave at the default of "tcp" to use raw TCP.
         :param gw_timeout_s: Timeout in s to receive a response from a gw
+        :param no_data: False by default. If set to true, library doesn't subscribe for uplink traffic.
+               It may be useful when writting scripts that only want to send request. It avoids loading the broker.
+        :param no_gw_status: False by default. If set to true, library doesn't subscribe for gatway status.
+               It may be useful when writting scripts that only want to send request without needing the list of gateway/sinks.
+               It avoids loading the broker.
+               If enabled, discovering the network is not possible
         """
         # Create an MQTT client (can generate Exception if clean session is False and no client id set,
         # but no need to catch it here)
@@ -197,6 +203,8 @@ class WirepasNetworkInterface:
         self._strict_mode = strict_mode
         self._connection_cb = connection_cb
         self._gw_timeout_s = gw_timeout_s
+        self._no_uplink = no_uplink
+        self._no_gw_status = no_gw_status
 
         # Make the connection in a dedicated thread to use the
         # synchronous call and be able to catch network connections exceptions
@@ -231,16 +239,18 @@ class WirepasNetworkInterface:
             return
 
         # Register for Gateway status topic
-        all_gateway_status_topic = TopicGenerator.make_status_topic()
-        self._mqtt_client.subscribe(all_gateway_status_topic, qos=1)
-        self._mqtt_client.message_callback_add(all_gateway_status_topic,
-                                               self._on_status_gateway_received)
+        if not self._no_gw_status:
+            all_gateway_status_topic = TopicGenerator.make_status_topic()
+            self._mqtt_client.subscribe(all_gateway_status_topic, qos=1)
+            self._mqtt_client.message_callback_add(all_gateway_status_topic,
+                                                self._on_status_gateway_received)
 
-        # Register for Data topic
-        all_data_topic = TopicGenerator.make_received_data_topic()
-        self._mqtt_client.subscribe(all_data_topic, qos=1)
-        self._mqtt_client.message_callback_add(all_data_topic,
-                                               self._on_data_received)
+        if not self._no_uplink:
+            # Register for Data topic
+            all_data_topic = TopicGenerator.make_received_data_topic()
+            self._mqtt_client.subscribe(all_data_topic, qos=1)
+            self._mqtt_client.message_callback_add(all_data_topic,
+                                                self._on_data_received)
 
         # Register for all responses
         # TODO must be part of TopicGenerator
@@ -1207,7 +1217,6 @@ class _TaskQueue(Queue):
                 task, args, kwargs = self.get()
                 # When a task is None in the queue and the task is invoked
                 # a type error is raised. This condition is used to terminate the Thread
-                
                 if task is None:
                     break
 
