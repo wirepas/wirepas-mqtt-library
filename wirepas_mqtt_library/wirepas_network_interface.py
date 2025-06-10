@@ -785,7 +785,7 @@ class WirepasNetworkInterface:
         return final_res
 
     @_wait_for_connection
-    def upload_scratchpad(self, gw_id, sink_id, seq, scratchpad=None, cb=None, param=None, timeout=60):
+    def upload_scratchpad(self, gw_id, sink_id, seq, scratchpad=None, cb=None, param=None, timeout=60, max_chunk_size=None):
         """
         upload_scratchpad(self, gw_id, sink_id, seq, scratchpad=None, cb=None, param=None)
         Upload a scratchpad on a given sink
@@ -816,19 +816,25 @@ class WirepasNetworkInterface:
         :type param: object
         :param timeout: Timeout in second to wait for the upload (default 60s)
         :type timeout: int
+        :param max_chunk_size: Max chunk size accepted by gateway. None to get it from discovery
+        :type max_chunk: int
         :return: None if cb is set or error code from gateway is synchronous call
         :rtype: :obj:`~wirepas_mesh_messaging.gateway_result_code.GatewayResultCode`
 
         :raises TimeoutError: Raised if cb is None and response is not received within the specified timeout
         """
-        try:
-            # Check what is the max transfert size supported by the gateway
-            max_size = self._gateways[gw_id].max_scratchpad_size
-            if max_size is not None:
-                logging.info("Max scratchpad size is %d for %s" % (scratchpad.__len__(), gw_id))
-        except KeyError:
-            logging.error("Unknown gateway in upload_scratchpad %s", gw_id)
-            return wmm.GatewayResultCode.GW_RES_INVALID_PARAM
+        if max_chunk_size is None:
+            # Discover it from Gateway itself
+            try:
+                # Check what is the max transfert size supported by the gateway
+                max_size = self._gateways[gw_id].max_scratchpad_size
+                if max_size is not None:
+                    logging.info("Max scratchpad size is %d for %s" % (scratchpad.__len__(), gw_id))
+            except KeyError:
+                logging.error("Unknown gateway in upload_scratchpad %s", gw_id)
+                return wmm.GatewayResultCode.GW_RES_INVALID_PARAM
+        else:
+            max_size = max_chunk_size
 
         topic = TopicGenerator.make_otap_load_scratchpad_request_topic(gw_id, sink_id)
 
