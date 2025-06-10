@@ -238,8 +238,8 @@ class WirepasNetworkInterface:
                 self._task_queue.add_task(self._connection_cb, False, self.ConnectionErrorCode.from_broker_connack(rc))
             return
 
-        # Register for Gateway status topic
         if not self._no_gw_status:
+            # Register for Gateway status topic
             all_gateway_status_topic = TopicGenerator.make_status_topic()
             self._mqtt_client.subscribe(all_gateway_status_topic, qos=1)
             self._mqtt_client.message_callback_add(all_gateway_status_topic,
@@ -335,7 +335,10 @@ class WirepasNetworkInterface:
                     self._task_queue.add_task(self._on_config_changed_cb)
 
         except KeyError:
-            logging.error("Receiving sink config that is unknown %s/%s", gw_id, config["sink_id"])
+            if not self._no_gw_status:
+                logging.error("Receiving sink config that is unknown %s/%s", gw_id, config["sink_id"])
+            else:
+                logging.info("Sink config received but flag no_gw_status set")
 
     def _update_gateway_configs(self, config):
         try:
@@ -345,7 +348,10 @@ class WirepasNetworkInterface:
                 if self._on_config_changed_cb is not None:
                     self._task_queue.add_task(self._on_config_changed_cb)
         except KeyError:
-            logging.error("Receiving gateway config that is unknown %s", config.gw_id)
+            if not self._no_gw_status:
+                logging.error("Receiving gateway config that is unknown %s", config.gw_id)
+            else:
+                logging.info("Gateway config received but flag no_gw_status set")
 
     def _on_data_received(self, client, userdata, message):
         try:
