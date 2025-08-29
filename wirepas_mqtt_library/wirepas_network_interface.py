@@ -10,7 +10,7 @@ import paho.mqtt.client as mqtt
 from paho.mqtt.client import connack_string
 import wirepas_mesh_messaging as wmm
 from .topic_helper import TopicGenerator, TopicParser
-from threading import Event, Thread, Lock
+from threading import Event, Thread, Lock, Timer
 from time import sleep, time
 from queue import Queue
 
@@ -189,6 +189,8 @@ class WirepasNetworkInterface:
         # Dictionary to store request id, associated cb
         self._ongoing_requests = {}
 
+        # Dictionnary to store ongoing downlink traffic (not necessarily initiated by us)
+        self._ongoing_downlink_traffic = {}
 
         self._data_uplink_filters_lock = Lock()
         self._data_uplink_filters = {}
@@ -388,12 +390,14 @@ class WirepasNetworkInterface:
 
     def _call_cb(self, response, *args):
         try:
-            for cb, param in self._ongoing_requests[response.req_id]:
-            # Add caller param after response error code and add any additional param at the end
-                cb(response.res, param, *args)
-                # Cb called, remove key
+            cb, param, timer = self._ongoing_requests.pop(response.req_id)
 
-            del self._ongoing_requests[response.req_id]
+            if timer:
+                timer.cancel()  # cancel timeout timer
+
+            # Add caller param after response error code and add any additional param at the end
+            cb(response.res, param, *args)
+
         except KeyError:
             # No cb set, just pass (could be timeout that expired)
             logging.debug("Response but no associated cb: %s" % response.req_id)
@@ -409,13 +413,15 @@ class WirepasNetworkInterface:
             data.__dict__.update({'sink_id': sink_id})
 
             logging.debug("Received message with id: %s", data.req_id)
-            self._wait_for_response(self._dispatch_downlink_data, data.req_id, param=data)
+
+            self._ongoing_downlink_traffic[data.req_id] = data
 
         except wmm.GatewayAPIParsingException as e:
             logging.error(str(e))
 
     def _dispatch_downlink_data(self, response, data):
         with self._data_downlink_filters_lock:
+            logging.debug("Dispatching downlink data to register filters")
             filters_copy = list(self._data_downlink_filters.values())
 
         for f in filters_copy:
@@ -430,10 +436,18 @@ class WirepasNetworkInterface:
         try:
             if cmd == "send_data":
                 response = wmm.SendDataResponse.from_payload(message.payload)
+                try:
+                    request_data = self._ongoing_downlink_traffic[response.req_id]
+                    self._task_queue.add_task(self._dispatch_downlink_data, response, request_data)
+                except KeyError:
+                    logging.debug("Send_data response but we didn't see the request")
+                    pass
+
             elif cmd == "get_configs":
                 response = wmm.GetConfigsResponse.from_payload(message.payload)
                 # Get config are consumed internally, no external cb to call
-                handler = self._update_gateway_configs
+                self._task_queue.add_task(self._update_gateway_configs, response)
+                handler = None
             elif cmd == "set_config":
                 response = wmm.SetConfigResponse.from_payload(message.payload)
                 # Set config answer contains the config set, update our cache value
@@ -460,10 +474,11 @@ class WirepasNetworkInterface:
                 logging.debug("Untracked response type %s" % cmd)
                 return
 
-            if additional_params is None:
-                self._task_queue.add_task(handler, response)
-            else:
-                self._task_queue.add_task(handler, response, additional_params)
+            if handler is not None:
+                if additional_params is None:
+                    self._task_queue.add_task(handler, response)
+                else:
+                    self._task_queue.add_task(handler, response, additional_params)
 
         except wmm.GatewayAPIParsingException as e:
             logging.error(str(e))
@@ -489,10 +504,6 @@ class WirepasNetworkInterface:
         self._publish(TopicGenerator.make_get_configs_request_topic(gw_id),
                         request.payload,
                         1)
-
-        # Call update gateway config when receiving it
-        self._wait_for_response(self._update_gateway_configs, request.req_id)
-
 
     def _wait_for_configs(self, gateways=None):
         gateways_to_wait_config = []
@@ -660,16 +671,26 @@ class WirepasNetworkInterface:
         topic = TopicGenerator.make_status_topic(gw_id)
         self._publish(topic, None, qos=1, retain=True)
 
-    def _add_to_ongoing_request(self, req_id, cb, param=None):
+    def _timeout_cb(self, req_id):
+        """
+        Called when async request times out
+        """
         try:
-            self._ongoing_requests[req_id].append((cb, param))
+            cb, param, _ = self._ongoing_requests.pop(req_id)
+            # Use existing GW_RES_SINK_TIMEOUT as it exists already
+            cb(wmm.GatewayResultCode.GW_RES_SINK_TIMEOUT, param)
         except KeyError:
-            self._ongoing_requests[req_id]= [(cb, param)]
+            # Already handled (response arrived before timeout fired)
+            pass
+
 
     def _wait_for_response(self, cb, req_id, extra_timeout=0, param=None):
+        timeout = self._gw_timeout_s + extra_timeout
         if cb is not None:
-            # Unblocking call, cb will be called later
-            self._add_to_ongoing_request(req_id, cb, param)
+            # Unblocking call, cb will be called later or timeout
+            timer = Timer(timeout, self._timeout_cb, args=(req_id,))
+            self._ongoing_requests[req_id] = (cb, param, timer)
+            timer.start()
             return None
 
         # No cb specified so blocking call
@@ -685,9 +706,9 @@ class WirepasNetworkInterface:
                 res = response, *args
             response_event.set()
 
-        self._add_to_ongoing_request(req_id, unlock)
+        self._ongoing_requests[req_id] = (unlock, None, None)
 
-        if not response_event.wait(self._gw_timeout_s + extra_timeout):
+        if not response_event.wait(timeout):
             # Timeout
             del self._ongoing_requests[req_id]
             raise TimeoutError("Cannot get response for request")
