@@ -470,6 +470,10 @@ class WirepasNetworkInterface:
                         'target_scratchpad_and_action': response.target_scratchpad_and_action
                     }
                 additional_params = status
+            elif cmd == "set_configuration_data_item":
+                response = wmm.SetConfigurationDataItemResponse.from_payload(message.payload)
+            elif cmd == "get_configuration_data_item":
+                response = wmm.GetConfigurationDataItemResponse.from_payload(message.payload)
             else:
                 logging.debug("Untracked response type %s" % cmd)
                 return
@@ -1175,6 +1179,33 @@ class WirepasNetworkInterface:
 
     def __str__(self):
         return str(self._gateways)
+
+    @_wait_for_connection
+    def set_configuration_data_item(self, gw_id, sink_id, endpoint, payload, cb=None, param=None):
+        """
+        set_configuration_data_item(self, gw_id, sink_id, endpoint, payload, cb=None, param=None)
+        Set configuration data item on a sink
+
+        Call can be blocking or non-blocking depending on ``cb`` parameter.
+
+        :param gw_id: gateway id the sink is attached to
+        :param sink_id: id of the sink
+        :param endpoint: configuration data item endpoint.
+        :param payload: configuration data item payload.
+        :return: None if cb is set or error code from gateway if synchronous call
+        :rtype: :obj:`~wirepas_mesh_messaging.gateway_result_code.GatewayResultCode`
+
+        :raises TimeoutError: Raised if cb is None and response is not received within 2 sec
+
+        """
+        request = wmm.SetConfigurationDataItemRequest(sink_id,
+                                                      endpoint,
+                                                      payload)
+
+        self._publish(TopicGenerator.make_set_configuration_data_item_request_topic(gw_id, sink_id),
+                      request.payload,
+                      1)
+        return self._wait_for_response(cb, request.req_id, param=param)
 
 
 class _DataFilter:
