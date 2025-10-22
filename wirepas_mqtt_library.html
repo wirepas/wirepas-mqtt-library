@@ -82,6 +82,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.unregister_downlink_traffic_cb"><code class="docutils literal notranslate"><span class="pre">WirepasNetworkInterface.unregister_downlink_traffic_cb()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_sink_config"><code class="docutils literal notranslate"><span class="pre">WirepasNetworkInterface.set_sink_config()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_config_changed_cb"><code class="docutils literal notranslate"><span class="pre">WirepasNetworkInterface.set_config_changed_cb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_configuration_data_item"><code class="docutils literal notranslate"><span class="pre">WirepasNetworkInterface.set_configuration_data_item()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -886,6 +887,32 @@ the attached gateway</p>
 <a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_gateways" title="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_gateways"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_gateways()</span></code></a>
 and <a class="reference internal" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_sinks" title="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.get_sinks"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_sinks()</span></code></a>
 can be used to discover what has changed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_configuration_data_item">
+<span class="sig-name descname"><span class="pre">set_configuration_data_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gw_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_network_interface.WirepasNetworkInterface.set_configuration_data_item" title="Permalink to this definition"></a></dt>
+<dd><p>Set configuration data item on a sink</p>
+<p>Call can be blocking or non-blocking depending on <code class="docutils literal notranslate"><span class="pre">cb</span></code> parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gw_id</strong> – gateway id the sink is attached to</p></li>
+<li><p><strong>sink_id</strong> – id of the sink</p></li>
+<li><p><strong>endpoint</strong> – configuration data item endpoint.</p></li>
+<li><p><strong>payload</strong> – configuration data item payload.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None if cb is set or error code from gateway if synchronous call</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#wirepas_mesh_messaging.gateway_result_code.GatewayResultCode" title="wirepas_mesh_messaging.gateway_result_code.GatewayResultCode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GatewayResultCode</span></code></a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TimeoutError</strong> – Raised if cb is None and response is not received within 2 sec</p>
 </dd>
 </dl>
 </dd></dl>
