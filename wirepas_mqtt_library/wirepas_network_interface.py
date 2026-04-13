@@ -169,7 +169,7 @@ class WirepasNetworkInterface:
         if not insecure:
             self._mqtt_client.tls_set(ca_certs=None, certfile=None, keyfile=None,
                                       cert_reqs=ssl.CERT_REQUIRED,
-                                      tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
+                                      tls_version=ssl.PROTOCOL_TLS_CLIENT, ciphers=None)
 
         self._mqtt_client.username_pw_set(username,
                                           password)
