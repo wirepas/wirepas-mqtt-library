@@ -297,6 +297,15 @@ class WirepasOtapHelper:
         target = {'action': wmm.ScratchpadAction.ACTION_NO_OTAP}
         return self._set_target_to_all_sinks(target)
 
+    def set_inventory_mode_to_all_sinks(self):
+        """Set inventory mode action on all sinks
+
+        :return: True if action is correctly set on all sinks, false otherwise
+        """
+        logging.info("Set scratchpad action to inventory mode on all sinks for network %d" % self.network)
+        target = {'action': wmm.ScratchpadAction.ACTION_INVENTORY_MODE}
+        return self._set_target_to_all_sinks(target)
+
     def set_propagate_scratchpad_to_all_sinks(self, seq=None, crc=None):
         """Set propagate only action on all sinks
 
