@@ -96,6 +96,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.get_target_scratchpad_seq_list"><code class="docutils literal notranslate"><span class="pre">WirepasOtapHelper.get_target_scratchpad_seq_list()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_legacy_otap_to_all_sinks"><code class="docutils literal notranslate"><span class="pre">WirepasOtapHelper.set_legacy_otap_to_all_sinks()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_no_otap_to_all_sinks"><code class="docutils literal notranslate"><span class="pre">WirepasOtapHelper.set_no_otap_to_all_sinks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_inventory_mode_to_all_sinks"><code class="docutils literal notranslate"><span class="pre">WirepasOtapHelper.set_inventory_mode_to_all_sinks()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_scratchpad_to_all_sinks"><code class="docutils literal notranslate"><span class="pre">WirepasOtapHelper.set_propagate_scratchpad_to_all_sinks()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_and_process_scratchpad_to_all_sinks"><code class="docutils literal notranslate"><span class="pre">WirepasOtapHelper.set_propagate_and_process_scratchpad_to_all_sinks()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.send_remote_scratchpad_status"><code class="docutils literal notranslate"><span class="pre">WirepasOtapHelper.send_remote_scratchpad_status()</span></code></a></li>
@@ -168,6 +169,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS"><code class="docutils literal notranslate"><span class="pre">ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS_WITH_DELAY"><code class="docutils literal notranslate"><span class="pre">ScratchpadAction.ACTION_PROPAGATE_AND_PROCESS_WITH_DELAY</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_LEGACY_OTAP"><code class="docutils literal notranslate"><span class="pre">ScratchpadAction.ACTION_LEGACY_OTAP</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_INVENTORY_MODE"><code class="docutils literal notranslate"><span class="pre">ScratchpadAction.ACTION_INVENTORY_MODE</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#wirepas_mesh_messaging.otap_helper.ScratchpadType"><code class="docutils literal notranslate"><span class="pre">ScratchpadType</span></code></a><ul>
@@ -1025,6 +1027,17 @@ or None if cannot be determined</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_inventory_mode_to_all_sinks">
+<span class="sig-name descname"><span class="pre">set_inventory_mode_to_all_sinks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_inventory_mode_to_all_sinks" title="Permalink to this definition"></a></dt>
+<dd><p>Set inventory mode action on all sinks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if action is correctly set on all sinks, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_scratchpad_to_all_sinks">
 <span class="sig-name descname"><span class="pre">set_propagate_scratchpad_to_all_sinks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wirepas_mqtt_library.wirepas_otap_helper.WirepasOtapHelper.set_propagate_scratchpad_to_all_sinks" title="Permalink to this definition"></a></dt>
 <dd><p>Set propagate only action on all sinks</p>
@@ -1484,6 +1497,11 @@ conversion</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_LEGACY_OTAP">
 <span class="sig-name descname"><span class="pre">ACTION_LEGACY_OTAP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_LEGACY_OTAP" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_INVENTORY_MODE">
+<span class="sig-name descname"><span class="pre">ACTION_INVENTORY_MODE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#wirepas_mesh_messaging.otap_helper.ScratchpadAction.ACTION_INVENTORY_MODE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
